@@ -24,24 +24,35 @@ namespace PureConnectBackend.Controllers
             _userService = userService;
         }
 
+
+        /// <summary>
+        /// Login endpoint.
+        /// </summary>
+        /// <param name="userLogin">User login data.</param>
+        /// <returns>Response with status code 200 and dto with jwt token in it, or 404 error if data was invalid for that user.</returns>
         [AllowAnonymous]
         [HttpPost]
         [Route("login")]
         public ActionResult<UserLoginResponse> Login([FromBody] UserLogin userLogin)
         {
             var user = Authenticate(userLogin);
-            UserLoginResponse userLoginResponse = new UserLoginResponse();
+
             if (user is not null)
             {
-                var token = Generate(user);
-                userLoginResponse.Token = token;
+                var token = GenerateToken(user);
+                UserLoginResponse userLoginResponse = new UserLoginResponse() { Token = token };
                 return Ok(userLoginResponse);
             }
 
             return NotFound("User not found");
         }
 
-        private string Generate(User user)
+        /// <summary>
+        /// Method generates a jwt token depending on user data.
+        /// </summary>
+        /// <param name="user">User who wants to receive token.</param>
+        /// <returns>Jwt token string.</returns>
+        private string GenerateToken(User user)
         {
             var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:Key"]));
             var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
@@ -67,9 +78,14 @@ namespace PureConnectBackend.Controllers
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
 
+        /// <summary>
+        /// Method that tries to login user data.
+        /// </summary>
+        /// <param name="userLogin">User login data.</param>
+        /// <returns>If data is valid returns User object, otherwise null.</returns>
         private User? Authenticate(UserLogin userLogin)
         {
-            var currUser = _userService.GetUser(userLogin);
+            User? currUser = _userService.GetUser(userLogin);
             return currUser;
         }
     }

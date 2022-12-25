@@ -6,6 +6,9 @@ using System.Security.Claims;
 
 namespace PureConnectBackend.Controllers
 {
+    /// <summary>
+    /// Test controller.
+    /// </summary>
     [Route("api/[controller]")]
     [ApiController]
     public class UserController : ControllerBase
@@ -14,27 +17,9 @@ namespace PureConnectBackend.Controllers
         [Authorize(Roles = "user")]
         public IActionResult AdminsEndpoint()
         {
-            var identity = HttpContext.User.Identity as ClaimsIdentity;
+            var currUser = GetCurrentUser();
 
-            if (identity is not null)
-            {
-                var userClaims = identity.Claims;
-
-                var currUser = new User
-                {
-                    UserName = userClaims.FirstOrDefault(o => o.Type == ClaimTypes.NameIdentifier)?.Value,
-                    Email = userClaims.FirstOrDefault(o => o.Type == ClaimTypes.Email)?.Value,
-                    FirstName = userClaims.FirstOrDefault(o => o.Type == ClaimTypes.GivenName)?.Value,
-                    LastName = userClaims.FirstOrDefault(o => o.Type == ClaimTypes.Surname)?.Value,
-                    Role = userClaims.FirstOrDefault(o => o.Type == ClaimTypes.Role)?.Value,
-                    Id = Convert.ToInt32(userClaims.FirstOrDefault(o => o.Type == ClaimTypes.Sid)?.Value)
-
-                };
-                return Ok($"Hi, {currUser.FirstName}, you are an {currUser.Role}, your id:  {currUser.Id}");
-
-            };
-
-            return NotFound("No user");
+            return Ok($"Hi, {currUser.FirstName}, you are an {currUser.Role}, your id is: {currUser.Id}");
         }
 
 
