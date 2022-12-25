@@ -1,0 +1,41 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.4.33205.214
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PureConnectBackend", "PureConnectBackend.csproj", "{3B288AF3-EAF4-4A69-8BEF-09DA8BB0A702}"
+	ProjectSection(ProjectDependencies) = postProject
+		{23BCD3DD-88B2-4BC0-A341-68A797CF7A53} = {23BCD3DD-88B2-4BC0-A341-68A797CF7A53}
+		{956AB99B-E281-4F38-BD8B-957F91D7E036} = {956AB99B-E281-4F38-BD8B-957F91D7E036}
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PureConnectBackend.Core", "..\PureConnectBackend.Core\PureConnectBackend.Core.csproj", "{23BCD3DD-88B2-4BC0-A341-68A797CF7A53}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PureConnectBackend.Infrastructure", "..\PureConnectBackend.Infrastructure\PureConnectBackend.Infrastructure.csproj", "{956AB99B-E281-4F38-BD8B-957F91D7E036}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{3B288AF3-EAF4-4A69-8BEF-09DA8BB0A702}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3B288AF3-EAF4-4A69-8BEF-09DA8BB0A702}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3B288AF3-EAF4-4A69-8BEF-09DA8BB0A702}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3B288AF3-EAF4-4A69-8BEF-09DA8BB0A702}.Release|Any CPU.Build.0 = Release|Any CPU
+		{23BCD3DD-88B2-4BC0-A341-68A797CF7A53}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{23BCD3DD-88B2-4BC0-A341-68A797CF7A53}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{23BCD3DD-88B2-4BC0-A341-68A797CF7A53}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{23BCD3DD-88B2-4BC0-A341-68A797CF7A53}.Release|Any CPU.Build.0 = Release|Any CPU
+		{956AB99B-E281-4F38-BD8B-957F91D7E036}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{956AB99B-E281-4F38-BD8B-957F91D7E036}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{956AB99B-E281-4F38-BD8B-957F91D7E036}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{956AB99B-E281-4F38-BD8B-957F91D7E036}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {305DC93A-DD5B-4D55-A653-49A28D3F022A}
+	EndGlobalSection
+EndGlobal
