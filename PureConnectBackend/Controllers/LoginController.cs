@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Localization;
 using Microsoft.IdentityModel.Tokens;
 using PureConnectBackend.Core.Interfaces;
 using PureConnectBackend.Core.Models.Requests;
@@ -18,10 +19,12 @@ namespace PureConnectBackend.Controllers
     {
         private IConfiguration _config;
         private ILoginService _userService;
-        public LoginController(IConfiguration config, ILoginService userService)
+        private readonly IStringLocalizer<LoginController> _stringLocalizer;
+        public LoginController(IConfiguration config, ILoginService userService, IStringLocalizer<LoginController> stringLocalizer)
         {
             _config = config;
             _userService = userService;
+            _stringLocalizer = stringLocalizer;
         }
 
         /// <summary>
@@ -43,7 +46,7 @@ namespace PureConnectBackend.Controllers
                 return Ok(userLoginResponse);
             }
 
-            return NotFound("User not found");
+            return NotFound(_stringLocalizer.GetString("UserNotFound"));
         }
 
         /// <summary>

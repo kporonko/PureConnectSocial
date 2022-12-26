@@ -7,6 +7,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using PureConnectBackend.Core.Interfaces;
 using PureConnectBackend.Core.Services;
+using Microsoft.Extensions.Options;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -30,6 +31,8 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
         };
     });
+builder.Services.AddLocalization(options =>
+        options.ResourcesPath = "Resourcess");
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
@@ -44,6 +47,25 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+#region Localization
+var supportedCultures = new[] {
+    "en-US",
+    //"fr-FR",
+    //"de-DE",
+    //"ja-JP",
+    //"kk-KZ",
+    //"pt-PT",
+    //"ru-RU",
+    "uk-UA"
+};
+var localizationOptions =
+    new RequestLocalizationOptions().SetDefaultCulture(supportedCultures[0])
+    .AddSupportedCultures(supportedCultures)
+    .AddSupportedUICultures(supportedCultures);
+
+app.UseRequestLocalization(localizationOptions);
+#endregion
 
 app.UseHttpsRedirection();
 app.UseAuthentication();
