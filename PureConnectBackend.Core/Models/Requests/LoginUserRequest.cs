@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace PureConnectBackend.Core.Models.Requests
 {
-    public class UserLogin
+    public class LoginUserRequest
     {
         [Required(ErrorMessage = "You must enter your email address.")]
         [EmailAddress]

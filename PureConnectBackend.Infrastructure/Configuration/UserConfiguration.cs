@@ -61,12 +61,12 @@ namespace PureConnectBackend.Infrastructure.Configuration
                 .HasColumnType("varchar(max)");
             builder
                 .Property(t => t.Status)
-                .IsRequired()
                 .HasColumnName("Status")
+                .IsRequired(false)
                 .HasColumnType("varchar(max)");
             builder
                 .Property(t => t.Avatar)
-                .IsRequired()
+                .IsRequired(false)
                 .HasColumnName("Avatar")
                 .HasColumnType("varchar(max)");
             builder

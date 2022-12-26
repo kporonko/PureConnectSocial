@@ -14,6 +14,8 @@ string? connection = builder.Configuration.GetConnectionString("Default");
 
 // Services registration.
 builder.Services.AddTransient<ILoginService, LoginService>();
+builder.Services.AddTransient<IRegisterService, RegisterService>();
+
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {

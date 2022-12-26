@@ -24,7 +24,6 @@ namespace PureConnectBackend.Controllers
             _userService = userService;
         }
 
-
         /// <summary>
         /// Login endpoint.
         /// </summary>
@@ -33,7 +32,7 @@ namespace PureConnectBackend.Controllers
         [AllowAnonymous]
         [HttpPost]
         [Route("login")]
-        public ActionResult<UserLoginResponse> Login([FromBody] UserLogin userLogin)
+        public ActionResult<UserLoginResponse> Login([FromBody] LoginUserRequest userLogin)
         {
             var user = Authenticate(userLogin);
 
@@ -83,7 +82,7 @@ namespace PureConnectBackend.Controllers
         /// </summary>
         /// <param name="userLogin">User login data.</param>
         /// <returns>If data is valid returns User object, otherwise null.</returns>
-        private User? Authenticate(UserLogin userLogin)
+        private User? Authenticate(LoginUserRequest userLogin)
         {
             User? currUser = _userService.GetUser(userLogin);
             return currUser;

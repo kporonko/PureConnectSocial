@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PureConnectBackend.Infrastructure.Data;
 
@@ -11,9 +12,11 @@ using PureConnectBackend.Infrastructure.Data;
 namespace PureConnectBackend.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    partial class ApplicationContextModelSnapshot : ModelSnapshot
+    [Migration("20221226003251_AvatarAndStatusChangedToNullableUserFields")]
+    partial class AvatarAndStatusChangedToNullableUserFields
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -32,6 +35,7 @@ namespace PureConnectBackend.Infrastructure.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Avatar")
+                        .IsRequired()
                         .HasColumnType("varchar(max)")
                         .HasColumnName("Avatar");
 
@@ -77,6 +81,7 @@ namespace PureConnectBackend.Infrastructure.Migrations
                         .HasColumnName("Role");
 
                     b.Property<string>("Status")
+                        .IsRequired()
                         .HasColumnType("varchar(max)")
                         .HasColumnName("Status");
 
