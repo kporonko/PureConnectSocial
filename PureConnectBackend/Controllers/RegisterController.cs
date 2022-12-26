@@ -15,9 +15,9 @@ namespace PureConnectBackend.Controllers
     {
         private IConfiguration _config;
         private IRegisterService _userService;
-        private readonly IStringLocalizer<LoginController> _stringLocalizer;
+        private readonly IStringLocalizer<RegisterController> _stringLocalizer;
 
-        public RegisterController(IConfiguration config, IRegisterService userService, IStringLocalizer<LoginController> stringLocalizer)
+        public RegisterController(IConfiguration config, IRegisterService userService, IStringLocalizer<RegisterController> stringLocalizer)
         {
             _config = config;
             _userService = userService;
@@ -31,9 +31,9 @@ namespace PureConnectBackend.Controllers
         /// <returns></returns>
         [AllowAnonymous]
         [HttpPost]
-        public IActionResult Register([FromBody] RegisterUserRequest userRegister)
+        public async Task<IActionResult> Register([FromBody] RegisterUserRequest userRegister)
         {
-            var codeResult = _userService.RegisterUser(userRegister);
+            var codeResult = await _userService.RegisterUser(userRegister);
             if((int)codeResult == 409)
                 return Conflict(_stringLocalizer.GetString("EmailUsed"));
 

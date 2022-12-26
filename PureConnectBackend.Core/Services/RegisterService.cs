@@ -1,4 +1,5 @@
-﻿using PureConnectBackend.Core.Extentions;
+﻿using Microsoft.EntityFrameworkCore;
+using PureConnectBackend.Core.Extentions;
 using PureConnectBackend.Core.Interfaces;
 using PureConnectBackend.Core.Models.Requests;
 using PureConnectBackend.Infrastructure.Data;
@@ -24,12 +25,13 @@ namespace PureConnectBackend.Core.Services
         /// </summary>
         /// <param name="registerUser">User`s registration data.</param>
         /// <returns>201 if account was created. 409 if email is already taken.</returns>
-        public HttpStatusCode RegisterUser(RegisterUserRequest registerUser)
+        public async Task<HttpStatusCode> RegisterUser(RegisterUserRequest registerUser)
         {
-            if (IsEmailExists(registerUser.Email))
+            var isEmailExists = await IsEmailExists(registerUser.Email);
+            if (isEmailExists)
                 return HttpStatusCode.Conflict;
             User user = ConvertRegisterToUser(registerUser);
-            AddUserToDb(user);
+            await AddUserToDb(user);
             return HttpStatusCode.Created;
         }
 
@@ -39,9 +41,9 @@ namespace PureConnectBackend.Core.Services
         /// </summary>
         /// <param name="profileRegister">Register user data.</param>
         /// <returns>Whether login already exists or not.</returns>
-        private bool IsEmailExists(string email)
+        private async Task<bool> IsEmailExists(string email)
         {
-            User? user = _context.Users.FirstOrDefault(x => x.Email ==  email);
+            User? user = await _context.Users.FirstOrDefaultAsync(x => x.Email ==  email);
             return user != null;
         }
 
@@ -71,10 +73,10 @@ namespace PureConnectBackend.Core.Services
         /// Adds the user to database.
         /// </summary>
         /// <param name="user">User to add.</param>
-        private void AddUserToDb(User user)
+        private async Task AddUserToDb(User user)
         {
             _context.Users.Add(user);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
         }
     }
 }

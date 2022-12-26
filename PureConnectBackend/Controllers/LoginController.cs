@@ -35,9 +35,9 @@ namespace PureConnectBackend.Controllers
         [AllowAnonymous]
         [HttpPost]
         [Route("login")]
-        public ActionResult<UserLoginResponse> Login([FromBody] LoginUserRequest userLogin)
+        public async Task<ActionResult<UserLoginResponse>> Login([FromBody] LoginUserRequest userLogin)
         {
-            var user = Authenticate(userLogin);
+            var user = await Authenticate(userLogin);
 
             if (user is not null)
             {
@@ -85,9 +85,9 @@ namespace PureConnectBackend.Controllers
         /// </summary>
         /// <param name="userLogin">User login data.</param>
         /// <returns>If data is valid returns User object, otherwise null.</returns>
-        private User? Authenticate(LoginUserRequest userLogin)
+        private async Task<User?> Authenticate(LoginUserRequest userLogin)
         {
-            User? currUser = _userService.GetUser(userLogin);
+            User? currUser = await _userService.GetUser(userLogin);
             return currUser;
         }
     }

@@ -10,6 +10,6 @@ namespace PureConnectBackend.Core.Interfaces
 {
     public interface ILoginService
     {
-        public User? GetUser(LoginUserRequest userLogin);
+        public Task<User?> GetUser(LoginUserRequest userLogin);
     }
 }

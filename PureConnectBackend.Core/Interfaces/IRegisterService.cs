@@ -10,6 +10,6 @@ namespace PureConnectBackend.Core.Interfaces
 {
     public interface IRegisterService
     {
-        public HttpStatusCode RegisterUser(RegisterUserRequest registerUser);
+        public Task<HttpStatusCode> RegisterUser(RegisterUserRequest registerUser);
     }
 }
