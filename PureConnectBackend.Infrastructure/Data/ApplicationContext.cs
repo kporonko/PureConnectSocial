@@ -18,11 +18,28 @@ namespace PureConnectBackend.Infrastructure.Data
         }
 
         public DbSet<User> Users { get; set; }
+        public DbSet<Friend> Friends { get; set; }
+        public DbSet<Follower> Followers { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.ApplyConfiguration(new UserConfiguration());
+            modelBuilder.ApplyConfiguration(new FriendConfiguration());
+            modelBuilder.ApplyConfiguration(new FollowerConfiguration());
+
+            modelBuilder
+                .Entity<Friend>()
+                .HasOne(x => x.User)
+                .WithMany(x => x.Friends)
+                .HasForeignKey(x => x.TargetId)
+                .IsRequired();
+            modelBuilder
+                .Entity<Follower>()
+                .HasOne(x => x.User)
+                .WithMany(x => x.Followers)
+                .HasForeignKey(x => x.TargetId)
+                .IsRequired();
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
