@@ -21,7 +21,7 @@ namespace PureConnectBackend.Infrastructure.Models
         public string Avatar { get; set; }
         public string Role { get; set; }
 
-        public List<Friend> Friends { get; set; }
-        public List<Follower> Followers { get; set; }
+        public List<Follow> Follower { get; set; }
+        public List<Follow> Followee { get; set; }
     }
 }

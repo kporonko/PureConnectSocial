@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PureConnectBackend.Infrastructure.Data;
 
@@ -11,9 +12,11 @@ using PureConnectBackend.Infrastructure.Data;
 namespace PureConnectBackend.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    partial class ApplicationContextModelSnapshot : ModelSnapshot
+    [Migration("20221227163715_FriendEntityDeletedButFollowersEntityChanged")]
+    partial class FriendEntityDeletedButFollowersEntityChanged
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -26,8 +29,7 @@ namespace PureConnectBackend.Infrastructure.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasColumnName("Id");
+                        .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
@@ -37,17 +39,13 @@ namespace PureConnectBackend.Infrastructure.Migrations
                     b.Property<int>("FollowerId")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("RequestDate")
-                        .HasColumnType("date")
-                        .HasColumnName("RequestDate");
-
                     b.HasKey("Id");
 
                     b.HasIndex("FolloweeId");
 
                     b.HasIndex("FollowerId");
 
-                    b.ToTable("Follow", (string)null);
+                    b.ToTable("Follows");
                 });
 
             modelBuilder.Entity("PureConnectBackend.Infrastructure.Models.User", b =>

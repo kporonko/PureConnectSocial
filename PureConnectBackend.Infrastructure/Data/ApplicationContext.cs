@@ -18,28 +18,28 @@ namespace PureConnectBackend.Infrastructure.Data
         }
 
         public DbSet<User> Users { get; set; }
-        public DbSet<Friend> Friends { get; set; }
-        public DbSet<Follower> Followers { get; set; }
+        public DbSet<Follow> Follows { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.ApplyConfiguration(new UserConfiguration());
-            modelBuilder.ApplyConfiguration(new FriendConfiguration());
-            modelBuilder.ApplyConfiguration(new FollowerConfiguration());
+            modelBuilder.ApplyConfiguration(new FollowConfiguration());
 
-            modelBuilder
-                .Entity<Friend>()
-                .HasOne(x => x.User)
-                .WithMany(x => x.Friends)
-                .HasForeignKey(x => x.TargetId)
-                .IsRequired();
-            modelBuilder
-                .Entity<Follower>()
-                .HasOne(x => x.User)
-                .WithMany(x => x.Followers)
-                .HasForeignKey(x => x.TargetId)
-                .IsRequired();
+            modelBuilder.Entity<Follow>()
+                .HasKey(k => k.Id);
+
+            modelBuilder.Entity<Follow>()
+                .HasOne(u => u.Followee)
+                .WithMany(u => u.Follower)
+                .HasForeignKey(u => u.FollowerId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Follow>()
+                .HasOne(u => u.Follower)
+                .WithMany(u => u.Followee)
+                .HasForeignKey(u => u.FolloweeId)
+                .OnDelete(DeleteBehavior.Restrict);
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
