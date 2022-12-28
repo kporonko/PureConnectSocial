@@ -17,6 +17,19 @@ string? connection = builder.Configuration.GetConnectionString("Default");
 builder.Services.AddTransient<ILoginService, LoginService>();
 builder.Services.AddTransient<IRegisterService, RegisterService>();
 builder.Services.AddTransient<IFollowService, FollowService>();
+builder.Services.AddTransient<IGoogleAuthService, GoogleAuthService>();
+
+var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(name: MyAllowSpecificOrigins,
+                      builder =>
+                      {
+                          builder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod();
+                      });
+});
+
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
@@ -43,6 +56,8 @@ builder.Services.AddDbContext<ApplicationContext>(options =>
 
 
 var app = builder.Build();
+app.UseCors(MyAllowSpecificOrigins);
+
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();

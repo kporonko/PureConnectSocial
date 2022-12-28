@@ -1,10 +1,9 @@
 import React, {useEffect} from 'react';
 import './App.css';
 import {authGoogle, login} from './fetch/FetchData'
+import {clientId} from "./functions/secureData";
 
 function App() {
-  const clientId = "101792196480-mfjdod0mrjbgpambjn5psnpj5q88jhf7.apps.googleusercontent.com"
-
   async function handleCallbackResponse(response : google.accounts.id.CredentialResponse){
     console.log("Encoded JWT ID token: ", response.credential);
     const res = await authGoogle(response.credential);

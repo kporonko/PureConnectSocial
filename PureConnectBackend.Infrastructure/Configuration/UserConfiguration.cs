@@ -36,6 +36,7 @@ namespace PureConnectBackend.Infrastructure.Configuration
                 .HasMaxLength(50);
             builder
                 .Property(t => t.BirthDate)
+                .IsRequired(false)
                 .HasColumnName("BirthDate")
                 .HasColumnType("date");
             builder
@@ -46,17 +47,17 @@ namespace PureConnectBackend.Infrastructure.Configuration
                 .HasMaxLength(100);
             builder
                 .Property(t => t.Password)
-                .IsRequired()
+                .IsRequired(false)
                 .HasColumnName("Password")
                 .HasColumnType("varchar(max)");
             builder
                 .Property(t => t.IsOpenAcc)
-                .IsRequired()
+                .IsRequired(true)
                 .HasColumnName("IsOpenAcc")
                 .HasColumnType("bit");
             builder
                 .Property(t => t.Location)
-                .IsRequired()
+                .IsRequired(false)
                 .HasColumnName("Location")
                 .HasColumnType("varchar(max)");
             builder
@@ -71,12 +72,12 @@ namespace PureConnectBackend.Infrastructure.Configuration
                 .HasColumnType("varchar(max)");
             builder
                 .Property(t => t.Role)
-                .IsRequired()
+                .IsRequired(true)
                 .HasColumnName("Role")
                 .HasColumnType("varchar(max)");
             builder
                 .Property(t => t.UserName)
-                .IsRequired()
+                .IsRequired(true)
                 .HasColumnName("UserName")
                 .HasColumnType("varchar(max)");
         }
