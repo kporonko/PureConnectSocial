@@ -43,7 +43,7 @@ namespace PureConnectBackend.Controllers
             if (user is not null)
             {
                 var token = UserExtentions.GenerateTokenFromUser(user, _config["Jwt:Key"], _config["Jwt:Issuer"], _config["Jwt:Audience"]);
-                UserLoginResponse userLoginResponse = new UserLoginResponse() { Token = token };
+                UserLoginResponse userLoginResponse = new UserLoginResponse() { Token = token, Role = user.Role };
                 return Ok(userLoginResponse);
             }
 

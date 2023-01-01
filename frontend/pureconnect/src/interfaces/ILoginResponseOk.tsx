@@ -1,3 +1,4 @@
 export interface ILoginResponseOk{
-    token: string
+    token: string,
+    role: string
 }

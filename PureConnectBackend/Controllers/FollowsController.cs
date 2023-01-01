@@ -28,7 +28,7 @@ namespace PureConnectBackend.Controllers
         /// <param name="followRequest">Follow info: ids of follower and followee and date.</param>
         /// <returns>Status code of operation with localized text.</returns>
         [HttpPost("follow")]
-        [Authorize]
+        [Authorize(Roles = "user")]
         public async Task<IActionResult> AddFollow(FollowAddRequest followRequest)
         {
             var res = await _followService.AddFollow(followRequest);
@@ -44,7 +44,7 @@ namespace PureConnectBackend.Controllers
         /// <param name="followRequest">Follow info: ids of follower and followee.</param>
         /// <returns>Status code of operation with localized text.</returns>
         [HttpDelete("follow")]
-        [Authorize]
+        [Authorize(Roles = "user")]
         public async Task<IActionResult> DeleteFollow(FollowDeleteRequest followRequest)
         {
             var res = await _followService.RemoveFollow(followRequest);
