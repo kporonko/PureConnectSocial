@@ -30,10 +30,10 @@ const Login = (props:{theme: string, setTheme: any}) => {
             client_id: clientId,
             callback: handleCallbackResponse
         });
-
+        const themeButton = props.theme === 'dark' ? 'filled_black' : 'outline';
         google.accounts.id.renderButton(
             document.getElementById("signInDiv")!,
-            {theme: "filled_black", size: "large", type: "standard", shape: "square", text: 'signin_with', logo_alignment: 'left', width: '500px'}
+            {theme: themeButton, size: "large", type: "standard", shape: "rectangular", text: 'signin_with', logo_alignment: 'center', width: '100px'}
         );
     },[])
 
