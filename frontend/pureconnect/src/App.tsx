@@ -4,12 +4,17 @@ import './App.css';
 import Login from "./pages/Login";
 import Home from "./pages/Home";
 import AdminHome from "./pages/AdminHome";
+import useLocalStorage from 'use-local-storage'
 
 function App() {
+
+  const defaultDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+  const [theme, setTheme] = useLocalStorage('theme', defaultDark ? 'dark' : 'light');
+
   return (
       <BrowserRouter>
         <Routes>
-            <Route path="/" element={<Login/>}/>
+            <Route path="/" element={<Login theme={theme} setTheme={setTheme}/>}/>
 
             {/* User*/}
             <Route path="/home" element={<Home/>}/>

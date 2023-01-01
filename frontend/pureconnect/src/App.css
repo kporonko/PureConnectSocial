@@ -1,38 +1,170 @@
-.App {
-  text-align: center;
+html, body{
+  margin: 0;
+  padding: 0;
+  height: 100vh;
+  box-sizing: border-box;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
+@media screen and (max-width: 1200px) {
+  .login-main-logo-wrapper {
+    display: none!important;
   }
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+
+:root {
+  --background: white;
+  --background-secondary: #e2e2e2;
+  --background-third: #b8b8b8;
+  --text-primary: black;
+  --background-imagelogin: white;
+  --input: white;
+  --button-yellow: rgba(255, 199, 0, 1);
+  --box-shadow-main: rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(255, 255, 255, 0.17) 0px 12px 13px, rgba(255, 255, 255, 0.09) 0px -3px 5px;
+}
+[data-theme='dark'] {
+  --background: #494949;
+  --background-secondary: #313131;
+  --background-third: #212121;
+  --text-primary: white;
+  --background-imagelogin: #313131;
+  --input: #494949;
+  --box-shadow-main: rgba(255, 255, 255, 0.25) 0px 54px 55px, rgba(255, 255, 255, 0.12) 0px -12px 30px, rgba(255, 255, 255, 0.12) 0px 4px 6px, rgba(255, 255, 255, 0.17) 0px 12px 13px, rgba(255, 255, 255, 0.09) 0px -3px 5px;
+}
+
+.login-wrapper{
+  background: var(--background);
+}
+.login-main-logo-wrapper{
+  background: var(--background-imagelogin);
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  padding: 5%;
+  border: 1px solid var(--text-primary);
+  box-shadow: var(--box-shadow-main);
+  border-radius: 50px;
+}
+.login-main-logo-img-wrapper{
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+.login-main-logo-img{
+  width: 50%;
+  height: 50%;
+}
+.login-main-logo-text{
+  font-size: 1.1rem;
+  font-family: "Montserrat", sans-serif;
+  color: var(--text-primary);
 }
 
-.App-link {
-  color: #61dafb;
+.login-change-theme-wrapper{
+  display: flex;
+  justify-content: flex-end;
+  padding: 0.5% 0.5% 0 0;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.login-change-theme{
+  text-align: right;
+  font-size: 1.3rem;
+  background: none;
+  border: none;
+  color: var(--text-primary);
+  cursor: pointer;
+}
+.login-change-theme:hover{
+  transform: scale(1.1);
+  transition: 0.7s all ease;
+}
+.login-main-content-wrapper{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  gap: 5%;
+}
+.login-form-wrapper{
+  padding: 5%;
+  height: 100%;
+  border: 1px solid var(--text-primary);
+  border-radius: 50px;
+  background: var(--background-imagelogin);
+  box-shadow: var(--box-shadow-main);
+}
+
+.login-form-text{
+  font-size: 1.9rem;
+  font-family: "Montserrat", sans-serif;
+  color: var(--text-primary);
+  margin-bottom: 15%;
+  font-weight: 600;
+  text-align: center;
+}
+.login-form-input{
+    width: 90%;
+    height: 3rem;
+    border: 1px solid var(--text-primary);
+    border-radius: 5px;
+    padding: 0 5%;
+    margin-bottom: 8%;
+    font-size: 1.1rem;
+    font-family: "Montserrat", sans-serif;
+    background: var(--input);
+    color: var(--text-primary);
+}
+.login-form-input::placeholder{
+  color: var(--text-primary);
+}
+.login-form-input:focus::placeholder {
+  color: gray;
+}
+.login-form-additional-func{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8%;
+  font-size: 0.8rem;
+}
+.login-form-links{
+  text-decoration: underline;
+  color: var(--text-primary);
+  font-family: "Montserrat", sans-serif;
+  font-size: 0.8rem;
+}
+.login-form-buttons-wrapper{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-direction: column;
+}
+.login-form-button-div{
+  width: 100%;
+  height: 3rem;
+  border: 1px solid var(--text-primary);
+  border-radius: 5px;
+  margin-bottom: 1rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  background: var(--button-yellow);
+  border: none;
+}
+.login-form-button{
+  width: 100%;
+  height: 100%;
+  background: none;
+  font-size: 1rem;
+  font-family: "Montserrat", sans-serif;
+  font-weight: 600;
+  color: black;
+  border: none;
+  cursor: pointer;
+}
+.login-form-button-div:hover{
+  background: #ffe100;
+  transition: 0.7s ease;
 }
