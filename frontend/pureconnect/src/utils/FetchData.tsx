@@ -23,16 +23,7 @@ export const login = async (loginData: IUserLoginRequest) => {
     });
 
     const responseJson = await response.json()
-
-    if (response.status === 400){
-        return undefined;
-    }
-    if (response.status === 200){
-        return responseJson as ILoginResponseOk;
-    }
-    if (response.status === 404){
-        return responseJson as ILoginResponseBad;
-    }
+    return responseJson;
 }
 export const authGoogle = async (token: string) => {
     const response = await fetch(`${BASE_URL}api/GoogleAuth/auth`, {

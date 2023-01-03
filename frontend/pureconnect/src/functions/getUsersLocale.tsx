@@ -4,6 +4,6 @@ const userLocale = getUserLocale();
 
 
 export const getUsersLocale = () => {
-    // return getUserLocale()
-    return 'uk-Ua'
+    return getUserLocale()
+    //return 'uk-Ua'
 }

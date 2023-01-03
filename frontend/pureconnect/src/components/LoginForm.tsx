@@ -1,10 +1,12 @@
-import React, {useState} from 'react';
+import React, {FormEvent, useState} from 'react';
 import {Link} from "react-router-dom";
 import {login} from "../utils/FetchData";
 import {useNavigate} from "react-router";
 import LocalizedStrings from "react-localization";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import {ILoginResponseOk} from "../interfaces/ILoginResponseOk";
+import {ILoginResponseBad} from "../interfaces/ILoginResponseBad";
 
 const LoginForm = (props: {theme: string}) => {
 
@@ -35,14 +37,21 @@ const LoginForm = (props: {theme: string}) => {
 
     const nav = useNavigate();
 
-    const loginUser = async () => {
+    const loginUser = async (e: FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
         const res = await login({email: email, password: password});
-        if (res === undefined){
+        if(res.status === 400){
             const notify = () => toast.error(strings.loginErrorValid);
             notify();
         }
-        else
+        else if ((res as ILoginResponseOk).token?.length > 0 && (res as ILoginResponseOk).role?.length > 0){
             handleNav(res!.role, res!.token);
+        }
+        else{
+            const text = (res as ILoginResponseBad).value
+            const notify = () => toast.error(text);
+            notify();
+        }
     }
 
     const handleNav = (role: string|null, token: string|null) => {
@@ -64,47 +73,51 @@ const LoginForm = (props: {theme: string}) => {
     }
     return (
         <div className="login-form-wrapper">
-            <div className="login-form-text">
-                {strings.loginText}
-            </div>
 
-            <div>
-                <input
-                    onChange={(e) => setEmail(e.target.value)}
-                    value={email}
-                    className='login-form-input'
-                    placeholder={strings.loginInp}
-                    type="email"
-                />
-                <input
-                    onChange={(e) => setPassword(e.target.value)}
-                    value={password}
-                    className='login-form-input'
-                    placeholder={strings.passInp}
-                    type="password"
-                />
-            </div>
-
-            <div className='login-form-additional-func'>
-                <Link className='login-form-links' to={'soon'}>
-                    {strings.forgotPass}
-                </Link>
-                <Link className='login-form-links' to={'soon'}>
-                    {strings.alreadyHaveAcc}
-                </Link>
-            </div>
-
-            <div className='login-form-buttons-wrapper'>
-                <div className={isEmail(email) && password.length > 0 ? 'login-form-button-div active-button-div' : 'login-form-button-div'}>
-                    <button disabled={!isEmail(email) || password.length < 1} className={isEmail(email) && password.length > 0 ? 'login-form-button active-button' : 'login-form-button'} onClick={loginUser}>
-                        {strings.logBtn}
-                    </button>
+            <form onSubmit={(e) => loginUser(e)}>
+                <div className="login-form-text">
+                    {strings.loginText}
                 </div>
 
-                <div id="signInDiv">
-
+                <div>
+                    <input
+                        onChange={(e) => setEmail(e.target.value)}
+                        value={email}
+                        className='login-form-input'
+                        placeholder={strings.loginInp}
+                        type="email"
+                    />
+                    <input
+                        onChange={(e) => setPassword(e.target.value)}
+                        value={password}
+                        className='login-form-input'
+                        placeholder={strings.passInp}
+                        type="password"
+                    />
                 </div>
-            </div>
+
+                <div className='login-form-additional-func'>
+                    <Link className='login-form-links' to={'soon'}>
+                        {strings.forgotPass}
+                    </Link>
+                    <Link className='login-form-links' to={'soon'}>
+                        {strings.alreadyHaveAcc}
+                    </Link>
+                </div>
+
+                <div className='login-form-buttons-wrapper'>
+                    <div className={isEmail(email) && password.length > 0 ? 'login-form-button-div active-button-div' : 'login-form-button-div'}>
+                        <button type={'submit'} disabled={!isEmail(email) || password.length < 1} className={isEmail(email) && password.length > 0 ? 'login-form-button active-button' : 'login-form-button'}>
+                            {strings.logBtn}
+                        </button>
+                    </div>
+
+                    <div id="signInDiv">
+
+                    </div>
+                </div>
+            </form>
+
             <ToastContainer
                 position="top-right"
                 autoClose={5000}
@@ -112,7 +125,7 @@ const LoginForm = (props: {theme: string}) => {
                 newestOnTop={false}
                 closeOnClick
                 rtl={false}
-                pauseOnFocusLoss
+                pauseOnFocusLoss={false}
                 draggable
                 pauseOnHover
                 theme={props.theme === 'dark' ? 'dark' : 'light'}
