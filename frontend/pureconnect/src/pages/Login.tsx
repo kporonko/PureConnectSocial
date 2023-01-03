@@ -51,7 +51,7 @@ const Login = (props:{theme: string, setTheme: any}) => {
             </div>
             <div className='login-main-content-wrapper'>
                 <LoginMainLogo theme={props.theme.toString()}/>
-                <LoginForm/>
+                <LoginForm theme={props.theme}/>
             </div>
         </div>
     );
