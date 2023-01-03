@@ -7,6 +7,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import {ILoginResponseOk} from "../interfaces/ILoginResponseOk";
 import {ILoginResponseBad} from "../interfaces/ILoginResponseBad";
+import {isEmail} from "../functions/stringFunctions";
 
 const LoginForm = (props: {theme: string}) => {
 
@@ -16,7 +17,7 @@ const LoginForm = (props: {theme: string}) => {
             loginInp:"Email",
             passInp:"Password",
             forgotPass:"Forgot password",
-            dontHaveAcc:"Don`t have an account",
+            alrHaveAcc:"Don`t have an account",
             logBtn:"Log In",
             loginErrorValid:"Entered data was invalid. Try again.",
         },
@@ -25,7 +26,7 @@ const LoginForm = (props: {theme: string}) => {
             loginInp:"Електронна пошта",
             passInp:"Пароль",
             forgotPass:"Забули пароль",
-            dontHaveAcc:"В мене немає акаунта",
+            alrHaveAcc:"В мене немає акаунта",
             logBtn:"Увійти",
             loginErrorValid:"Введені дані були невірними. Спробуйте ще раз.",
 
@@ -67,10 +68,7 @@ const LoginForm = (props: {theme: string}) => {
             nav("/home")
     }
 
-    const isEmail = (email:string) => {
-        const regexExp = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/gi;
-        return regexExp.test(email);
-    }
+
     return (
         <div className="login-form-wrapper">
 
@@ -101,7 +99,7 @@ const LoginForm = (props: {theme: string}) => {
                         {strings.forgotPass}
                     </Link>
                     <Link className='login-form-links' to={'register'}>
-                        {strings.dontHaveAcc}
+                        {strings.alrHaveAcc}
                     </Link>
                 </div>
 

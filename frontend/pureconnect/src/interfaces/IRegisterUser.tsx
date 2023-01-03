@@ -3,7 +3,8 @@ export interface IRegisterUser{
     password: string,
     lastName: string,
     firstName: string,
-    location: string|null,
+    location: string|undefined,
     birthDate: string,
-    avatar: string|null
+    avatar: string|undefined,
+    username: string
 }
