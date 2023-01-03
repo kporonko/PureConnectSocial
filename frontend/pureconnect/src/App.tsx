@@ -5,6 +5,7 @@ import Login from "./pages/Login";
 import Home from "./pages/Home";
 import AdminHome from "./pages/AdminHome";
 import useLocalStorage from 'use-local-storage'
+import Register from "./pages/Register";
 
 function App() {
 
@@ -15,6 +16,7 @@ function App() {
       <BrowserRouter>
         <Routes>
             <Route path="/" element={<Login theme={theme} setTheme={setTheme}/>}/>
+            <Route path="/register" element={<Register theme={theme} setTheme={setTheme}/>}/>
 
             {/* User*/}
             <Route path="/home" element={<Home/>}/>

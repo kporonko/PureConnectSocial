@@ -7,7 +7,8 @@ import LoginForm from "../components/LoginForm";
 import light from '../assets/sunny.png';
 import dark from '../assets/moon.ico';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { solid, regular, brands, icon } from '@fortawesome/fontawesome-svg-core/import.macro' // <-- import styles to be used
+import { solid, regular, brands, icon } from '@fortawesome/fontawesome-svg-core/import.macro'
+import ChangeThemeButton from "../components/ChangeThemeButton"; // <-- import styles to be used
 
 const Login = (props:{theme: string, setTheme: any}) => {
     const nav = useNavigate();
@@ -44,11 +45,7 @@ const Login = (props:{theme: string, setTheme: any}) => {
     }
     return (
         <div className='login-wrapper' data-theme={props.theme}>
-            <div className="login-change-theme-wrapper">
-                <button className="login-change-theme" onClick={handleTheme}>
-                    <FontAwesomeIcon icon={props.theme === 'light' ? solid('moon') : solid('sun')} />
-                </button>
-            </div>
+            <ChangeThemeButton theme={props.theme} setTheme={props.setTheme}/>
             <div className='login-main-content-wrapper'>
                 <LoginMainLogo theme={props.theme.toString()}/>
                 <LoginForm theme={props.theme}/>

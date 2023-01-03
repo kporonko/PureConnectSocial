@@ -16,7 +16,7 @@ const LoginForm = (props: {theme: string}) => {
             loginInp:"Email",
             passInp:"Password",
             forgotPass:"Forgot password",
-            alreadyHaveAcc:"Already have an account",
+            dontHaveAcc:"Don`t have an account",
             logBtn:"Log In",
             loginErrorValid:"Entered data was invalid. Try again.",
         },
@@ -25,7 +25,7 @@ const LoginForm = (props: {theme: string}) => {
             loginInp:"Електронна пошта",
             passInp:"Пароль",
             forgotPass:"Забули пароль",
-            alreadyHaveAcc:"Вже маю акаунт",
+            dontHaveAcc:"В мене немає акаунта",
             logBtn:"Увійти",
             loginErrorValid:"Введені дані були невірними. Спробуйте ще раз.",
 
@@ -100,8 +100,8 @@ const LoginForm = (props: {theme: string}) => {
                     <Link className='login-form-links' to={'soon'}>
                         {strings.forgotPass}
                     </Link>
-                    <Link className='login-form-links' to={'soon'}>
-                        {strings.alreadyHaveAcc}
+                    <Link className='login-form-links' to={'register'}>
+                        {strings.dontHaveAcc}
                     </Link>
                 </div>
 

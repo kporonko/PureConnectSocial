@@ -1,11 +1,5 @@
 import {IUserLoginRequest} from "../interfaces/IUserLoginRequest";
-import {ILoginResponseOk} from "../interfaces/ILoginResponseOk";
-import {ILoginResponseBad} from "../interfaces/ILoginResponseBad";
 import {getUsersLocale} from "../functions/getUsersLocale";
-import LocalizedStrings from "react-localization";
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-
 
 const BASE_URL = "https://localhost:7219/";
 

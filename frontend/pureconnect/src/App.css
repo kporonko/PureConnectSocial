@@ -180,3 +180,68 @@ html, body{
   color: white;
   color: black;
 }
+
+
+/*Register page*/
+.register-wrapper{
+  background: var(--background);
+}
+.register-form-wrapper{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.register-form{
+  position: relative;
+  background: var(--background-imagelogin);
+  border: 1px solid var(--text-primary);
+  padding: 3% 5% 5% 5%;
+  border: 1px solid var(--text-primary);
+  box-shadow: var(--box-shadow-main);
+  border-radius: 50px;
+  min-width: 65vw;
+}
+.register-header{
+  font-size: 1.7rem;
+  font-family: "Montserrat", sans-serif;
+  color: var(--text-primary);
+  margin: 0 0 5% 0;
+  font-weight: 600;
+  text-align: center;
+}
+.register-inputs-wrapper{
+  display: flex;
+  justify-content: space-between;
+  /*gap: 35%;*/
+}
+.register-input-additional{
+  max-width: 15vw;
+}
+.register-single-input-wrapper{
+  display: flex;
+  justify-content: center;
+}
+.register-form-input{
+  width: 17vw;
+  height: 3rem;
+  border: 1px solid var(--text-primary);
+  border-radius: 5px;
+  padding: 0 10% 0 5%;
+  margin-right: 2.5rem;
+  font-weight: 400;
+  font-size: 1.1rem;
+  font-family: "Montserrat", sans-serif;
+  background: var(--input);
+  color: var(--text-primary);
+}
+.register-form-avatar-image{
+  width: 15rem;
+  height: 15rem;
+  margin-bottom: 2rem;
+  object-fit: cover;
+}
+.register-absolute{
+  position: absolute;
+  right:  28.8rem;
+  top: 10rem;
+}
