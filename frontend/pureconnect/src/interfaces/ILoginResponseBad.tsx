@@ -3,6 +3,4 @@ export interface ILoginResponseBad{
     value: string,
     resourceNotFound: boolean,
     searchedLocation: string,
-    token: null,
-    role: null
 }

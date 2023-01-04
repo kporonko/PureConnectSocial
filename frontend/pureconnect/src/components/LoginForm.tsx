@@ -62,6 +62,7 @@ const LoginForm = (props: {theme: string}) => {
             return;
         }
 
+        localStorage.setItem('access_token', token);
         if (role === "admin")
             nav("/admin-home")
         else if (role === "user")

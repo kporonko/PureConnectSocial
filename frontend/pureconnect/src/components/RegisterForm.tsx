@@ -1,10 +1,14 @@
-import React, {ChangeEvent, useRef, useState} from 'react';
+import React, {ChangeEvent, FormEvent, useRef, useState} from 'react';
 import LocalizedStrings from "react-localization";
 import {isEmail} from "../functions/stringFunctions";
 import { IRegisterUser } from '../interfaces/IRegisterUser';
 import {Link} from "react-router-dom";
+import {login, register} from "../utils/FetchData";
+import {toast, ToastContainer} from "react-toastify";
+import {ILoginResponseOk} from "../interfaces/ILoginResponseOk";
+import {useNavigate} from "react-router";
 
-const RegisterForm = () => {
+const RegisterForm = (props: {theme: string}) => {
     let strings = new LocalizedStrings({
         en:{
             registerText:"Create new account",
@@ -46,6 +50,7 @@ const RegisterForm = () => {
         avatar: '',
     });
 
+    const nav = useNavigate();
     const fileInput = useRef<HTMLInputElement>(null);
     const [preview, setPreview] = useState<string | ArrayBuffer | null>("");
 
@@ -62,12 +67,39 @@ const RegisterForm = () => {
         }
     };
 
+    const handleRegisterSubmit = async (e: FormEvent<HTMLFormElement>) => {
+        e.preventDefault()
+        const res = await register(user)
+        const responseJson = await res.json();
+
+        if (res.status === 200) {
+            const notify = () => toast.success(responseJson.value);
+            notify();
+
+            const res = await login({email: user.email, password: user.password});
+            localStorage.setItem('access_token', res.token);
+            setInterval(() => nav("/home"), 2000)
+        }
+        else if(res.status === 400) {
+            const notify = () => toast.error(responseJson.errors);
+            notify();
+        }
+        else if (res.status === 409) {
+            const notify = () => toast.warning(responseJson.value);
+            notify();
+        }
+    }
+
+    const submitCheckForDisabled = () => {
+        return !isEmail(user?.email) || user?.password.length < 1 || user.firstName.length < 1 || user.lastName.length < 1 || user.birthDate.length < 1 || user.username.length < 1
+    }
+
     return (
         <div className={'register-form'}>
             <h1 className={'register-header'}>
                 {strings.registerText}
             </h1>
-            <form>
+            <form onSubmit={(e) => handleRegisterSubmit(e)}>
                 <div className={'register-form-grid-wrapper'}>
                     <input
                         className={'login-form-input register-input-additional register-email-grid'}
@@ -134,8 +166,8 @@ const RegisterForm = () => {
                     />
 
                 </div>
-                <div className={ isEmail(user.email) && user?.password.length > 0 && user.firstName.length > 0 && user.lastName.length > 0 && user.birthDate.length > 0 && user.username.length > 0? 'login-form-button-div active-button-div' : 'login-form-button-div'}>
-                    <button type={'submit'} disabled={ !isEmail(user?.email) || user?.password.length < 1 || user.firstName.length < 1 || user.lastName.length < 1 || user.birthDate.length < 1 || user.username.length < 1} className={isEmail(user?.email) && user?.password.length > 0 ? 'login-form-button active-button' : 'login-form-button'}>
+                <div className={ isEmail(user.email) && user?.password.length >= 8 && user.firstName.length > 0 && user.lastName.length > 0 && user.birthDate.length > 0 && user.username.length > 0? 'login-form-button-div active-button-div' : 'login-form-button-div'}>
+                    <button type={'submit'} disabled={submitCheckForDisabled()} className={ submitCheckForDisabled() ? 'login-form-button active-button' : 'login-form-button'}>
                         {strings.regBtn}
                     </button>
                 </div>
@@ -146,6 +178,18 @@ const RegisterForm = () => {
                     </Link>
                 </div>
             </form>
+            <ToastContainer
+                position="top-right"
+                autoClose={5000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss={false}
+                draggable
+                pauseOnHover
+                theme={props.theme === 'dark' ? 'dark' : 'light'}
+            />
         </div>
     );
 };

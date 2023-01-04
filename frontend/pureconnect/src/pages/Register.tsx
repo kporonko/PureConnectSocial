@@ -7,7 +7,7 @@ const Register = (props:{theme: string, setTheme: any}) => {
         <div className={'register-wrapper'} data-theme={props.theme}>
             <ChangeThemeButton theme={props.theme} setTheme={props.setTheme}/>
             <div className="register-form-wrapper">
-                <RegisterForm/>
+                <RegisterForm theme={props.theme}/>
             </div>
         </div>
     );
