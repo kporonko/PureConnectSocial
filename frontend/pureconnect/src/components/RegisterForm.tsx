@@ -62,10 +62,18 @@ const RegisterForm = (props: {theme: string}) => {
             reader.readAsDataURL(file);
 
             // Implement image to base64
-            setUser({...user, avatar: e.target.value} as IRegisterUser)
+            convertAvatarImageToBase64(reader, file);
             console.log(user?.avatar)
         }
     };
+
+    const convertAvatarImageToBase64 = (reader: FileReader, file: File) => {
+        reader.onload = (event) => {
+            console.log(event.target?.result as string)
+            setUser({...user, avatar: event.target?.result as string});
+        };
+        reader.readAsDataURL(file);
+    }
 
     const handleRegisterSubmit = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault()

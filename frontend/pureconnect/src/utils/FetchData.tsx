@@ -54,6 +54,5 @@ export const register = async (registerData: IRegisterUser) => {
             username: registerData.username
         })
     });
-    console.log(response);
     return response;
 }
