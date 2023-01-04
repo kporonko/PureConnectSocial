@@ -24,5 +24,6 @@ namespace PureConnectBackend.Infrastructure.Models
         public List<Follow> Follower { get; set; }
         public List<Follow> Followee { get; set; }
         public List<Post> Posts { get; set; }
+        public List<PostLike> PostsLikes { get; set; }
     }
 }

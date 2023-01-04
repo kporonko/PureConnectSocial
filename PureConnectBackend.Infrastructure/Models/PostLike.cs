@@ -6,14 +6,13 @@ using System.Threading.Tasks;
 
 namespace PureConnectBackend.Infrastructure.Models
 {
-    public class Post
+    public class PostLike
     {
         public int Id { get; set; }
-        public string? Image { get; set; }
-        public string Description { get; set; }
         public DateTime CreatedAt { get; set; }
+        public int PostId { get; set; }
+        public Post Post { get; set; }
         public int UserId { get; set; }
         public User User { get; set; }
-        public List<PostLike> PostLikes { get; set; }
     }
 }

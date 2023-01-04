@@ -20,13 +20,14 @@ namespace PureConnectBackend.Infrastructure.Data
         public DbSet<User> Users { get; set; }
         public DbSet<Follow> Follows { get; set; }
         public DbSet<Post> Posts { get; set; }
-        
+        public DbSet<PostLike> PostLikes { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.ApplyConfiguration(new UserConfiguration());
             modelBuilder.ApplyConfiguration(new FollowConfiguration());
             modelBuilder.ApplyConfiguration(new PostConfiguration());
+            modelBuilder.ApplyConfiguration(new PostLikeConfiguration());
 
             modelBuilder.Entity<Follow>()
                 .HasKey(k => k.Id);
@@ -48,6 +49,19 @@ namespace PureConnectBackend.Infrastructure.Data
                 .WithMany(u => u.Posts)
                 .HasForeignKey(u => u.UserId)
                 .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<PostLike>()
+                .HasOne(u => u.User)
+                .WithMany(u => u.PostsLikes)
+                .HasForeignKey(u => u.UserId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+
+            modelBuilder.Entity<PostLike>()
+                .HasOne(u => u.Post)
+                .WithMany(u => u.PostLikes)
+                .HasForeignKey(u => u.PostId)
+                .OnDelete(DeleteBehavior.Restrict);
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
