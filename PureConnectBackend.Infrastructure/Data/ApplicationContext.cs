@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml;
 
 namespace PureConnectBackend.Infrastructure.Data
 {
@@ -20,7 +21,9 @@ namespace PureConnectBackend.Infrastructure.Data
         public DbSet<User> Users { get; set; }
         public DbSet<Follow> Follows { get; set; }
         public DbSet<Post> Posts { get; set; }
-        public DbSet<PostLike> PostLikes { get; set; }
+        public DbSet<PostLike> PostsLikes { get; set; }
+        public DbSet<PostComment> PostsComments { get; set; }
+        public DbSet<PostCommentLike> PostsCommentsLikes { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -28,6 +31,8 @@ namespace PureConnectBackend.Infrastructure.Data
             modelBuilder.ApplyConfiguration(new FollowConfiguration());
             modelBuilder.ApplyConfiguration(new PostConfiguration());
             modelBuilder.ApplyConfiguration(new PostLikeConfiguration());
+            modelBuilder.ApplyConfiguration(new PostCommentConfiguration());
+            modelBuilder.ApplyConfiguration(new PostCommentLikeConfiguration());
 
             modelBuilder.Entity<Follow>()
                 .HasKey(k => k.Id);
@@ -61,6 +66,33 @@ namespace PureConnectBackend.Infrastructure.Data
                 .HasOne(u => u.Post)
                 .WithMany(u => u.PostLikes)
                 .HasForeignKey(u => u.PostId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<PostComment>()
+                .HasOne(u => u.ParentComment)
+                .WithMany(u => u.CommentReplies)
+                .HasForeignKey(u => u.ParentCommentId)
+                .OnDelete(DeleteBehavior.Restrict);
+            modelBuilder.Entity<PostComment>()
+                .HasOne(u => u.User)
+                .WithMany(u => u.PostsComments)
+                .HasForeignKey(u => u.UserId)
+                .OnDelete(DeleteBehavior.Restrict);
+            modelBuilder.Entity<PostComment>()
+                .HasOne(u => u.Post)
+                .WithMany(u => u.PostComments)
+                .HasForeignKey(u => u.PostId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<PostCommentLike>()
+                .HasOne(u => u.User)
+                .WithMany(u => u.PostsCommentsLikes)
+                .HasForeignKey(u => u.UserId)
+                .OnDelete(DeleteBehavior.Restrict);
+            modelBuilder.Entity<PostCommentLike>()
+                .HasOne(u => u.PostComment)
+                .WithMany(u => u.PostCommentLikes)
+                .HasForeignKey(u => u.PostCommentId)
                 .OnDelete(DeleteBehavior.Restrict);
         }
 
