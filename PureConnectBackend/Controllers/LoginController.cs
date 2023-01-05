@@ -1,15 +1,11 @@
 ﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Localization;
-using Microsoft.IdentityModel.Tokens;
 using PureConnectBackend.Core.Extentions;
 using PureConnectBackend.Core.Interfaces;
 using PureConnectBackend.Core.Models.Requests;
 using PureConnectBackend.Core.Models.Responses;
 using PureConnectBackend.Infrastructure.Models;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
 using System.Text;
 
 namespace PureConnectBackend.Controllers
@@ -19,12 +15,12 @@ namespace PureConnectBackend.Controllers
     public class LoginController : ControllerBase
     {
         private IConfiguration _config;
-        private ILoginService _userService;
+        private ILoginService _loginService;
         private readonly IStringLocalizer<LoginController> _stringLocalizer;
-        public LoginController(IConfiguration config, ILoginService userService, IStringLocalizer<LoginController> stringLocalizer)
+        public LoginController(IConfiguration config, ILoginService loginService, IStringLocalizer<LoginController> stringLocalizer)
         {
             _config = config;
-            _userService = userService;
+            _loginService = loginService;
             _stringLocalizer = stringLocalizer;
         }
 
@@ -57,7 +53,7 @@ namespace PureConnectBackend.Controllers
         /// <returns>If data is valid returns User object, otherwise null.</returns>
         private async Task<User?> Authenticate(LoginUserRequest userLogin)
         {
-            User? currUser = await _userService.GetUser(userLogin);
+            User? currUser = await _loginService.GetUser(userLogin);
             return currUser;
         }
     }

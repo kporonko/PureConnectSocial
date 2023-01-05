@@ -32,7 +32,7 @@ namespace PureConnectBackend.Controllers
         public async Task<IActionResult> AddFollow(FollowAddRequest followRequest)
         {
             var res = await _followService.AddFollow(followRequest);
-            if ((int)res == 201)
+            if (res == HttpStatusCode.Created)
                 return Ok(_stringLocalizer.GetString("FollowAdd"));
             
             return BadRequest(_stringLocalizer.GetString("AddFail"));
@@ -48,7 +48,7 @@ namespace PureConnectBackend.Controllers
         public async Task<IActionResult> DeleteFollow(FollowDeleteRequest followRequest)
         {
             var res = await _followService.RemoveFollow(followRequest);
-            if ((int)res == 201)
+            if (res == HttpStatusCode.Created)
                 return Ok(_stringLocalizer.GetString("FollowDeleted"));
 
             return BadRequest(_stringLocalizer.GetString("DeleteFail"));
