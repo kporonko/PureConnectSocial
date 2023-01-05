@@ -26,10 +26,12 @@ namespace PureConnectBackend.Core.Services
             _context = context;
         }
 
+
         /// <summary>
         /// Creates new post.
         /// </summary>
-        /// <param name="postInfo">Post DTO with post info and user`s jwt token.</param>
+        /// <param name="postInfo">Post DTO with post info.</param>
+        /// <param name="userFromJwt">User object got from jwt token.</param>
         /// <returns>201 status code if post is created.</returns>
         public async Task<HttpStatusCode> CreatePost(CreatePostRequest postInfo, User userFromJwt)
         {
@@ -87,7 +89,7 @@ namespace PureConnectBackend.Core.Services
         /// <summary>
         /// Gets list of full information about all user`s posts.
         /// </summary>
-        /// <param name="token">User jwt token.</param>
+        /// <param name="userFromJwt">User object got from jwt token.</param>
         /// <returns>List of all user`s posts info or null if token was invalid.</returns>
         public async Task<List<PostResponse>?> GetPosts(User userFromJwt)
         {
@@ -105,6 +107,11 @@ namespace PureConnectBackend.Core.Services
             return resPostsList;
         }
 
+        /// <summary>
+        /// Gets list of images of all user`s posts.
+        /// </summary>
+        /// <param name="userFromJwt">User object got from jwt token.</param>
+        /// <returns>List of all user`s posts images or null if token was invalid.</returns>
         public async Task<List<PostImageResponse>?> GetPostsImages(User userFromJwt)
         {
             var user = await _context.Users.Include(x => x.Posts).FirstOrDefaultAsync(x => x.Email == userFromJwt.Email);
@@ -125,6 +132,28 @@ namespace PureConnectBackend.Core.Services
 
             return resPostsImagesList;
         }
+
+        /// <summary>
+        /// Gets recommended 50 posts according to user`s follows.
+        /// </summary>
+        /// <param name="userFromJwt">User object got from jwt token.</param>
+        /// <returns>List of 50 last recommended posts info or null if token was invalid.</returns>
+        public async Task<List<PostResponse>?> GetRecommendedPosts(User userFromJwt)
+        {
+            var user = await _context.Users.Include(x => x.Follower).FirstOrDefaultAsync(x => x.Email == userFromJwt.Email);
+
+            List<PostResponse> resPostsList = new();
+            foreach (var followee in user.Follower)
+            {
+                var followeeUser = await _context.Users.Include(x => x.Posts).ThenInclude(x => x.PostLikes).Include(x => x.Posts).ThenInclude(x => x.PostComments).FirstOrDefaultAsync(x => x.Id == followee.FolloweeId);
+                var followeeUserPosts = GetUserPostsDuringWeek(followeeUser!);
+                resPostsList.AddRange(followeeUserPosts);
+            }
+
+            resPostsList.OrderBy(x => x.CreatedAt);
+            return resPostsList;
+        }
+
 
         /// <summary>
         /// Converts post DTO to Post entity.
@@ -201,5 +230,22 @@ namespace PureConnectBackend.Core.Services
             return postResponse;
         }
 
+        /// <summary>
+        /// Gets user`s followees` posts for the last 7 days.
+        /// </summary>
+        /// <param name="followeeUser"></param>
+        /// <returns></returns>
+        private List<PostResponse> GetUserPostsDuringWeek(User followeeUser)
+        {
+            List<PostResponse> list = new();
+
+            var posts =  followeeUser.Posts.Where(x => (DateTime.Now - x.CreatedAt).TotalDays <= 7(DateTime.Now - x.CreatedAt).TotalSeconds >= 0).ToList();
+            foreach (var post in posts)
+            {
+                list.Add(ConvertEntityObjectToPostDto(post));
+            }
+
+            return list;
+        }
     }
 }

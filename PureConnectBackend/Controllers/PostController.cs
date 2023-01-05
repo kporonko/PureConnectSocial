@@ -124,6 +124,17 @@ namespace PureConnectBackend.Controllers
             return Ok(posts);
         }
 
+        [Authorize]
+        [HttpGet("recommended-posts")]
+        public async Task<ActionResult<List<PostResponse>>> RecommendedPosts()
+        {
+            var user = GetCurrentUser();
+            var posts = await _postService.GetRecommendedPosts(user!);
+            if (posts is null)
+                return NotFound();
+
+            return Ok(posts);
+        }
 
         /// <summary>
         /// Gets current user by authorizing jwt token.

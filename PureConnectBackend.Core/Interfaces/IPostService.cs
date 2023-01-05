@@ -18,5 +18,6 @@ namespace PureConnectBackend.Core.Interfaces
         Task<PostResponse?> GetPost(int postId);
         Task<List<PostImageResponse>?> GetPostsImages(User userFromJwt);
         Task<List<PostResponse>?> GetPosts(User userFromJwt);
+        Task<List<PostResponse>?> GetRecommendedPosts(User userFromJwt);
     }
 }
