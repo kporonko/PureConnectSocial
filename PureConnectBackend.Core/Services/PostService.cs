@@ -150,7 +150,7 @@ namespace PureConnectBackend.Core.Services
                 resPostsList.AddRange(followeeUserPosts);
             }
 
-            resPostsList.OrderBy(x => x.CreatedAt);
+            resPostsList.OrderBy(x => x.CreatedAt).Take(50);
             return resPostsList;
         }
 
