@@ -23,6 +23,11 @@ namespace PureConnectBackend.Controllers
             _postService = postService;
         }
 
+        /// <summary>
+        /// Creates a new post.
+        /// </summary>
+        /// <param name="postRequest">CreatePostRequest dto object with post info.</param>
+        /// <returns>Ok(200) if post was created, otherwise BadRequest(400).</returns>
         [Authorize(Roles = "user")]
         [HttpPost]
         public async Task<IActionResult> CreatePost([FromBody] CreatePostRequest postRequest)
@@ -34,6 +39,11 @@ namespace PureConnectBackend.Controllers
             return BadRequest();
         }
 
+        /// <summary>
+        /// Deletes post from db.
+        /// </summary>
+        /// <param name="postRequest">DeletePostRequest object with id of post to delete.</param>
+        /// <returns>Ok(200) if post was deleted, otherwise NotFound(404).</returns>
         [Authorize]
         [HttpDelete]
         public async Task<IActionResult> DeletePost([FromBody] DeletePostRequest postRequest)
@@ -44,6 +54,12 @@ namespace PureConnectBackend.Controllers
             
             return NotFound();
         }
+
+        /// <summary>
+        /// Edits post in db.
+        /// </summary>
+        /// <param name="postRequest">EditPostInfoRequest object with post id and it`s new information.</param>
+        /// <returns>Ok(200) if post was updated, otherwise NotFound(404).</returns>
         [Authorize(Roles = "user")]
         [HttpPut]
         public async Task<IActionResult> EditPost([FromBody] EditPostInfoRequest postRequest)
@@ -53,9 +69,14 @@ namespace PureConnectBackend.Controllers
             if (response == HttpStatusCode.OK)
                 return Ok();
 
-            return BadRequest();
+            return NotFound();
         }
 
+        /// <summary>
+        /// Gets post from db.
+        /// </summary>
+        /// <param name="postId">Id of post.</param>
+        /// <returns>PostResponse object with 200 code if post was found, otherwise NotFound(404).</returns>
         [Authorize]
         [HttpGet]
         public async Task<ActionResult<PostResponse>> GetPost(int postId)
@@ -67,6 +88,11 @@ namespace PureConnectBackend.Controllers
             return Ok(post);
         }
 
+        /// <summary>
+        /// Gets all user`s posts images from db.
+        /// </summary>
+        /// <param name="token">JWT user`s token whose posts are being gotten.</param>
+        /// <returns>List of PostImageResponse object with 200 code if user was found, otherwise NotFound(404).</returns>
         [Authorize]
         [HttpGet]
         public async Task<ActionResult<List<PostImageResponse>>> GetPostsImages(string token)
@@ -78,6 +104,11 @@ namespace PureConnectBackend.Controllers
             return Ok(postsImages);
         }
 
+        /// <summary>
+        /// Gets all user`s posts from db.
+        /// </summary>
+        /// <param name="token">JWT user`s token whose posts are being gotten.</param>
+        /// <returns>List of PostResponse objects with 200 code if user was found, otherwise NotFound(404).</returns>
         [Authorize]
         [HttpGet]
         public async Task<ActionResult<List<PostResponse>>> GetPosts(string token)
