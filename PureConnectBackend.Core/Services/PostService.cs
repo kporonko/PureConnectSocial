@@ -239,7 +239,7 @@ namespace PureConnectBackend.Core.Services
         {
             List<PostResponse> list = new();
 
-            var posts =  followeeUser.Posts.Where(x => (DateTime.Now - x.CreatedAt).TotalDays <= 7(DateTime.Now - x.CreatedAt).TotalSeconds >= 0).ToList();
+            var posts =  followeeUser.Posts.Where(x => (DateTime.Now - x.CreatedAt).TotalDays <= 7 && (DateTime.Now - x.CreatedAt).TotalSeconds >= 0).ToList();
             foreach (var post in posts)
             {
                 list.Add(ConvertEntityObjectToPostDto(post));
