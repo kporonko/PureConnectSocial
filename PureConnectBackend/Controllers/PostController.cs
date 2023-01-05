@@ -8,6 +8,7 @@ using PureConnectBackend.Core.Models.Requests;
 using PureConnectBackend.Core.Models.Responses;
 using PureConnectBackend.Infrastructure.Models;
 using System.Net;
+using System.Security.Claims;
 
 namespace PureConnectBackend.Controllers
 {
@@ -30,9 +31,10 @@ namespace PureConnectBackend.Controllers
         /// <returns>Ok(200) if post was created, otherwise BadRequest(400).</returns>
         [Authorize(Roles = "user")]
         [HttpPost]
-        public async Task<IActionResult> CreatePost([FromBody] CreatePostRequest postRequest)
+        public async Task<IActionResult> Post([FromBody] CreatePostRequest postRequest)
         {
-            var response = await _postService.CreatePost(postRequest);
+            var user = GetCurrentUser();
+            var response = await _postService.CreatePost(postRequest, user);
             if (response == HttpStatusCode.Created)
                 return Ok();
 
@@ -46,7 +48,7 @@ namespace PureConnectBackend.Controllers
         /// <returns>Ok(200) if post was deleted, otherwise NotFound(404).</returns>
         [Authorize]
         [HttpDelete]
-        public async Task<IActionResult> DeletePost([FromBody] DeletePostRequest postRequest)
+        public async Task<IActionResult> Post([FromBody] DeletePostRequest postRequest)
         {
             var response = await _postService.DeletePost(postRequest);
             if (response == HttpStatusCode.OK)
@@ -62,7 +64,7 @@ namespace PureConnectBackend.Controllers
         /// <returns>Ok(200) if post was updated, otherwise NotFound(404).</returns>
         [Authorize(Roles = "user")]
         [HttpPut]
-        public async Task<IActionResult> EditPost([FromBody] EditPostInfoRequest postRequest)
+        public async Task<IActionResult> Post([FromBody] EditPostInfoRequest postRequest)
         {
             var response = await _postService.EditPost(postRequest);
 
@@ -78,8 +80,8 @@ namespace PureConnectBackend.Controllers
         /// <param name="postId">Id of post.</param>
         /// <returns>PostResponse object with 200 code if post was found, otherwise NotFound(404).</returns>
         [Authorize]
-        [HttpGet]
-        public async Task<ActionResult<PostResponse>> GetPost(int postId)
+        [HttpGet("post/{postId}")]
+        public async Task<ActionResult<PostResponse>> Post([FromRoute]int postId)
         {
             var post = await _postService.GetPost(postId);
             if(post is null)
@@ -94,10 +96,11 @@ namespace PureConnectBackend.Controllers
         /// <param name="token">JWT user`s token whose posts are being gotten.</param>
         /// <returns>List of PostImageResponse object with 200 code if user was found, otherwise NotFound(404).</returns>
         [Authorize]
-        [HttpGet]
-        public async Task<ActionResult<List<PostImageResponse>>> GetPostsImages(string token)
+        [HttpGet("images")]
+        public async Task<ActionResult<List<PostImageResponse>>> PostsImages()
         {
-            var postsImages = await _postService.GetPostsImages(token);
+            var user = GetCurrentUser();
+            var postsImages = await _postService.GetPostsImages(user!);
             if (postsImages is null)
                 return NotFound();
             
@@ -110,14 +113,41 @@ namespace PureConnectBackend.Controllers
         /// <param name="token">JWT user`s token whose posts are being gotten.</param>
         /// <returns>List of PostResponse objects with 200 code if user was found, otherwise NotFound(404).</returns>
         [Authorize]
-        [HttpGet]
-        public async Task<ActionResult<List<PostResponse>>> GetPosts(string token)
+        [HttpGet("posts")]
+        public async Task<ActionResult<List<PostResponse>>> Posts()
         {
-            var posts = await _postService.GetPosts(token);
+            var user = GetCurrentUser();
+            var posts = await _postService.GetPosts(user!);
             if (posts is null)
                 return NotFound();
             
             return Ok(posts);
+        }
+
+
+        /// <summary>
+        /// Gets current user by authorizing jwt token.
+        /// </summary>
+        /// <returns></returns>
+        private User? GetCurrentUser()
+        {
+            var identity = HttpContext.User.Identity as ClaimsIdentity;
+
+            if (identity is not null)
+            {
+                var userClaims = identity.Claims;
+
+                return new User
+                {
+                    UserName = userClaims.FirstOrDefault(o => o.Type == ClaimTypes.NameIdentifier)?.Value,
+                    Email = userClaims.FirstOrDefault(o => o.Type == ClaimTypes.Email)?.Value,
+                    FirstName = userClaims.FirstOrDefault(o => o.Type == ClaimTypes.GivenName)?.Value,
+                    LastName = userClaims.FirstOrDefault(o => o.Type == ClaimTypes.Surname)?.Value,
+                    Role = userClaims.FirstOrDefault(o => o.Type == ClaimTypes.Role)?.Value,
+                    Id = Convert.ToInt32(userClaims.FirstOrDefault(o => o.Type == ClaimTypes.Sid)?.Value)
+                };
+            }
+            return null;
         }
     }
 }

@@ -31,10 +31,9 @@ namespace PureConnectBackend.Core.Services
         /// </summary>
         /// <param name="postInfo">Post DTO with post info and user`s jwt token.</param>
         /// <returns>201 status code if post is created.</returns>
-        public async Task<HttpStatusCode> CreatePost(CreatePostRequest postInfo)
+        public async Task<HttpStatusCode> CreatePost(CreatePostRequest postInfo, User userFromJwt)
         {
-            var userCredentials = postInfo.Token.GetCredentialsFromToken();
-            var user = await _context.Users.FirstOrDefaultAsync(x => x.Email == userCredentials.Email);
+            var user = await _context.Users.FirstOrDefaultAsync(x => x.Email == userFromJwt.Email);
 
             var post = ConvertPostDtoToPost(postInfo, user);
             await AddPostToContext(post);
@@ -50,7 +49,7 @@ namespace PureConnectBackend.Core.Services
         {
             var post = await _context.Posts.FirstOrDefaultAsync(x => x.Id == postInfo.PostId);
             if (post is null)
-                return HttpStatusCode.BadRequest;
+                return HttpStatusCode.NotFound;
 
             await DeletePostFromContext(post);
             return HttpStatusCode.OK;
@@ -65,7 +64,7 @@ namespace PureConnectBackend.Core.Services
         {
             var post = await _context.Posts.FirstOrDefaultAsync(x => x.Id == postNewInfo.PostId);
             if (post is null)
-                return HttpStatusCode.BadRequest;
+                return HttpStatusCode.NotFound;
             await UpdatePost(post, postNewInfo);
             return HttpStatusCode.OK;
         }
@@ -90,13 +89,9 @@ namespace PureConnectBackend.Core.Services
         /// </summary>
         /// <param name="token">User jwt token.</param>
         /// <returns>List of all user`s posts info or null if token was invalid.</returns>
-        public async Task<List<PostResponse>?> GetPosts(string token)
+        public async Task<List<PostResponse>?> GetPosts(User userFromJwt)
         {
-            var userCredentials = token.GetCredentialsFromToken();
-            if (userCredentials is null)
-                return null;
-
-            var user = await _context.Users.Include(x => x.Posts).ThenInclude(x => x.PostLikes).Include(x => x.PostsComments).FirstOrDefaultAsync(x => x.Email == userCredentials.Email);
+            var user = await _context.Users.Include(x => x.Posts).ThenInclude(x => x.PostLikes).Include(x => x.PostsComments).FirstOrDefaultAsync(x => x.Email == userFromJwt.Email);
             if (user is null)
                 return null;
 
@@ -110,10 +105,9 @@ namespace PureConnectBackend.Core.Services
             return resPostsList;
         }
 
-        public async Task<List<PostImageResponse>?> GetPostsImages(string token)
+        public async Task<List<PostImageResponse>?> GetPostsImages(User userFromJwt)
         {
-            var userCredentials = token.GetCredentialsFromToken();
-            var user = await _context.Users.Include(x => x.Posts).FirstOrDefaultAsync(x => x.Email == userCredentials.Email);
+            var user = await _context.Users.Include(x => x.Posts).FirstOrDefaultAsync(x => x.Email == userFromJwt.Email);
             if (user is null)
                 return null;
 
