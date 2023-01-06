@@ -1,6 +1,9 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Localization;
+using PureConnectBackend.Core.Interfaces;
+using PureConnectBackend.Core.Models.Responses;
 using PureConnectBackend.Infrastructure.Models;
 using System.Security.Claims;
 
@@ -13,20 +16,62 @@ namespace PureConnectBackend.Controllers
     [ApiController]
     public class UserController : ControllerBase
     {
-        [HttpGet("Admins")]
+        private IConfiguration _config;
+        private IUserService _userService;
+
+        public UserController(IConfiguration config, IUserService userService)
+        {
+            _config = config;
+            _userService = userService;
+        }
+
+        /// <summary>
+        /// Gets profile info of current user.
+        /// </summary>
+        /// <returns>Profile info of current user.</returns>
+        [HttpGet("my-profile")]
         [Authorize(Roles = "user")]
-        public IActionResult AdminsEndpoint()
+        public async Task<ActionResult<PostResponse?>> GetMyProfile()
         {
             var currUser = GetCurrentUser();
+            var response = await _userService.GetProfile(currUser);
+            if (response is null)
+                return NotFound();
+            
+            return Ok(response);
+        }
 
-            return Ok($"Hi, {currUser.FirstName}, you are an {currUser.Role}, your id is: {currUser.Id}");
+        /// <summary>
+        /// Gets profile avatar of current user.
+        /// </summary>
+        /// <returns>Avatar of current user.</returns>
+        [HttpGet("my-avatar")]
+        [Authorize]
+        public async Task<ActionResult<GetAvatarResponse?>> GetMyAvatar()
+        {
+            var currUser = GetCurrentUser();
+            var response = await _userService.GetProfileAvatar(currUser);
+            if (response is null)
+                return NotFound();
+
+            return Ok(response);
         }
 
 
-        [HttpGet("public")]
-        public IActionResult Public()
+        /// <summary>
+        /// Gets 0-10 recommended users for current user.
+        /// </summary>
+        /// <returns>List of max 10 recommended users to current user.</returns>
+        [HttpGet("recommended-users")]
+        [Authorize]
+        public async Task<ActionResult<List<RecommendedUserResponse>?>> GetRecommendedUsers()
         {
-            return Ok("Ok");
+            var currUser = GetCurrentUser();
+            var response = await _userService.GetRecommendedUsers(currUser);
+            if (response is null)
+                return NotFound();
+
+            return Ok(response.Take(10));
         }
 
         private User GetCurrentUser()

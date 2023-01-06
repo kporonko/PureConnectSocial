@@ -93,7 +93,6 @@ namespace PureConnectBackend.Controllers
         /// <summary>
         /// Gets all user`s posts images from db.
         /// </summary>
-        /// <param name="token">JWT user`s token whose posts are being gotten.</param>
         /// <returns>List of PostImageResponse object with 200 code if user was found, otherwise NotFound(404).</returns>
         [Authorize]
         [HttpGet("images")]
@@ -110,7 +109,6 @@ namespace PureConnectBackend.Controllers
         /// <summary>
         /// Gets all user`s posts from db.
         /// </summary>
-        /// <param name="token">JWT user`s token whose posts are being gotten.</param>
         /// <returns>List of PostResponse objects with 200 code if user was found, otherwise NotFound(404).</returns>
         [Authorize]
         [HttpGet("posts")]
@@ -124,6 +122,10 @@ namespace PureConnectBackend.Controllers
             return Ok(posts);
         }
 
+        /// <summary>
+        /// Gets the list of 50 user`s followees` posts during last week.
+        /// </summary>
+        /// <returns></returns>
         [Authorize]
         [HttpGet("recommended-posts")]
         public async Task<ActionResult<List<PostResponse>>> RecommendedPosts()

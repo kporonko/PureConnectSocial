@@ -36,7 +36,7 @@ namespace PureConnectBackend.Infrastructure.Configuration
                 .HasMaxLength(50);
             builder
                 .Property(t => t.BirthDate)
-                .IsRequired(false)
+                .IsRequired(true)
                 .HasColumnName("BirthDate")
                 .HasColumnType("date");
             builder
