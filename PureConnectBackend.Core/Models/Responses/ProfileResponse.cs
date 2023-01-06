@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static PureConnectBackend.Core.Services.UserService;
 
 namespace PureConnectBackend.Core.Models.Responses
 {
@@ -20,5 +21,7 @@ namespace PureConnectBackend.Core.Models.Responses
         public int PostsCount { get; set; }
         public int FollowersCount { get; set; } 
         public int FriendsCount { get; set; }
+
+        public MyResponses? Response { get; set; }
     }
 }

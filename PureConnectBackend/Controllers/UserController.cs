@@ -74,6 +74,32 @@ namespace PureConnectBackend.Controllers
             return Ok(response.Take(10));
         }
 
+
+
+        /// <summary>
+        /// Gets profile info of requested user.
+        /// </summary>
+        /// <param name="profileId">Id of requested user.</param>
+        /// <returns>Response model with Ok(200) status. Forbidden(403) if acc is closed and user is not a friend of requested user. Bad Request(404) if culdnt find a user.</returns>
+        [HttpGet("profile/{profileId}")]
+        [Authorize]
+        public async Task<ActionResult<List<RecommendedUserResponse>>> GetProfileById([FromRoute] int profileId)
+        {
+            var currUser = GetCurrentUser();
+            var response = await _userService.GetProfileById(currUser, profileId);
+            
+            if (response.Response == Core.Models.MyResponses.ClosedAcc)
+                return Forbid();
+            else if (response.Response == Core.Models.MyResponses.BadRequest)
+                return BadRequest();
+
+            return Ok(response);
+        }
+        
+        /// <summary>
+        /// Gets current user by authorizing jwt token.
+        /// </summary>
+        /// <returns></returns>
         private User GetCurrentUser()
         {
             var identity = HttpContext.User.Identity as ClaimsIdentity;

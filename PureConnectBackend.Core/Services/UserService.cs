@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using PureConnectBackend.Core.Interfaces;
+using PureConnectBackend.Core.Models;
 using PureConnectBackend.Core.Models.Responses;
 using PureConnectBackend.Infrastructure.Data;
 using PureConnectBackend.Infrastructure.Models;
@@ -52,6 +53,11 @@ namespace PureConnectBackend.Core.Services
             return new GetAvatarResponse { Avatar = currUser.Avatar };
         }
 
+        /// <summary>
+        /// Gets the list of recommended users in RecommendedUserResponse object instance.
+        /// </summary>
+        /// <param name="userJwt">User object credentials from jwt token.</param>
+        /// <returns></returns>
         public async Task<List<RecommendedUserResponse>?> GetRecommendedUsers(User userJwt)
         {
             var currUser = await _context.Users.Include(x => x.Follower).Include(x => x.Followee).FirstOrDefaultAsync(x => x.Email == userJwt.Email);
@@ -59,44 +65,64 @@ namespace PureConnectBackend.Core.Services
                 return null;
 
             List<User> currUserFriends = await GetUserFriends(currUser);
-
-            Dictionary<User, int> commonFriends = new();
-            foreach (var user in _context.Users.Include(x => x.Follower).Include(x => x.Followee).Where(x => x.Id != currUser.Id))
-            {
-                List<User> currentUserInDbFriends = await GetUserFriends(user);
-                //List<User> commonFriends = currentUserInDbFriends.Intersect(currUserFriends).ToList();
-                int commonFriendsCount = currentUserInDbFriends.Intersect(currUserFriends).ToList().Count;
-                if (commonFriendsCount > 0 && !await IsFollower(currUser, user))
-                {
-                    commonFriends.Add(user, commonFriendsCount);
-                }
-            }
+            Dictionary<User, int> usersWithCommonFriends = await GetUsersWithCommonFriendsByUser(currUser, currUserFriends);
 
             List<RecommendedUserResponse> resListOfRecommendedUsers = new List<RecommendedUserResponse>();
-
-            if (commonFriends.Count < 1)
+            if (usersWithCommonFriends.Count < 1)
                 return resListOfRecommendedUsers;
 
-            commonFriends = commonFriends.OrderBy(x => x.Value).ToDictionary(x => x.Key, x => x.Value);
-
-            foreach (var user in commonFriends.Keys)
-            {
-                RecommendedUserResponse recommendedUserDtoObject = ConvertUserToRecommendedUserResponse(user, commonFriends[user]);
-                resListOfRecommendedUsers.Add(recommendedUserDtoObject);
-            }
-
+            resListOfRecommendedUsers = FillListOfRecommendedUsersByUserAndCountCommonFriendsDictionary(usersWithCommonFriends, resListOfRecommendedUsers);
             return resListOfRecommendedUsers;
         }
 
+
+        /// <summary>
+        /// Gets user profile by id if profile is open or current user is a requested profile`s friend.
+        /// </summary>
+        /// <param name="currUserJwt">Current user`s credentials from jwt token.</param>
+        /// <param name="requestedUserProfileId">Requested profile id.</param>
+        /// <returns>ProfileResponse with data about user or empty object with error MyResponses enum value.</returns>
+        public async Task<ProfileResponse> GetProfileById(User currUserJwt, int requestedUserProfileId)
+        {
+            var currUser = await _context.Users.Include(x => x.Follower).Include(x => x.Followee).FirstOrDefaultAsync(x => x.Id == currUserJwt.Id);
+            var requestedUser = await _context.Users.Include(x => x.Follower).Include(x => x.Followee).Include(x => x.Posts).FirstOrDefaultAsync(x => x.Id == requestedUserProfileId);
+
+            var responseValidator = await CheckForValidationGeProfile(currUser, requestedUser);
+            if (responseValidator is not null)
+                return responseValidator;
+
+            return ConvertUserToProfileResponse(requestedUser);
+        }
+
+        /// <summary>
+        /// Checks for users objects and for account of requested user to be opened or requested user must be a friend of currUser.
+        /// </summary>
+        /// <param name="currUser">User object.</param>
+        /// <param name="requestedUser">Requested user object.</param>
+        /// <returns>Null if validation is ok. Otherwise empty ProfileResponse with response message.</returns>
+        private async Task<ProfileResponse?> CheckForValidationGeProfile(User? currUser, User? requestedUser)
+        {
+            if (currUser is null || requestedUser is null)
+                return new ProfileResponse() { Response = MyResponses.BadRequest };
+
+            if (!requestedUser.IsOpenAcc)
+            {
+                if (!await AreFriends(currUser, requestedUser))
+                {
+                    return new ProfileResponse() { Response = MyResponses.ClosedAcc };
+                }
+            }
+
+            return null;
+        }
 
         /// <summary>
         /// Converts user object to ProfileResponse instanse.
         /// </summary>
         /// <param name="user"></param>
         /// <returns></returns>
-        private ProfileResponse? ConvertUserToProfileResponse(User user)
+        private ProfileResponse ConvertUserToProfileResponse(User user)
         {
-
             var profileResponse = new ProfileResponse()
             {
                 Email = user.Email,
@@ -113,6 +139,7 @@ namespace PureConnectBackend.Core.Services
             profileResponse.PostsCount = user.Posts.Count;
             profileResponse.FriendsCount = GetUsersFriendsCount(user);
             profileResponse.FollowersCount = GetUsersFollowersCount(user);
+            profileResponse.Response = MyResponses.Ok;
 
             return profileResponse;
         }
@@ -230,6 +257,49 @@ namespace PureConnectBackend.Core.Services
             };
 
             return recommendedUser;
+        }
+
+
+        /// <summary>
+        /// Gets dictionary with key users and value common friends count.
+        /// </summary>
+        /// <param name="currUser">User object that requesting recommendations.</param>
+        /// <param name="currUserFriends">User`s list of friends.</param>
+        /// <returns>Dictionary with user key and common friends value.</returns>
+        private async Task<Dictionary<User, int>> GetUsersWithCommonFriendsByUser(User currUser, List<User> currUserFriends)
+        {
+            Dictionary<User, int> commonFriends = new();
+            foreach (var user in _context.Users.Include(x => x.Follower).Include(x => x.Followee).Where(x => x.Id != currUser.Id))
+            {
+                List<User> currentUserInDbFriends = await GetUserFriends(user);
+                //List<User> commonFriends = currentUserInDbFriends.Intersect(currUserFriends).ToList();
+                int commonFriendsCount = currentUserInDbFriends.Intersect(currUserFriends).ToList().Count;
+                if (commonFriendsCount > 0 && !await IsFollower(currUser, user))
+                {
+                    commonFriends.Add(user, commonFriendsCount);
+                }
+            }
+
+            return commonFriends;
+        }
+
+        /// <summary>
+        /// Fills list by RecommendedUserResponse objects with most count of recommended friends.
+        /// </summary>
+        /// <param name="usersWithCommonFriends">Dictionary of users and their common friends.</param>
+        /// <param name="resListOfRecommendedUsers">Resultive list of RecommendedUserResponse objects that we want to fill by data.</param>
+        /// <returns>Resultive list of RecommendedUserResponse objects filled by data from dictionary.</returns>
+        private List<RecommendedUserResponse> FillListOfRecommendedUsersByUserAndCountCommonFriendsDictionary(Dictionary<User, int> usersWithCommonFriends, List<RecommendedUserResponse> resListOfRecommendedUsers)
+        {
+            usersWithCommonFriends = usersWithCommonFriends.OrderBy(x => x.Value).ToDictionary(x => x.Key, x => x.Value);
+
+            foreach (var user in usersWithCommonFriends.Keys)
+            {
+                RecommendedUserResponse recommendedUserDtoObject = ConvertUserToRecommendedUserResponse(user, usersWithCommonFriends[user]);
+                resListOfRecommendedUsers.Add(recommendedUserDtoObject);
+            }
+
+            return resListOfRecommendedUsers;
         }
     }
 }
