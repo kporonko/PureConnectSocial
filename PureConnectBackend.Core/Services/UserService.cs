@@ -91,7 +91,7 @@ namespace PureConnectBackend.Core.Services
             if (responseValidator is not null)
                 return responseValidator;
 
-            return ConvertUserToProfileResponse(requestedUser);
+            return ConvertUserToProfileResponse(requestedUser!);
         }
 
         /// <summary>

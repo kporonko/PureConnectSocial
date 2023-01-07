@@ -13,6 +13,6 @@ namespace PureConnectBackend.Core.Interfaces
         public Task<GetAvatarResponse?> GetProfileAvatar(User user);
         public Task<List<RecommendedUserResponse>?> GetRecommendedUsers(User user);
         public Task<ProfileResponse?> GetProfile(User user);
-        public Task<ProfileResponse?> GetProfileById (User currUser, int requestedUserProfileId);
+        public Task<ProfileResponse> GetProfileById (User currUser, int requestedUserProfileId);
     }
 }
