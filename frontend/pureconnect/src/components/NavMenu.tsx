@@ -8,7 +8,7 @@ import ModalHomeNavMenuMore from "./ModalHomeNavMenuMore";
 
 export enum Page { Home, Search, Notifications, Profile, Chats = 4};
 
-const NavMenu = (props: {page: Page, theme: string, avatar: string}) => {
+const NavMenu = (props: {page: Page, theme: string, setTheme: any, avatar: string}) => {
 
     const [isModalHomeNavMenuMoreOpen, setIsModalHomeNavMenuMoreOpen] = useState(false);
     const changeModalHomeNavMenuMoreOpen = () => setIsModalHomeNavMenuMoreOpen(!isModalHomeNavMenuMoreOpen);
@@ -52,7 +52,7 @@ const NavMenu = (props: {page: Page, theme: string, avatar: string}) => {
                     </li>
                 </ul>
 
-                <ModalHomeNavMenuMore theme={props.theme} isOpen={isModalHomeNavMenuMoreOpen}/>
+                <ModalHomeNavMenuMore setTheme={props.setTheme} theme={props.theme} isOpen={isModalHomeNavMenuMoreOpen}/>
                 <div onClick={changeModalHomeNavMenuMoreOpen} className={isModalHomeNavMenuMoreOpen ? "nav-more nav-more-active" : "nav-more"}>
                     <FontAwesomeIcon className={'nav-icon'} icon={solid('bars')} />
                     <div className={"nav-menu-item-text"}>More</div>

@@ -26,7 +26,7 @@ const Home = (props: {theme: string, setTheme: any}) => {
 
     return (
         <div className={'home-wrapper'} data-theme={props.theme}>
-            <NavMenu page={Page.Home} theme={props.theme} avatar={avatarImage}/>
+            <NavMenu page={Page.Home} theme={props.theme} setTheme={props.setTheme} avatar={avatarImage}/>
             <MainContentHome/>
         </div>
     );

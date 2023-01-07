@@ -11,12 +11,12 @@ html, body{
 
 :root {
   --background: white;
-  --background-secondary: #e2e2e2;
-  --background-third: #b8b8b8;
+  --background-secondary: #b8b8b8;
+  --background-third: #e2e2e2;
   --text-primary: black;
   --background-imagelogin: white;
   --input: white;
-  --button-yellow: rgba(255, 199, 0, 1);
+  --button-yellow: rgb(158, 142, 4);
   --box-shadow-main: rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(255, 255, 255, 0.17) 0px 12px 13px, rgba(255, 255, 255, 0.09) 0px -3px 5px;
 }
 [data-theme='dark'] {
@@ -26,6 +26,7 @@ html, body{
   --text-primary: white;
   --background-imagelogin: #313131;
   --input: #494949;
+  --button-yellow: rgba(255, 199, 0, 1);
   --box-shadow-main: rgba(255, 255, 255, 0.25) 0px 54px 55px, rgba(255, 255, 255, 0.12) 0px -12px 30px, rgba(255, 255, 255, 0.12) 0px 4px 6px, rgba(255, 255, 255, 0.17) 0px 12px 13px, rgba(255, 255, 255, 0.09) 0px -3px 5px;
 }
 
