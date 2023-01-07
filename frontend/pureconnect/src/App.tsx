@@ -23,6 +23,8 @@ function App() {
 
 
 
+            <Route path="/settings" element={<div>Settings</div>}/>
+
 
 
 

@@ -1,13 +1,18 @@
-import React from 'react';
+import React, {useState} from 'react';
 import mainLogoBlack from '../assets/pure connect icon black.png'
 import mainLogoWhite from '../assets/pure connect icon white.png'
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {solid} from "@fortawesome/fontawesome-svg-core/import.macro";
 import {Link} from "react-router-dom";
+import ModalHomeNavMenuMore from "./ModalHomeNavMenuMore";
 
 export enum Page { Home, Search, Notifications, Profile, Chats = 4};
 
 const NavMenu = (props: {page: Page, theme: string, avatar: string}) => {
+
+    const [isModalHomeNavMenuMoreOpen, setIsModalHomeNavMenuMoreOpen] = useState(false);
+    const changeModalHomeNavMenuMoreOpen = () => setIsModalHomeNavMenuMoreOpen(!isModalHomeNavMenuMoreOpen);
+
     return (
         <div className={"nav-menu-wrapper"}>
             <div className={"nav-menu-image-wrapper"}>
@@ -46,7 +51,9 @@ const NavMenu = (props: {page: Page, theme: string, avatar: string}) => {
                         <div className={"nav-menu-item-text"}>Profile</div>
                     </li>
                 </ul>
-                <div className={"nav-more"}>
+
+                <ModalHomeNavMenuMore theme={props.theme} isOpen={isModalHomeNavMenuMoreOpen}/>
+                <div onClick={changeModalHomeNavMenuMoreOpen} className={isModalHomeNavMenuMoreOpen ? "nav-more nav-more-active" : "nav-more"}>
                     <FontAwesomeIcon className={'nav-icon'} icon={solid('bars')} />
                     <div className={"nav-menu-item-text"}>More</div>
                 </div>

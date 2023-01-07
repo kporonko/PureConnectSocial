@@ -316,14 +316,13 @@ html, body{
 .nav-menu-items{
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  gap: 1rem;
   padding: 1rem 1rem 1rem 1rem;
   margin: 0;
 }
 .nav-menu-item{
   display: flex;
   align-items: center;
-  padding: 0.3rem 0;
   cursor: pointer;
   gap: 1rem;
   text-align: center;
@@ -365,7 +364,7 @@ html, body{
   flex-direction: column;
   justify-content: space-between;
   align-items: flex-start;
-  height: 78vh;
+  height: 79vh;
   overflow: auto;
 }
 .nav-more{
@@ -381,4 +380,93 @@ html, body{
 .main-content-home{
   margin-left: 17vw; /* same as width of #left-nav */
   width: calc(100% - 17vw);
+}
+
+.nav-menu-item:hover{
+  transition: 0.5s ease;
+  background: var(--background-third);
+  color: var(--button-yellow);
+  border-radius: 30px;
+}
+/* Modal home nav menu more */
+
+.modal-home-nav-manu-more-wrapper{
+  border: 1px solid var(--text-primary);
+  background: var(--background);
+  border-radius: 30px;
+  position: absolute;
+  bottom: 4rem;
+  left: 1rem;
+}
+.modal-home-nav-menu-more-item-first{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem 0;
+  cursor: pointer;
+  gap: 1rem;
+  text-align: center;
+  border-bottom: 1px solid var(--text-primary);
+}
+.modal-home-nav-menu-more-item{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem 0;
+  cursor: pointer;
+  gap: 1rem;
+  text-align: center;
+  border-bottom: 1px solid var(--text-primary);
+}
+.modal-home-nav-menu-more-item-last{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem 0;
+  cursor: pointer;
+  gap: 1rem;
+  text-align: center;
+}
+.modal-home-nav-menu-more-item-text{
+  font-size: 1rem;
+  max-width: 8vw;
+  text-align: left;
+  font-family: "Montserrat", sans-serif;
+  color: var(--text-primary);
+  margin: 0.3rem 1rem 0.3rem 1.5rem;
+}
+
+.modal-home-nav-menu-more-item-icon{
+  font-size: 1rem;
+  text-align: left;
+  font-family: "Montserrat", sans-serif;
+  color: var(--text-primary);
+  margin: 0.3rem 1.5rem 0.3rem 0.3rem;
+}
+.modal-home-nav-menu-more-item:hover{
+  transition: 0.5s background-color ease;
+  background: var(--background-third);
+}
+.modal-home-nav-menu-more-item-first:hover{
+  transition: 0.5s background-color ease;
+  background: var(--background-third);
+  border-radius: 30px 30px 0 0;
+}
+.modal-home-nav-menu-more-item-last:hover{
+  transition: 0.5s background-color ease;
+  background: var(--background-third);
+  border-radius: 0 0 30px 30px;
+}
+
+.modal-home-nav-menu-more-item-first:hover>div, .modal-home-nav-menu-more-item:hover>div, .modal-home-nav-menu-more-item-last:hover>div{
+  transition: 0.5s color ease;
+  color: var(--button-yellow);
+}
+
+.nav-more-active{
+  background: var(--background-third);
+  border-radius: 30px;
+}
+.nav-more-active>div, .nav-more-active>svg{
+    color: var(--button-yellow);
 }
