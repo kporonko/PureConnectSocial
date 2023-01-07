@@ -6,6 +6,7 @@ using PureConnectBackend.Core.Interfaces;
 using PureConnectBackend.Core.Models.Requests;
 using PureConnectBackend.Core.Models.Responses;
 using PureConnectBackend.Core.Services;
+using System.Net;
 
 namespace PureConnectBackend.Controllers
 {
@@ -34,7 +35,7 @@ namespace PureConnectBackend.Controllers
         public async Task<IActionResult> Register([FromBody] RegisterUserRequest userRegister)
         {
             var codeResult = await _userService.RegisterUser(userRegister);
-            if((int)codeResult == 409)
+            if(codeResult == HttpStatusCode.Conflict)
                 return Conflict(_stringLocalizer.GetString("EmailUsed"));
 
             return Ok(_stringLocalizer.GetString("AccountCreated"));

@@ -18,6 +18,8 @@ builder.Services.AddTransient<ILoginService, LoginService>();
 builder.Services.AddTransient<IRegisterService, RegisterService>();
 builder.Services.AddTransient<IFollowService, FollowService>();
 builder.Services.AddTransient<IGoogleAuthService, GoogleAuthService>();
+builder.Services.AddTransient<IPostService, PostService>();
+builder.Services.AddTransient<IUserService, UserService>();
 
 var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 

@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PureConnectBackend.Infrastructure.Data;
 
@@ -11,9 +12,11 @@ using PureConnectBackend.Infrastructure.Data;
 namespace PureConnectBackend.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    partial class ApplicationContextModelSnapshot : ModelSnapshot
+    [Migration("20230105130516_PostCommentEntityAdded")]
+    partial class PostCommentEntityAdded
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -121,34 +124,6 @@ namespace PureConnectBackend.Infrastructure.Migrations
                     b.ToTable("PostComment", (string)null);
                 });
 
-            modelBuilder.Entity("PureConnectBackend.Infrastructure.Models.PostCommentLike", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasColumnName("Id");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime")
-                        .HasColumnName("CreatedAt");
-
-                    b.Property<int>("PostCommentId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("PostCommentId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("PostCommentLike", (string)null);
-                });
-
             modelBuilder.Entity("PureConnectBackend.Infrastructure.Models.PostLike", b =>
                 {
                     b.Property<int>("Id")
@@ -190,7 +165,7 @@ namespace PureConnectBackend.Infrastructure.Migrations
                         .HasColumnType("varchar(max)")
                         .HasColumnName("Avatar");
 
-                    b.Property<DateTime>("BirthDate")
+                    b.Property<DateTime?>("BirthDate")
                         .HasColumnType("date")
                         .HasColumnName("BirthDate");
 
@@ -300,25 +275,6 @@ namespace PureConnectBackend.Infrastructure.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("PureConnectBackend.Infrastructure.Models.PostCommentLike", b =>
-                {
-                    b.HasOne("PureConnectBackend.Infrastructure.Models.PostComment", "PostComment")
-                        .WithMany("PostCommentLikes")
-                        .HasForeignKey("PostCommentId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("PureConnectBackend.Infrastructure.Models.User", "User")
-                        .WithMany("PostsCommentsLikes")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("PostComment");
-
-                    b.Navigation("User");
-                });
-
             modelBuilder.Entity("PureConnectBackend.Infrastructure.Models.PostLike", b =>
                 {
                     b.HasOne("PureConnectBackend.Infrastructure.Models.Post", "Post")
@@ -348,8 +304,6 @@ namespace PureConnectBackend.Infrastructure.Migrations
             modelBuilder.Entity("PureConnectBackend.Infrastructure.Models.PostComment", b =>
                 {
                     b.Navigation("CommentReplies");
-
-                    b.Navigation("PostCommentLikes");
                 });
 
             modelBuilder.Entity("PureConnectBackend.Infrastructure.Models.User", b =>
@@ -361,8 +315,6 @@ namespace PureConnectBackend.Infrastructure.Migrations
                     b.Navigation("Posts");
 
                     b.Navigation("PostsComments");
-
-                    b.Navigation("PostsCommentsLikes");
 
                     b.Navigation("PostsLikes");
                 });

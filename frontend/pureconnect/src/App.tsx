@@ -19,7 +19,7 @@ function App() {
             <Route path="/register" element={<Register theme={theme} setTheme={setTheme}/>}/>
 
             {/* User*/}
-            <Route path="/home" element={<Home/>}/>
+            <Route path="/home" element={<Home theme={theme} setTheme={setTheme}/>}/>
 
 
 

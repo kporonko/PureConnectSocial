@@ -12,7 +12,7 @@ namespace PureConnectBackend.Infrastructure.Models
         public string UserName { get; set; }
         public string LastName { get; set; }
         public string FirstName { get; set; }
-        public DateTime? BirthDate { get; set; }
+        public DateTime BirthDate { get; set; }
         public string Email { get; set; }
         public string Password { get; set; }
         public bool IsOpenAcc { get; set; }
@@ -25,5 +25,9 @@ namespace PureConnectBackend.Infrastructure.Models
         public List<Follow> Followee { get; set; }
         public List<Post> Posts { get; set; }
         public List<PostLike> PostsLikes { get; set; }
+
+        public List<PostComment> PostsComments { get; set; }
+        public List<PostCommentLike> PostsCommentsLikes { get; set; }
+
     }
 }

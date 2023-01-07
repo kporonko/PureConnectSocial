@@ -29,8 +29,11 @@ namespace PureConnectBackend.Core.Services
         /// </summary>
         /// <param name="request">Follower`s and followe`s id with follow date.</param>
         /// <returns>Status code of the operation.</returns>
-        public async Task<HttpStatusCode> AddFollow(FollowAddRequest request)
+        public async Task<HttpStatusCode> AddFollow(FollowAddRequest request, User user)
         {
+            if (request.FollowerId != user.Id)
+                return HttpStatusCode.BadRequest;
+            
             var follow = await _context.Follows.FirstOrDefaultAsync(x => x.FolloweeId == request.FolloweeId && x.FollowerId == request.FollowerId);
 
             if(follow is not null)
@@ -45,8 +48,11 @@ namespace PureConnectBackend.Core.Services
         /// </summary>
         /// <param name="request">Follower`s and followe`s id with follow date.</param>
         /// <returns>Status code of the operation.</returns>
-        public async Task<HttpStatusCode> RemoveFollow(FollowDeleteRequest request)
+        public async Task<HttpStatusCode> RemoveFollow(FollowDeleteRequest request, User user)
         {
+            if (request.FollowerId != user.Id)
+                return HttpStatusCode.BadRequest;
+            
             var follow = await _context.Follows.FirstOrDefaultAsync(x => x.FolloweeId == request.FolloweeId && x.FollowerId == request.FollowerId);
 
             if (follow is null)

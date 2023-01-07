@@ -1,6 +1,8 @@
 ﻿using Azure.Core;
 using Microsoft.EntityFrameworkCore;
+using PureConnectBackend.Core.Extentions;
 using PureConnectBackend.Core.Interfaces;
+using PureConnectBackend.Core.Models;
 using PureConnectBackend.Core.Models.Requests;
 using PureConnectBackend.Core.Models.Responses;
 using PureConnectBackend.Infrastructure.Data;
@@ -27,18 +29,6 @@ namespace PureConnectBackend.Core.Services
             _context = context;
         }
 
-        /// <summary>
-        /// Private class to store google token credentials.
-        /// </summary>
-        private class TokenCredentials
-        {
-            public string Email { get; set; }
-            public string Name { get; set; }
-            public string Picture { get; set; }
-            public string FirstName { get; set; }
-            public string LastName { get; set; }
-        }
-
 
         /// <summary>
         /// If user`s email is already registered - gets user data, otherwise creates new user, adds to db and returns him.
@@ -47,7 +37,7 @@ namespace PureConnectBackend.Core.Services
         /// <returns>User with this email or new created user.</returns>
         public async Task<User?> AuthUserWithGoogle(string token)
         {
-            TokenCredentials tokenCredentials = GetCredentialsFromToken(token);
+            TokenCredentials tokenCredentials = token.GetCredentialsFromToken();
 
             User? user = await _context.Users.FirstOrDefaultAsync(x => x.Email == tokenCredentials.Email);
             if (user is null)
@@ -56,28 +46,6 @@ namespace PureConnectBackend.Core.Services
             var userResponse = await LoginUserGoogle(tokenCredentials);
 
             return userResponse;
-        }
-
-
-        /// <summary>
-        /// Decodes JWT token into user info.
-        /// </summary>
-        /// <param name="token">JWt token string.</param>
-        /// <returns>Token user info.</returns>
-        private TokenCredentials GetCredentialsFromToken(string token)
-        {
-            var handler = new JwtSecurityTokenHandler();
-            var jsonToken = handler.ReadToken(token);
-            var tokenS = jsonToken as JwtSecurityToken;
-
-            TokenCredentials res = new TokenCredentials();
-            res.Email =  tokenS.Claims.First(claim => claim.Type == "email").Value;
-            res.Name = tokenS.Claims.First(claim => claim.Type == "name").Value;
-            res.Picture = tokenS.Claims.First(claim => claim.Type == "picture").Value;
-            res.FirstName = tokenS.Claims.First(claim => claim.Type == "given_name").Value;
-            res.LastName = tokenS.Claims.First(claim => claim.Type == "family_name").Value;
-
-            return res;
         }
 
         /// <summary>
