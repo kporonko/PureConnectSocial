@@ -56,3 +56,15 @@ export const register = async (registerData: IRegisterUser) => {
     });
     return response;
 }
+
+export const getAvatar = async (token: string) => {
+    const response = await fetch(`${BASE_URL}api/User/my-avatar`, {
+        method: 'GET',
+        headers:{
+            'Authorization': 'Bearer ' + token,
+            'Content-Type': 'application/x-www-form-urlencoded'
+        }
+    });
+
+    return response;
+}

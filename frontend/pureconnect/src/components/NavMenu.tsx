@@ -7,7 +7,7 @@ import {Link} from "react-router-dom";
 
 export enum Page { Home, Search, Notifications, Profile, Chats = 4};
 
-const NavMenu = (props: {page: Page, theme: string}) => {
+const NavMenu = (props: {page: Page, theme: string, avatar: string}) => {
     return (
         <div className={"nav-menu-wrapper"}>
             <div className={"nav-menu-image-wrapper"}>
@@ -40,7 +40,9 @@ const NavMenu = (props: {page: Page, theme: string}) => {
                         <div className={"nav-menu-item-text"}>Notifications</div>
                     </li>
                     <li className={props.page == Page.Profile ? "nav-menu-item active-page" : "nav-menu-item"}>
-                        <img src="" alt=""/>
+                        <div className={"nav-menu-item-icon-wrapper"}>
+                            <img className={'nav-menu-avatar-profile-image'} src={props.avatar} alt=""/>
+                        </div>
                         <div className={"nav-menu-item-text"}>Profile</div>
                     </li>
                 </ul>
