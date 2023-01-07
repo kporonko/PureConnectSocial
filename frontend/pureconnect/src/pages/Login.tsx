@@ -16,6 +16,7 @@ const Login = (props:{theme: string, setTheme: any}) => {
         if (role === null || token === null)
             return;
 
+        localStorage.setItem('access_token', token);
         if (role === "admin")
             nav("/admin-home")
         else if (role === "user")
@@ -39,10 +40,6 @@ const Login = (props:{theme: string, setTheme: any}) => {
     },[])
 
 
-
-    const handleTheme = () => {
-        props.setTheme(props.theme === 'light' ? 'dark' : 'light');
-    }
     return (
         <div className='login-wrapper' data-theme={props.theme}>
             <ChangeThemeButton theme={props.theme} setTheme={props.setTheme}/>

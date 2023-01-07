@@ -6,6 +6,7 @@ import {solid} from "@fortawesome/fontawesome-svg-core/import.macro";
 import {Link} from "react-router-dom";
 import ModalHomeNavMenuMore from "./ModalHomeNavMenuMore";
 import LocalizedStrings from "react-localization";
+import person from '../assets/user.png'
 
 export enum Page { Home, Search, Notifications, Profile, Chats = 4};
 
@@ -74,7 +75,7 @@ const NavMenu = (props: {page: Page, theme: string, setTheme: any, avatar: strin
                     </li>
                     <li className={props.page == Page.Profile ? "nav-menu-item active-page" : "nav-menu-item"}>
                         <div className={"nav-menu-item-icon-wrapper"}>
-                            <img className={'nav-menu-avatar-profile-image'} src={props.avatar} alt=""/>
+                            <img className={'nav-menu-avatar-profile-image'} src={props.avatar.length === 0 ? person : props.avatar} alt=""/>
                         </div>
                         <div className={"nav-menu-item-text"}>{strings.profile}</div>
                     </li>
