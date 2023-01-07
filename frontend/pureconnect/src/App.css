@@ -377,3 +377,8 @@ html, body{
   color: var(--text-primary);
   gap: 1.5rem;
 }
+
+.main-content-home{
+  margin-left: 17vw; /* same as width of #left-nav */
+  width: calc(100% - 17vw);
+}

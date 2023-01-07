@@ -1,6 +1,7 @@
 import React, {useEffect} from 'react';
 import NavMenu, {Page} from "../components/NavMenu";
 import {getAvatar} from "../utils/FetchData";
+import MainContentHome from "../components/MainContentHome";
 
 const Home = (props: {theme: string, setTheme: any}) => {
 
@@ -21,6 +22,7 @@ const Home = (props: {theme: string, setTheme: any}) => {
     return (
         <div className={'home-wrapper'} data-theme={props.theme}>
             <NavMenu page={Page.Home} theme={props.theme} avatar={avatarImage}/>
+            <MainContentHome/>
         </div>
     );
 };
