@@ -42,6 +42,15 @@ const NavMenu = (props: {page: Page, theme: string, setTheme: any, avatar: strin
         }
     });
 
+    const [isValidAvatar, setIsValidAvatar] = React.useState(false);
+
+    React.useEffect(() => {
+        const image = new Image();
+        image.src = props.avatar;
+        image.onload = () => setIsValidAvatar(true);
+        image.onerror = () => setIsValidAvatar(false);
+    }, [props.avatar]);
+
     return (
         <div className={"nav-menu-wrapper"}>
             <div className={"nav-menu-image-wrapper"}>
@@ -75,7 +84,7 @@ const NavMenu = (props: {page: Page, theme: string, setTheme: any, avatar: strin
                     </li>
                     <li className={props.page == Page.Profile ? "nav-menu-item active-page" : "nav-menu-item"}>
                         <div className={"nav-menu-item-icon-wrapper"}>
-                            <img className={'nav-menu-avatar-profile-image'} src={props.avatar.length === 0 ? person : props.avatar} alt=""/>
+                            <img className={'nav-menu-avatar-profile-image'} src={!isValidAvatar ? person : props.avatar} alt=""/>
                         </div>
                         <div className={"nav-menu-item-text"}>{strings.profile}</div>
                     </li>
