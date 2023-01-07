@@ -5,6 +5,7 @@ import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {solid} from "@fortawesome/fontawesome-svg-core/import.macro";
 import {Link} from "react-router-dom";
 import ModalHomeNavMenuMore from "./ModalHomeNavMenuMore";
+import LocalizedStrings from "react-localization";
 
 export enum Page { Home, Search, Notifications, Profile, Chats = 4};
 
@@ -12,6 +13,33 @@ const NavMenu = (props: {page: Page, theme: string, setTheme: any, avatar: strin
 
     const [isModalHomeNavMenuMoreOpen, setIsModalHomeNavMenuMoreOpen] = useState(false);
     const changeModalHomeNavMenuMoreOpen = () => setIsModalHomeNavMenuMoreOpen(!isModalHomeNavMenuMoreOpen);
+
+    let strings = new LocalizedStrings({
+        en:{
+            main:"Main Page",
+            search:"Search",
+            chats:"Chats",
+            notif:"Notifications",
+            profile:"Profile",
+            more:"More",
+            settings:"Settings",
+            changeTheme:"Change Theme",
+            report:"Report",
+            exit:"Exit"
+        },
+        ua: {
+            main:"Головна",
+            search:"Пошук",
+            chats:"Чати",
+            notif:"Сповіщення",
+            profile:"Профіль",
+            more:"Більше",
+            settings:"Налаштування",
+            changeTheme:"Змінити тему",
+            report:"Повідомити про проблему",
+            exit:"Вийти"
+        }
+    });
 
     return (
         <div className={"nav-menu-wrapper"}>
@@ -24,38 +52,38 @@ const NavMenu = (props: {page: Page, theme: string, setTheme: any, avatar: strin
                         <div className={"nav-menu-item-icon-wrapper"}>
                             <FontAwesomeIcon className={'nav-icon'} icon={solid('home')} />
                         </div>
-                        <div className={"nav-menu-item-text"}>Main Page</div>
+                        <div className={"nav-menu-item-text"}>{strings.main}</div>
                     </li>
                     <li className={props.page == Page.Search ? "nav-menu-item active-page" : "nav-menu-item"}>
                         <div className={"nav-menu-item-icon-wrapper"}>
                             <FontAwesomeIcon className={'nav-icon'} icon={solid('search')} />
                         </div>
-                        <div className={"nav-menu-item-text"}>Search</div>
+                        <div className={"nav-menu-item-text"}>{strings.search}</div>
                     </li>
                     <li className={props.page == Page.Chats ? "nav-menu-item active-page" : "nav-menu-item"}>
                         <div className={"nav-menu-item-icon-wrapper"}>
                             <FontAwesomeIcon className={'nav-icon'} icon={solid('comments')} />
                         </div>
-                        <div className={"nav-menu-item-text"}>Chats</div>
+                        <div className={"nav-menu-item-text"}>{strings.chats}</div>
                     </li>
                     <li className={props.page == Page.Notifications ? "nav-menu-item active-page" : "nav-menu-item"}>
                         <div className={"nav-menu-item-icon-wrapper"}>
                             <FontAwesomeIcon className={'nav-icon'} icon={solid('bell')} />
                         </div>
-                        <div className={"nav-menu-item-text"}>Notifications</div>
+                        <div className={"nav-menu-item-text"}>{strings.notif}</div>
                     </li>
                     <li className={props.page == Page.Profile ? "nav-menu-item active-page" : "nav-menu-item"}>
                         <div className={"nav-menu-item-icon-wrapper"}>
                             <img className={'nav-menu-avatar-profile-image'} src={props.avatar} alt=""/>
                         </div>
-                        <div className={"nav-menu-item-text"}>Profile</div>
+                        <div className={"nav-menu-item-text"}>{strings.profile}</div>
                     </li>
                 </ul>
 
                 <ModalHomeNavMenuMore setTheme={props.setTheme} theme={props.theme} isOpen={isModalHomeNavMenuMoreOpen}/>
                 <div onClick={changeModalHomeNavMenuMoreOpen} className={isModalHomeNavMenuMoreOpen ? "nav-more nav-more-active" : "nav-more"}>
                     <FontAwesomeIcon className={'nav-icon'} icon={solid('bars')} />
-                    <div className={"nav-menu-item-text"}>More</div>
+                    <div className={"nav-menu-item-text"}>{strings.more}</div>
                 </div>
             </div>
         </div>

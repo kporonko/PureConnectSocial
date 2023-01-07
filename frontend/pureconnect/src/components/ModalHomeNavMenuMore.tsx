@@ -2,6 +2,7 @@ import React, {useEffect, useRef, useState} from 'react';
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {solid} from "@fortawesome/fontawesome-svg-core/import.macro";
 import {useNavigate} from "react-router";
+import LocalizedStrings from "react-localization";
 
 interface ModalHomeNavMenuMoreProps {
     isOpen: boolean;
@@ -10,7 +11,20 @@ interface ModalHomeNavMenuMoreProps {
 }
 
 const ModalHomeNavMenuMore : React.FC<ModalHomeNavMenuMoreProps> = ({isOpen, theme, setTheme}) => {
-
+    let strings = new LocalizedStrings({
+        en:{
+            settings:"Settings",
+            changeTheme:"Change Theme",
+            report:"Report",
+            exit:"Exit"
+        },
+        ua: {
+            settings:"Налаштування",
+            changeTheme:"Змінити тему",
+            report:"Повідомити про проблему",
+            exit:"Вийти"
+        }
+    });
     const nav = useNavigate();
 
     const handleChangeTheme = () => {
@@ -33,7 +47,7 @@ const ModalHomeNavMenuMore : React.FC<ModalHomeNavMenuMoreProps> = ({isOpen, the
                 <div className="modal-home-nav-menu-more-items">
                     <div onClick={() => nav('/settings')} className="modal-home-nav-menu-more-item-first">
                         <div className='modal-home-nav-menu-more-item-text'>
-                            Settings
+                            {strings.settings}
                         </div>
 
                         <div className='modal-home-nav-menu-more-item-icon'>
@@ -42,7 +56,7 @@ const ModalHomeNavMenuMore : React.FC<ModalHomeNavMenuMoreProps> = ({isOpen, the
                     </div>
                     <div onClick={handleChangeTheme} className="modal-home-nav-menu-more-item">
                         <div className='modal-home-nav-menu-more-item-text'>
-                            Change Theme
+                            {strings.changeTheme}
                         </div>
 
                         <div className='modal-home-nav-menu-more-item-icon'>
@@ -55,7 +69,7 @@ const ModalHomeNavMenuMore : React.FC<ModalHomeNavMenuMoreProps> = ({isOpen, the
 
                     <div onClick={handleReport} className="modal-home-nav-menu-more-item">
                         <div className='modal-home-nav-menu-more-item-text'>
-                            Report
+                            {strings.report}
                         </div>
 
                         <div className='modal-home-nav-menu-more-item-icon'>
@@ -65,7 +79,7 @@ const ModalHomeNavMenuMore : React.FC<ModalHomeNavMenuMoreProps> = ({isOpen, the
 
                     <div onClick={handleExit} className="modal-home-nav-menu-more-item-last">
                         <div className='modal-home-nav-menu-more-item-text'>
-                            Exit
+                            {strings.exit}
                         </div>
 
                         <div className='modal-home-nav-menu-more-item-icon'>
