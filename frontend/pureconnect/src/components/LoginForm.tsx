@@ -68,6 +68,8 @@ const LoginForm = (props: {theme: string}) => {
         }
 
         localStorage.setItem('access_token', token);
+        localStorage.setItem('isShowMayKnowThem', true.toString());
+
         if (role === "admin")
             nav("/admin-home")
         else if (role === "user")

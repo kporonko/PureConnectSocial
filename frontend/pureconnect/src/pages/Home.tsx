@@ -9,7 +9,6 @@ import internal from "stream";
 
 const Home = (props: {theme: string, setTheme: any}) => {
 
-    console.log("home")
     const [avatarImage, setAvatarImage] = React.useState("");
     const nav = useNavigate();
     let strings = new LocalizedStrings({

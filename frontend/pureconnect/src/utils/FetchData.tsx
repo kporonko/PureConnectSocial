@@ -86,3 +86,16 @@ export const getAvatar = async (token: string) => {
 
     return response;
 }
+
+export const getRecommendedUsers = async (token: string) => {
+    const response = await fetch(`${BASE_URL}api/User/recommended-users`, {
+        method: 'GET',
+        headers:{
+            'Authorization': 'Bearer ' + token,
+            'Content-Type': 'application/x-www-form-urlencoded'
+        }
+    });
+
+    const responseJson = await response.json()
+    return responseJson;
+}

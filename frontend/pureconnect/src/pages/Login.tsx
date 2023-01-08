@@ -18,6 +18,8 @@ const Login = (props:{theme: string, setTheme: any}) => {
             return;
 
         localStorage.setItem('access_token', token);
+        localStorage.setItem('isShowMayKnowThem', true.toString());
+
         if (role === "admin")
             nav("/admin-home")
         else if (role === "user")

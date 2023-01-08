@@ -18,6 +18,8 @@ html, body{
   --input: white;
   --button-yellow: rgb(158, 142, 4);
   --box-shadow-main: rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(255, 255, 255, 0.17) 0px 12px 13px, rgba(255, 255, 255, 0.09) 0px -3px 5px;
+  --button-blue: #8D97F2;
+  --button-blue-hover: #5f6def
 }
 [data-theme='dark'] {
   --background: #494949;
@@ -28,6 +30,8 @@ html, body{
   --input: #494949;
   --button-yellow: rgba(255, 199, 0, 1);
   --box-shadow-main: rgba(255, 255, 255, 0.25) 0px 54px 55px, rgba(255, 255, 255, 0.12) 0px -12px 30px, rgba(255, 255, 255, 0.12) 0px 4px 6px, rgba(255, 255, 255, 0.17) 0px 12px 13px, rgba(255, 255, 255, 0.09) 0px -3px 5px;
+  --button-blue: #8D97F2;
+  --button-blue-hover: #5f6def;
 }
 
 .login-wrapper{
@@ -383,6 +387,12 @@ html, body{
   width: calc(100% - 17vw);
 }
 
+.main-content-home-block{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
 .nav-menu-item:hover{
   transition: 0.5s ease;
   background: var(--background-third);
@@ -470,4 +480,79 @@ html, body{
 }
 .nav-more-active>div, .nav-more-active>svg{
     color: var(--button-yellow);
+}
+
+/* May Know Them */
+
+.may-know-them-wrapper{
+  margin-top: 1rem;
+  padding:2rem;
+  background: var(--background-third);
+  border-radius: 30px;
+}
+.may-know-them-bar{
+  display: flex;
+  gap: 40vw;
+  justify-content: space-between;
+  color: var(--text-primary);
+  font-size: 2rem;
+  font-family: "Montserrat", sans-serif;
+  margin-bottom: 1rem;
+}
+.may-know-them-content{
+  display: flex;
+  gap: 1rem;
+  color: var(--text-primary);
+}
+
+.may-know-user{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 6px;
+  align-items: center;
+  padding: 0.8rem 1.5rem;
+  background: var(--background);
+  border-radius: 15px;
+}
+.may-know-user-image{
+  width: 6rem;
+  height: 6rem;
+  border-radius: 15px;
+  object-fit: cover;
+  border: 1px var(--text-primary) solid;
+}
+
+.may-know-user-name{
+  font-size: 1.1rem;
+  font-family: "Montserrat", sans-serif;
+  color: var(--text-primary);
+  text-align: center;
+}
+
+.may-know-user-friends-count{
+  font-size: 0.6rem;
+  font-family: "Montserrat", sans-serif;
+  color: var(--button-yellow);
+  text-align: center;
+  cursor: pointer;
+}
+
+.may-know-user-button{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.8rem;
+  color: var(--background-third);
+  background: var(--button-blue);
+
+  padding: 0.2rem 1.5rem;
+  font-size: 0.65rem;
+  font-family: "Montserrat", sans-serif;
+  border-radius: 2px;
+  cursor: pointer;
+}
+.may-know-user-button:hover{
+  transition: 0.3s background-color ease;
+  background: var(--button-blue-hover);
 }
