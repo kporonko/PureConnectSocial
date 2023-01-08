@@ -100,7 +100,7 @@ namespace PureConnectBackend.Core.Services
         /// <param name="currUser">User object.</param>
         /// <param name="requestedUser">Requested user object.</param>
         /// <returns>Null if validation is ok. Otherwise empty ProfileResponse with response message.</returns>
-        private async Task<ProfileResponse?> CheckForValidationGeProfile(User? currUser, User? requestedUser)
+        public async Task<ProfileResponse?> CheckForValidationGeProfile(User? currUser, User? requestedUser)
         {
             if (currUser is null || requestedUser is null)
                 return new ProfileResponse() { Response = MyResponses.BadRequest };

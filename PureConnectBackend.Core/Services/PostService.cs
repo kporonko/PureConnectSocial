@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using PureConnectBackend.Core.Extentions;
 using PureConnectBackend.Core.Interfaces;
+using PureConnectBackend.Core.Models;
 using PureConnectBackend.Core.Models.Requests;
 using PureConnectBackend.Core.Models.Responses;
 using PureConnectBackend.Infrastructure.Data;
@@ -76,11 +77,15 @@ namespace PureConnectBackend.Core.Services
         /// </summary>
         /// <param name="postId">Id of post.</param>
         /// <returns>PostResponse object with full info about post or null if postId is non-exsiting.</returns>
-        public async Task<PostResponse?> GetPost(int postId)
+        public async Task<PostResponse?> GetPost(User userFromJwt, int postId)
         {
             var post = await _context.Posts.Include(e => e.User).Include(x => x.PostLikes).Include(x => x.PostComments).FirstOrDefaultAsync(x => x.Id == postId);
             if (post is null)
                 return null;
+
+            var responseValidator = await CheckForValidationGeProfile(userFromJwt, post.User);
+            if (responseValidator is not null)
+                return responseValidator;
 
             PostResponse postResponse = ConvertEntityObjectToPostDto(post);
             return postResponse;
@@ -93,10 +98,10 @@ namespace PureConnectBackend.Core.Services
         /// <returns>List of all user`s posts info or null if token was invalid.</returns>
         public async Task<List<PostResponse>?> GetPosts(User userFromJwt)
         {
-            var user = await _context.Users.Include(x => x.Posts).ThenInclude(x => x.PostLikes).Include(x => x.PostsComments).FirstOrDefaultAsync(x => x.Email == userFromJwt.Email);
+            var user = await _context.Users.Include(x => x.Posts).ThenInclude(x => x.PostLikes).Include(x => x.Posts).ThenInclude(x => x.PostComments).FirstOrDefaultAsync(x => x.Email == userFromJwt.Email);
             if (user is null)
                 return null;
-
+            
             List<PostResponse> resPostsList = new();
             foreach (var post in user.Posts)
             {
@@ -218,7 +223,8 @@ namespace PureConnectBackend.Core.Services
                 PostId = post.Id,
                 Description = post.Description,
                 Image = post.Image,
-                CreatedAt = post.CreatedAt
+                CreatedAt = post.CreatedAt,
+                Response = MyResponses.Ok
             };
 
             postResponse.LikesCount = post.PostLikes.Count;
@@ -246,6 +252,42 @@ namespace PureConnectBackend.Core.Services
             }
 
             return list;
+        }
+
+        /// <summary>
+        /// Checks for users objects and for account of requested user to be opened or requested user must be a friend of currUser.
+        /// </summary>
+        /// <param name="currUser">User object.</param>
+        /// <param name="requestedUser">Requested user object.</param>
+        /// <returns>Null if validation is ok. Otherwise empty ProfileResponse with response message.</returns>
+        public async Task<PostResponse?> CheckForValidationGeProfile(User? currUser, User? requestedUser)
+        {
+            if (currUser is null || requestedUser is null)
+                return new PostResponse() { Response = MyResponses.BadRequest };
+
+            if (!requestedUser.IsOpenAcc)
+            {
+                if (!await AreFriends(currUser, requestedUser))
+                {
+                    return new PostResponse() { Response = MyResponses.ClosedAcc };
+                }
+            }
+
+            return null;
+        }
+
+        /// <summary>
+        /// Checks whether two users are friends or not.
+        /// </summary>
+        /// <param name="currUser">User 1 object.</param>
+        /// <param name="user">User2 object.</param>
+        /// <returns>True if users are friends, False if they are not friends.</returns>
+        private async Task<bool> AreFriends(User currUser, User user)
+        {
+            var followOneToSecond = await _context.Follows.FirstOrDefaultAsync(x => x.FollowerId == currUser.Id && x.FolloweeId == user.Id);
+            var followSecondToFirst = await _context.Follows.FirstOrDefaultAsync(x => x.FollowerId == user.Id && x.FolloweeId == currUser.Id);
+
+            return followOneToSecond is not null && followSecondToFirst is not null;
         }
     }
 }

@@ -18,5 +18,6 @@ namespace PureConnectBackend.Core.Models.Responses
         public string? Avatar { get; set; }
         public string Username { get; set; }
         public string FullName { get; set; }
+        public MyResponses Response { get; set; }
     }
 }

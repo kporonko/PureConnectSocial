@@ -83,10 +83,18 @@ namespace PureConnectBackend.Controllers
         [HttpGet("post/{postId}")]
         public async Task<ActionResult<PostResponse>> Post([FromRoute]int postId)
         {
-            var post = await _postService.GetPost(postId);
-            if(post is null)
+            var user = GetCurrentUser();
+            var post = await _postService.GetPost(user, postId);
+
+            if (post is null)
                 return NotFound();
+
+            if (post.Response == Core.Models.MyResponses.BadRequest)
+                return BadRequest();
             
+            if (post.Response == Core.Models.MyResponses.ClosedAcc)
+                return Forbid();
+           
             return Ok(post);
         }
 
@@ -118,7 +126,7 @@ namespace PureConnectBackend.Controllers
             var posts = await _postService.GetPosts(user!);
             if (posts is null)
                 return NotFound();
-            
+
             return Ok(posts);
         }
 
