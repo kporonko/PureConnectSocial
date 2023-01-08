@@ -8,7 +8,8 @@ import light from '../assets/sunny.png';
 import dark from '../assets/moon.ico';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { solid, regular, brands, icon } from '@fortawesome/fontawesome-svg-core/import.macro'
-import ChangeThemeButton from "../components/ChangeThemeButton"; // <-- import styles to be used
+import ChangeThemeButton from "../components/ChangeThemeButton";
+import {toast, ToastContainer} from "react-toastify"; // <-- import styles to be used
 
 const Login = (props:{theme: string, setTheme: any}) => {
     const nav = useNavigate();
@@ -24,6 +25,11 @@ const Login = (props:{theme: string, setTheme: any}) => {
     }
     async function handleCallbackResponse(response : google.accounts.id.CredentialResponse){
         const res = await authGoogle(response.credential);
+        if(res instanceof Error){
+            const notify = () => toast.error("Server is not responding");
+            notify();
+        }
+
         handleNav(res!.role, res!.token);
     }
 
@@ -47,6 +53,18 @@ const Login = (props:{theme: string, setTheme: any}) => {
                 <LoginMainLogo theme={props.theme.toString()}/>
                 <LoginForm theme={props.theme}/>
             </div>
+            <ToastContainer
+                position="top-right"
+                autoClose={5000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss={false}
+                draggable
+                pauseOnHover
+                theme={props.theme === 'dark' ? 'dark' : 'light'}
+            />
         </div>
     );
 };

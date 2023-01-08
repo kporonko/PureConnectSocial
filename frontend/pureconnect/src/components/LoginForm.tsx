@@ -20,6 +20,7 @@ const LoginForm = (props: {theme: string}) => {
             alrHaveAcc:"Don`t have an account",
             logBtn:"Log In",
             loginErrorValid:"Entered data was invalid. Try again.",
+            loginErrorServer:"Server error. Try again later.",
         },
         ua: {
             loginText:"Вхід до Pure Connect",
@@ -29,7 +30,7 @@ const LoginForm = (props: {theme: string}) => {
             alrHaveAcc:"В мене немає акаунта",
             logBtn:"Увійти",
             loginErrorValid:"Введені дані були невірними. Спробуйте ще раз.",
-
+            loginErrorServer:"Помилка сервера. Спробуйте пізніше.",
         }
     });
 
@@ -41,6 +42,10 @@ const LoginForm = (props: {theme: string}) => {
     const loginUser = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         const res = await login({email: email, password: password});
+        if (res instanceof Error){
+            const notify = () => toast.error(strings.loginErrorServer);
+            notify();
+        }
         if(res.status === 400){
             const notify = () => toast.error(strings.loginErrorValid);
             notify();

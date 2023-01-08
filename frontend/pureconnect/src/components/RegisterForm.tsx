@@ -22,6 +22,7 @@ const RegisterForm = (props: {theme: string}) => {
             alrHaveAcc:"Already have an account",
             regBtn:"Create",
             loginErrorValid:"Entered data was invalid. Try again.",
+            loginErrorServer:"Server error. Try again later.",
         },
         ua: {
             registerText:"Створити новий акаунт",
@@ -35,7 +36,7 @@ const RegisterForm = (props: {theme: string}) => {
             alrHaveAcc:"Маю акаунт",
             regBtn:"Створити",
             loginErrorValid:"Введені дані були невірними. Спробуйте ще раз.",
-
+            loginErrorServer:"Помилка сервера. Спробуйте пізніше.",
         }
     });
 
@@ -69,7 +70,6 @@ const RegisterForm = (props: {theme: string}) => {
 
     const convertAvatarImageToBase64 = (reader: FileReader, file: File) => {
         reader.onload = (event) => {
-            console.log(event.target?.result as string)
             setUser({...user, avatar: event.target?.result as string});
         };
         reader.readAsDataURL(file);
@@ -78,6 +78,13 @@ const RegisterForm = (props: {theme: string}) => {
     const handleRegisterSubmit = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault()
         const res = await register(user)
+
+        if (res instanceof Error) {
+            const notify = () => toast.error(strings.loginErrorServer);
+            notify();
+            return;
+        }
+
         const responseJson = await res.json();
 
         if (res.status === 200) {
