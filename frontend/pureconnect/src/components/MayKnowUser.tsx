@@ -3,7 +3,7 @@ import {IMayKnowUser} from "../interfaces/IMayKnowUser";
 import LocalizedStrings from "react-localization";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {regular, solid} from "@fortawesome/fontawesome-svg-core/import.macro";
-
+import user from "../assets/user.png";
 const MayKnowUser = (props:{user: IMayKnowUser}) => {
 
     let strings = new LocalizedStrings({
@@ -17,9 +17,18 @@ const MayKnowUser = (props:{user: IMayKnowUser}) => {
         }
     });
 
+    const [isValidAvatar, setIsValidAvatar] = React.useState(false);
+
+    React.useEffect(() => {
+        const image = new Image();
+        image.src = props.user.avatar;
+        image.onload = () => setIsValidAvatar(true);
+        image.onerror = () => setIsValidAvatar(false);
+    }, [props.user.avatar]);
+
     return (
         <div className='may-know-user'>
-            <img className='may-know-user-image' src={props.user.avatar} alt=""/>
+            <img className='may-know-user-image' src={isValidAvatar? props.user.avatar : user} alt=""/>
             <div  className='may-know-user-name'>
                 {props.user.lastName} {props.user.firstName}
             </div>
@@ -35,7 +44,6 @@ const MayKnowUser = (props:{user: IMayKnowUser}) => {
                     {strings.follow}
                 </div>
             </div>
-
         </div>
     );
 };

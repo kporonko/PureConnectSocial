@@ -503,6 +503,9 @@ html, body{
   display: flex;
   gap: 1rem;
   color: var(--text-primary);
+  justify-content: center;
+  max-width:60vw;
+  overflow: hidden; /* HERE IS THE HIDDEN OVERFLOW */
 }
 
 .may-know-user{
@@ -555,4 +558,14 @@ html, body{
 .may-know-user-button:hover{
   transition: 0.3s background-color ease;
   background: var(--button-blue-hover);
+}
+.may-know-close-btn{
+
+}
+.may-know-close-btn:hover{
+  transform: rotate(360deg);
+  cursor: pointer;
+  transition: 0.3s color ease;
+  transition: 3s transform ease;
+  color: #fa5b5b;
 }

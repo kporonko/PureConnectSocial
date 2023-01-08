@@ -5,6 +5,7 @@ import {solid} from "@fortawesome/fontawesome-svg-core/import.macro";
 import {IMayKnowUser} from "../interfaces/IMayKnowUser";
 import MayKnowUser from "./MayKnowUser";
 import {getRecommendedUsers} from "../utils/FetchData";
+import MayKnowUsersCarousel from "./MayKnowUsersCarousel";
 
 
 
@@ -22,11 +23,9 @@ const YouMayKnowThem = () => {
     let strings = new LocalizedStrings({
         en:{
             youMayKnowThem:"You may know them",
-            noRecommendations:"No recommendations",
         },
         ua: {
             youMayKnowThem:"Можливо, ви знаєте їх",
-            noRecommendations:"Немає рекомендацій",
         }
     });
 
@@ -52,16 +51,13 @@ const YouMayKnowThem = () => {
                 <div>
                     {strings.youMayKnowThem}
                 </div>
-                <div>
-                    <FontAwesomeIcon onClick={handleClose} icon={solid('x')}/>
+                <div className='may-know-close-btn'>
+                    <FontAwesomeIcon onClick={handleClose} icon={solid('xmark')}/>
                 </div>
             </div>
 
-            <div className={'may-know-them-content'}>
-                {users !== undefined ? users.map((user, index) => (
-                    <MayKnowUser user={user} key={index}/>
-                )) : strings.noRecommendations}
-            </div>
+            <MayKnowUsersCarousel users={users}/>
+
         </div>
     );
 };
