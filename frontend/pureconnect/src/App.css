@@ -504,7 +504,7 @@ html, body{
   gap: 1rem;
   color: var(--text-primary);
   justify-content: center;
-  max-width:60vw;
+  max-width:65vw;
   overflow: hidden; /* HERE IS THE HIDDEN OVERFLOW */
 }
 

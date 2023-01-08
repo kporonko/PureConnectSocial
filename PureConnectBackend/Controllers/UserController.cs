@@ -71,7 +71,7 @@ namespace PureConnectBackend.Controllers
             if (response is null)
                 return NotFound();
 
-            return Ok(response.Take(10));
+            return Ok(response.Take(5));
         }
 
 

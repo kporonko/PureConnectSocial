@@ -22,7 +22,7 @@ const MayKnowUsersCarousel = (props: {users: IMayKnowUser[] | undefined}) => {
 
             {props.users !== undefined ? props.users.length > 0 ? props.users.map((user, index) => (
                 <MayKnowUser user={user} key={index}/>
-            )) : strings.noRecommendations : strings.errorMayKnowLoading}
+                    )) : strings.noRecommendations : strings.errorMayKnowLoading}
         </div>
     );
 };
