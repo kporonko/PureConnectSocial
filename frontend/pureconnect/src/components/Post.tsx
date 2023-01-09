@@ -44,7 +44,7 @@ const Post = (props: {post: IPost}) => {
             </div>
 
             <PostActionsPanel post={props.post}/>
-            <PostDatePanel/>
+            <PostDatePanel post={props.post}/>
         </div>
     );
 };

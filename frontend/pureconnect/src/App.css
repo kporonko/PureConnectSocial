@@ -578,7 +578,7 @@ html, body{
   width: 50rem;
   /*padding: 1rem;*/
   background: var(--background-secondary);
-  border-radius: 5px;
+  border-radius: 10px;
   box-shadow: var(--box-shadow-main);
 }
 .post-bar{
@@ -647,7 +647,7 @@ html, body{
   cursor: pointer;
 }
 .post-actions-wrapper{
-  padding: 0rem 3rem;
+  padding: 1rem 3rem;
   border-top: 1px solid var(--text-primary);
   border-bottom: 1px solid var(--text-primary);
 
@@ -661,13 +661,6 @@ html, body{
   justify-content: start;
   cursor: pointer;
 }
-
-/*.post-action-text-header{*/
-/*  margin-top: 5px;*/
-/*  font-size: 1.5rem;*/
-/*  font-family: "Montserrat", sans-serif;*/
-/*  color: var(--button-yellow);*/
-/*}*/
 .post-action-icon{
   margin-top: 10px;
   color: var(--text-primary);
@@ -681,4 +674,14 @@ html, body{
 }
 .heart-fill{
   color: #f45252;
+}
+.post-date-wrapper{
+  padding: 1rem 3rem;
+  display: flex;
+  justify-content: space-between;
+}
+.post-date-wrapper>div{
+  font-size: 1.2rem;
+  font-family: "Montserrat", sans-serif;
+  color: var(--text-primary);
 }
