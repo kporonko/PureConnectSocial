@@ -7,7 +7,7 @@ const MainContentHome = (props: {theme: string}) => {
         <div className="main-content-home">
             <div className='main-content-home-block'>
                 <YouMayKnowThem theme={props.theme}/>
-                <RecommendedPostsList/>
+                <RecommendedPostsList theme={props.theme}/>
             </div>
         </div>
     );

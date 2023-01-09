@@ -6,7 +6,7 @@ import PostUser from "./PostUser";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {solid} from "@fortawesome/fontawesome-svg-core/import.macro";
 
-const Post = (props: {post: IPost}) => {
+const Post = (props: {post: IPost, theme: string}) => {
 
     const [isOpenReadMore, setIsOpenReadMore] = useState(false);
 
@@ -43,7 +43,7 @@ const Post = (props: {post: IPost}) => {
                 }
             </div>
 
-            <PostActionsPanel post={props.post}/>
+            <PostActionsPanel post={props.post} theme={props.theme}/>
             <PostDatePanel post={props.post}/>
         </div>
     );

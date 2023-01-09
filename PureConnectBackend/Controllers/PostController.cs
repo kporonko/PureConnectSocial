@@ -146,6 +146,42 @@ namespace PureConnectBackend.Controllers
             return Ok(posts);
         }
 
+
+        /// <summary>
+        /// Adds like on post.
+        /// </summary>
+        /// <param name="postInfo">LikePostRequest object.</param>
+        /// <returns>Ok if like was put. 404 if smth went wrong.</returns>
+        [Authorize]
+        [HttpPost("like")]
+        public async Task<IActionResult> LikePost([FromBody] LikePostRequest postInfo)
+        {
+            var user = GetCurrentUser();
+            var response = await _postService.LikePost(postInfo, user);
+            if (response == HttpStatusCode.OK)
+                return Ok();
+
+            return NotFound();
+        }
+
+        /// <summary>
+        /// Deletes like from post.
+        /// </summary>
+        /// <param name="postInfo">LikePostDeleteRequest object.</param>
+        /// <returns>Ok if like was put. 404 if smth went wrong.</returns>
+        [Authorize]
+        [HttpDelete("like")]
+        public async Task<IActionResult> UnLikePost([FromBody] LikePostDeleteRequest postInfo)
+        {
+            var user = GetCurrentUser();
+            var response = await _postService.UnlikePost(postInfo, user);
+            if (response == HttpStatusCode.OK)
+                return Ok();
+
+            return NotFound();
+        }
+        
+        
         /// <summary>
         /// Gets current user by authorizing jwt token.
         /// </summary>

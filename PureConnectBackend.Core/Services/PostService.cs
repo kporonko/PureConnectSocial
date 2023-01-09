@@ -161,6 +161,49 @@ namespace PureConnectBackend.Core.Services
 
 
         /// <summary>
+        /// Adds like on post from user.
+        /// </summary>
+        /// <param name="likeInfo">LikePostRequest object with date and id of post.</param>
+        /// <param name="userFromJwt">User object info from jwt.</param>
+        /// <returns>200 if liked. 400 if smth went wrong.</returns>
+        public async Task<HttpStatusCode> LikePost(LikePostRequest likeInfo, User userFromJwt)
+        {
+            var user = await _context.Users.Include(x => x.Follower).FirstOrDefaultAsync(x => x.Email == userFromJwt.Email);
+            if (user is null)
+                return HttpStatusCode.BadRequest;
+
+            var post = await _context.Posts.Include(x => x.PostLikes).FirstOrDefaultAsync(x => x.Id == likeInfo.PostId);
+            var postLike = new PostLike() { CreatedAt = likeInfo.CreatedAt, PostId = post.Id, UserId = user.Id };
+            await AddPostLikeToContext(postLike);
+            return HttpStatusCode.OK;
+        }
+
+
+        /// <summary>
+        /// Deletes like from post from user.
+        /// </summary>
+        /// <param name="likeInfo">LikePostRequest object with date and id of post.</param>
+        /// <param name="userFromJwt">User object info from jwt.</param>
+        /// <returns>200 if like id deleted. 400 if smth went wrong.</returns>
+        public async Task<HttpStatusCode> UnlikePost(LikePostDeleteRequest likeInfo, User userFromJwt)
+        {
+            var user = await _context.Users.Include(x => x.Follower).FirstOrDefaultAsync(x => x.Email == userFromJwt.Email);
+            if (user is null)
+                return HttpStatusCode.BadRequest;
+
+            var post = await _context.Posts.Include(x => x.PostLikes).FirstOrDefaultAsync(x => x.Id == likeInfo.PostId);
+            var postLike = await _context.PostsLikes.FirstOrDefaultAsync(x => x.PostId == likeInfo.PostId && x.UserId == user.Id);
+
+            if (postLike is null)
+                return HttpStatusCode.BadRequest;
+
+            await DeletePostLikeFromContext(postLike);
+            return HttpStatusCode.OK;
+        }
+
+
+
+        /// <summary>
         /// Converts post DTO to Post entity.
         /// </summary>
         /// <param name="postInfo">Post DTO.</param>
@@ -290,6 +333,26 @@ namespace PureConnectBackend.Core.Services
             var followSecondToFirst = await _context.Follows.FirstOrDefaultAsync(x => x.FollowerId == user.Id && x.FolloweeId == currUser.Id);
 
             return followOneToSecond is not null && followSecondToFirst is not null;
+        }
+
+        /// <summary>
+        /// Adds PostLike object to db context.
+        /// </summary>
+        /// <param name="postLike">PostLike object to add.</param>
+        private async Task DeletePostLikeFromContext(PostLike postLike)
+        {
+            _context.PostsLikes.Remove(postLike);
+            await _context.SaveChangesAsync();
+        }
+
+        /// <summary>
+        /// Deletes PostLike object from db context.
+        /// </summary>
+        /// <param name="postLike">PostLike object to delete.</param>
+        private async Task AddPostLikeToContext(PostLike postLike)
+        {
+            await _context.PostsLikes.AddAsync(postLike);
+            await _context.SaveChangesAsync();
         }
     }
 }

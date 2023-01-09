@@ -1,5 +1,5 @@
 export interface IPost{
-    id: number;
+    postId: number;
     image: string;
     description: string;
     likesCount: number;

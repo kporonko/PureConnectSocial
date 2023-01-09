@@ -3,7 +3,7 @@ import {IPost} from "../interfaces/IPost";
 import {getRecommendedPosts} from "../utils/FetchData";
 import Post from "./Post";
 
-const RecommendedPostsList = () => {
+const RecommendedPostsList = (props:{theme: string}) => {
 
     const [recommendedPosts, setRecommendedPosts] = React.useState<IPost[]>();
 
@@ -20,7 +20,7 @@ const RecommendedPostsList = () => {
     return (
         <div>
             {recommendedPosts !== undefined ? recommendedPosts.map((post, index) => (
-                <Post post={post} key={index}/>
+                <Post post={post} key={index} theme={props.theme}/>
                     )) : "No recommendations"}
         </div>
     );

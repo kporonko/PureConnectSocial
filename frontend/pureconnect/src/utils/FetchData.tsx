@@ -156,3 +156,47 @@ export const unfollowUser = async (token: string|null, userId: number) => {
     }
 }
 
+export const likePost = async (token: string|null, postId: number) => {
+    try {
+        const response = await fetch(`${BASE_URL}api/Post/like`, {
+            method: 'POST',
+            headers:{
+                'Content-Type': 'application/json',
+                'Accept-Language': getUsersLocale(),
+                'Authorization': 'Bearer ' + token,
+            },
+            body: JSON.stringify({
+                postId: postId,
+                createdAt: new Date().toISOString()
+            })
+        });
+        return response;
+    }
+    catch (error: any) {
+        console.log(error);
+        return error;
+    }
+}
+
+export const unLikePost = async (token: string|null, postId: number) => {
+    try {
+        const response = await fetch(`${BASE_URL}api/Post/like`, {
+            method: 'DELETE',
+            headers:{
+                'Content-Type': 'application/json',
+                'Accept-Language': getUsersLocale(),
+                'Authorization': 'Bearer ' + token,
+            },
+            body: JSON.stringify({
+                postId: postId
+            })
+        });
+        return response;
+    }
+    catch (error: any) {
+        console.log(error);
+        return error;
+    }
+}
+
+
