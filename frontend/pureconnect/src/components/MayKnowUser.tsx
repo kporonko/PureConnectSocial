@@ -38,7 +38,6 @@ const MayKnowUser = (props:{user: IMayKnowUser, theme: string}) => {
     }, [props.user.avatar]);
 
     const handleFollow = async () => {
-        setFollowed(!followed)
         const token = localStorage.getItem('access_token')
 
         if (!followed){
@@ -48,6 +47,7 @@ const MayKnowUser = (props:{user: IMayKnowUser, theme: string}) => {
                 notify();
             }
             else{
+                setFollowed(!followed)
                 const notify = () => toast.success(strings.successFollow);
                 notify();
             }
@@ -59,6 +59,7 @@ const MayKnowUser = (props:{user: IMayKnowUser, theme: string}) => {
                 notify();
             }
             else{
+                setFollowed(!followed)
                 const notify = () => toast.success(strings.successUnfollow);
                 notify();
             }
