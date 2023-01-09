@@ -5,7 +5,7 @@ import {solid} from "@fortawesome/fontawesome-svg-core/import.macro";
 import {IMayKnowUser} from "../interfaces/IMayKnowUser";
 import MayKnowUser from "./MayKnowUser";
 import {getRecommendedUsers} from "../utils/FetchData";
-import MayKnowUsersCarousel from "./MayKnowUsersCarousel";
+import MayKnowUsersList from "./MayKnowUsersList";
 
 
 
@@ -56,7 +56,7 @@ const YouMayKnowThem = () => {
                 </div>
             </div>
 
-            <MayKnowUsersCarousel users={users}/>
+            <MayKnowUsersList users={users}/>
 
         </div>
     );

@@ -12,7 +12,9 @@ import ChangeThemeButton from "../components/ChangeThemeButton";
 import {toast, ToastContainer} from "react-toastify"; // <-- import styles to be used
 
 const Login = (props:{theme: string, setTheme: any}) => {
+
     const nav = useNavigate();
+
     const handleNav = (role: string|null, token: string|null) => {
         if (role === null || token === null)
             return;
@@ -25,6 +27,7 @@ const Login = (props:{theme: string, setTheme: any}) => {
         else if (role === "user")
             nav("/home")
     }
+
     async function handleCallbackResponse(response : google.accounts.id.CredentialResponse){
         const res = await authGoogle(response.credential);
         if(res instanceof Error){

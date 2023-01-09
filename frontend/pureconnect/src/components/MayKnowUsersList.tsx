@@ -4,7 +4,7 @@ import {IMayKnowUser} from "../interfaces/IMayKnowUser";
 import LocalizedStrings from "react-localization";
 import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a loader
 
-const MayKnowUsersCarousel = (props: {users: IMayKnowUser[] | undefined}) => {
+const MayKnowUsersList = (props: {users: IMayKnowUser[] | undefined}) => {
 
     let strings = new LocalizedStrings({
         en:{
@@ -27,4 +27,4 @@ const MayKnowUsersCarousel = (props: {users: IMayKnowUser[] | undefined}) => {
     );
 };
 
-export default MayKnowUsersCarousel;
+export default MayKnowUsersList;

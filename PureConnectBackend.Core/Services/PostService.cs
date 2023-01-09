@@ -87,7 +87,7 @@ namespace PureConnectBackend.Core.Services
             if (responseValidator is not null)
                 return responseValidator;
 
-            PostResponse postResponse = ConvertEntityObjectToPostDto(post);
+            PostResponse postResponse = ConvertEntityObjectToPostDto(post, userFromJwt.Id);
             return postResponse;
         }
 
@@ -105,7 +105,7 @@ namespace PureConnectBackend.Core.Services
             List<PostResponse> resPostsList = new();
             foreach (var post in user.Posts)
             {
-                var postDto = ConvertEntityObjectToPostDto(post);
+                var postDto = ConvertEntityObjectToPostDto(post, user.Id);
                 resPostsList.Add(postDto);
             }
 
@@ -151,7 +151,7 @@ namespace PureConnectBackend.Core.Services
             foreach (var followee in user.Follower)
             {
                 var followeeUser = await _context.Users.Include(x => x.Posts).ThenInclude(x => x.PostLikes).Include(x => x.Posts).ThenInclude(x => x.PostComments).FirstOrDefaultAsync(x => x.Id == followee.FolloweeId);
-                var followeeUserPosts = GetUserPostsDuringWeek(followeeUser!);
+                var followeeUserPosts = GetUserPostsDuringWeek(followeeUser!, user.Id);
                 resPostsList.AddRange(followeeUserPosts);
             }
 
@@ -216,7 +216,7 @@ namespace PureConnectBackend.Core.Services
         /// </summary>
         /// <param name="post">Post we want to convert.</param>
         /// <returns>Post DTO with full info.</returns>
-        private PostResponse ConvertEntityObjectToPostDto(Post post)
+        private PostResponse ConvertEntityObjectToPostDto(Post post, int myId)
         {
             PostResponse postResponse = new PostResponse
             {
@@ -233,6 +233,8 @@ namespace PureConnectBackend.Core.Services
             postResponse.Username = post.User.UserName;
             postResponse.FullName = $"{post.User.FirstName} {post.User.LastName}";
 
+            postResponse.IsLike = post.PostLikes.Any(x => x.UserId == myId);
+            
             return postResponse;
         }
 
@@ -241,14 +243,14 @@ namespace PureConnectBackend.Core.Services
         /// </summary>
         /// <param name="followeeUser"></param>
         /// <returns></returns>
-        private List<PostResponse> GetUserPostsDuringWeek(User followeeUser)
+        private List<PostResponse> GetUserPostsDuringWeek(User followeeUser, int myId)
         {
             List<PostResponse> list = new();
 
             var posts =  followeeUser.Posts.Where(x => (DateTime.Now - x.CreatedAt).TotalDays <= 7 && (DateTime.Now - x.CreatedAt).TotalSeconds >= 0).ToList();
             foreach (var post in posts)
             {
-                list.Add(ConvertEntityObjectToPostDto(post));
+                list.Add(ConvertEntityObjectToPostDto(post, myId));
             }
 
             return list;

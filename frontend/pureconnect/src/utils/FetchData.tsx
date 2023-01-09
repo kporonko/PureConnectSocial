@@ -99,3 +99,16 @@ export const getRecommendedUsers = async (token: string) => {
     const responseJson = await response.json()
     return responseJson;
 }
+
+export const getRecommendedPosts = async (token: string) => {
+    const response = await fetch(`${BASE_URL}api/Post/recommended-posts`, {
+        method: 'GET',
+        headers:{
+            'Authorization': 'Bearer ' + token,
+            'Content-Type': 'application/x-www-form-urlencoded'
+        }
+    });
+
+    const responseJson = await response.json()
+    return responseJson;
+}
