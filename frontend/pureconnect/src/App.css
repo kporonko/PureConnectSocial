@@ -382,6 +382,11 @@ html, body{
   gap: 1.5rem;
 }
 
+.nav-more:hover{
+  transition: 0.5s ease;
+  background: var(--background-third);
+  border-radius: 30px;
+}
 .main-content-home{
   margin-left: 17vw; /* same as width of #left-nav */
   width: calc(100% - 17vw);
@@ -574,7 +579,7 @@ html, body{
 /* Post */
 
 .post-wrapper{
-  margin-top: 1.5rem;
+  margin-top: 3rem;
   width: 50rem;
   /*padding: 1rem;*/
   background: var(--background-secondary);
