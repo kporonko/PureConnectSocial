@@ -585,6 +585,7 @@ html, body{
   background: var(--background-secondary);
   border-radius: 10px;
   box-shadow: var(--box-shadow-main);
+  margin-bottom: 3rem;
 }
 .post-bar{
   padding: 0.8rem 2rem;
