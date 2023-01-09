@@ -37,8 +37,8 @@ const ModalHomeNavMenuMore : React.FC<ModalHomeNavMenuMoreProps> = ({isOpen, the
     }
 
     const handleExit = () => {
-        localStorage.removeItem('access_token');
         nav('/');
+        localStorage.removeItem('access_token');
     }
 
     return (
