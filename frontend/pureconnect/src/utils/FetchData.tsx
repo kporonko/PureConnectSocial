@@ -112,3 +112,47 @@ export const getRecommendedPosts = async (token: string) => {
     const responseJson = await response.json()
     return responseJson;
 }
+
+export const followUser = async (token: string|null, userId: number) => {
+    try {
+        const response = await fetch(`${BASE_URL}api/Follows/follow`, {
+            method: 'POST',
+            headers:{
+                'Content-Type': 'application/json',
+                'Accept-Language': getUsersLocale(),
+                'Authorization': 'Bearer ' + token,
+            },
+            body: JSON.stringify({
+                followeeId: userId,
+                RequestDate: new Date().toISOString()
+            })
+        });
+        return response;
+    }
+    catch (error: any) {
+        console.log(error);
+        return error;
+    }
+}
+
+export const unfollowUser = async (token: string|null, userId: number) => {
+    try {
+        const response = await fetch(`${BASE_URL}api/Follows/follow`, {
+            method: 'DELETE',
+            headers:{
+                'Content-Type': 'application/json',
+                'Accept-Language': getUsersLocale(),
+                'Authorization': 'Bearer ' + token,
+            },
+            body: JSON.stringify({
+                followeeId: userId,
+            })
+        });
+        return response;
+    }
+    catch (error: any) {
+        console.log(error);
+        return error;
+    }
+}
+

@@ -40,7 +40,7 @@ const Home = (props: {theme: string, setTheme: any}) => {
     return (
         <div className={'home-wrapper'} data-theme={props.theme}>
             <NavMenu page={Page.Home} theme={props.theme} setTheme={props.setTheme} avatar={avatarImage}/>
-            <MainContentHome/>
+            <MainContentHome theme={props.theme}/>
 
             <ToastContainer
                 position="top-right"

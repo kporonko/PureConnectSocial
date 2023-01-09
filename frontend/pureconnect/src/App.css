@@ -560,13 +560,15 @@ html, body{
   border-radius: 2px;
   cursor: pointer;
 }
-.may-know-user-button:hover{
-  transition: 0.3s background-color ease;
-  background: var(--button-blue-hover);
-}
-.may-know-close-btn{
+/*.may-know-user-button:hover{*/
+/*  transition: 0.3s background-color ease;*/
+/*  background: var(--button-blue-hover);*/
+/*}*/
 
+.may-know-user-button-followed{
+  background: var(--text-primary);
 }
+
 .may-know-close-btn:hover{
   transform: rotate(360deg);
   cursor: pointer;

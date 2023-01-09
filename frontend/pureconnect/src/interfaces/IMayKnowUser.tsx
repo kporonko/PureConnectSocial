@@ -1,5 +1,5 @@
 export interface IMayKnowUser{
-    id: number;
+    userId: number;
     lastName: string;
     firstName: string;
     commonFriendsCount: number;

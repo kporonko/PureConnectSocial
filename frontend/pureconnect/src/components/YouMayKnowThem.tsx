@@ -9,7 +9,7 @@ import MayKnowUsersList from "./MayKnowUsersList";
 
 
 
-const YouMayKnowThem = () => {
+const YouMayKnowThem = (props:{theme: string}) => {
 
     const isShow: boolean = localStorage.getItem('isShowMayKnowThem') === 'true' ? true : false;
 
@@ -56,7 +56,7 @@ const YouMayKnowThem = () => {
                 </div>
             </div>
 
-            <MayKnowUsersList users={users}/>
+            <MayKnowUsersList users={users} theme={props.theme}/>
 
         </div>
     );

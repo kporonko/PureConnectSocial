@@ -31,14 +31,11 @@ namespace PureConnectBackend.Core.Services
         /// <returns>Status code of the operation.</returns>
         public async Task<HttpStatusCode> AddFollow(FollowAddRequest request, User user)
         {
-            if (request.FollowerId != user.Id)
-                return HttpStatusCode.BadRequest;
-            
-            var follow = await _context.Follows.FirstOrDefaultAsync(x => x.FolloweeId == request.FolloweeId && x.FollowerId == request.FollowerId);
+            var follow = await _context.Follows.FirstOrDefaultAsync(x => x.FolloweeId == request.FolloweeId && x.FollowerId == user.Id);
 
             if(follow is not null)
                 return HttpStatusCode.BadRequest;
-            var newFollow = new Follow() { FolloweeId = request.FolloweeId, FollowerId = request.FollowerId, RequestDate = request.RequestDate };
+            var newFollow = new Follow() { FolloweeId = request.FolloweeId, FollowerId = user.Id, RequestDate = request.RequestDate };
             return await AddFollowToDb(newFollow);
         }
 
@@ -50,10 +47,7 @@ namespace PureConnectBackend.Core.Services
         /// <returns>Status code of the operation.</returns>
         public async Task<HttpStatusCode> RemoveFollow(FollowDeleteRequest request, User user)
         {
-            if (request.FollowerId != user.Id)
-                return HttpStatusCode.BadRequest;
-            
-            var follow = await _context.Follows.FirstOrDefaultAsync(x => x.FolloweeId == request.FolloweeId && x.FollowerId == request.FollowerId);
+            var follow = await _context.Follows.FirstOrDefaultAsync(x => x.FolloweeId == request.FolloweeId && x.FollowerId == user.Id);
 
             if (follow is null)
                 return HttpStatusCode.BadRequest;

@@ -9,7 +9,6 @@ namespace PureConnectBackend.Core.Models.Requests
     public class FollowAddRequest
     {
         public int FolloweeId { get; set; }
-        public int FollowerId { get; set; }
         public DateTime RequestDate { get; set; }
     }
 }
