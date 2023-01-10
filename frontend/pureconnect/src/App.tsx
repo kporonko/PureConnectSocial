@@ -6,6 +6,7 @@ import Home from "./pages/Home";
 import AdminHome from "./pages/AdminHome";
 import useLocalStorage from 'use-local-storage'
 import Register from "./pages/Register";
+import MyProfile from "./pages/MyProfile";
 
 function App() {
 
@@ -20,6 +21,7 @@ function App() {
 
             {/* User*/}
             <Route path="/home" element={<Home theme={theme} setTheme={setTheme}/>}/>
+            <Route path="/my-profile" element={<MyProfile theme={theme} setTheme={setTheme}/>}/>
 
 
 

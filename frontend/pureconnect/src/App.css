@@ -725,3 +725,209 @@ html, body{
   transition: 0.5s color ease;
   color: var(--button-yellow);
 }
+
+
+/* Profile */
+
+.profile-wrapper{
+  background: var(--background);
+  min-height: 100vh;
+}
+
+.main-content-profile{
+  margin-left: 17vw; /* same as width of #left-nav */
+  width: calc(100% - 17vw);
+}
+
+.main-content-profile-block{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.my-profile-user-grid{
+  background: var(--background-third);
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 5vw;
+  border-radius: 20px;
+  padding: 1.5rem;
+}
+
+.my-profile-user-avatar{
+  width: 20rem;
+  height: 20rem;
+  object-fit: cover;
+  border-radius: 10px;
+  border: 1px solid var(--text-primary);
+}
+.my-profile-user-left-bot{
+  /*max-width: 19rem;*/
+
+  margin-top: 0.6rem;
+  background: var(--background-secondary);
+  border-radius: 10px;
+  padding: 0.4rem 0.5rem;
+}
+.my-profile-user-label{
+  color: var(--button-yellow);
+  font-size: 0.7rem;
+  font-family: "Montserrat", sans-serif;
+  font-weight: 100;
+  margin: 0 0 0.4rem 0;
+}
+.my-profile-user-text{
+  color: var(--text-primary);
+  font-size: 1rem;
+  font-family: "Montserrat", sans-serif;
+  font-weight: 100;
+  overflow: auto;
+}
+.ma-bot-05{
+  margin-bottom: 0.5rem;
+}
+.my-profile-user-info-flex{
+  max-width: 19rem;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+
+.profile-user-name-edit-wrapper{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 1rem;
+  color: var(--text-primary);
+}
+
+.my-profile-user-right{
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+.profile-user-name{
+  max-width: 27rem;
+  font-size: 2rem;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  color: var(--button-yellow);
+  font-family: "Montserrat", sans-serif;
+  font-weight: 500;
+}
+
+.profile-user-edit{
+  display: flex;
+  justify-content: space-between;
+  gap: 0.5rem;
+  cursor: pointer;
+  font-family: "Montserrat", sans-serif;
+  font-weight: 500;
+  font-size: 1rem;
+  color: var(--text-primary);
+}
+.profile-user-edit:hover{
+  transition: 0.5s color ease;
+  color: var(--button-yellow);
+}
+.profile-user-status{
+  border-radius: 10px;
+  min-height: 8.5rem;
+  padding: 0.5rem 1rem;
+  background: var(--background-secondary);
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  justify-content: start;
+}
+
+.no-status{
+  color: var(--text-primary);
+  font-size: 1rem;
+  font-family: "Montserrat", sans-serif;
+  font-weight: 100;
+  margin: 0 0 0.4rem 0;
+  opacity: 0.5;
+}
+.status-text{
+  max-width: 38rem;
+  max-height: 9rem;
+  overflow: auto;
+  color: var(--text-primary);
+  font-size: 1.1rem;
+  font-family: "Montserrat", sans-serif;
+  font-weight: 100;
+  margin: 0 0 0.4rem 0;
+}
+
+.profile-user-stats{
+  margin-top: 2rem;
+  border-radius: 10px;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  background: var(--background-secondary);
+}
+.profile-user-stat{
+  border-radius: 0px;
+  border: 1px solid var(--text-primary);
+  padding: 0.7rem 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  color: var(--text-primary);
+  cursor: pointer;
+}
+.profile-user-stat:hover{
+  transition: 0.5s color ease;
+  color: var(--button-yellow);
+  background: var(--background-third);
+}
+.profile-user-stats>div:nth-child(1){
+  border-radius: 10px 0px 0px 10px;
+}
+
+.profile-user-stats>div:nth-child(3){
+  border-radius: 0 10px 10px 0;
+}
+
+.profile-user-additional-wrapper{
+  margin-top: 1.3rem;
+  padding: 0.7rem 0.7rem;
+  border-radius: 10px;
+  background: var(--background-secondary);
+}
+
+.profile-user-additional-location{
+  padding: 0 0 0.3rem 0;
+  margin-top: 0.7rem;
+  display: flex;
+  gap: 1rem;
+  color: var(--text-primary);
+  font-size: 1rem;
+  font-weight: 100;
+  font-family: "Montserrat", sans-serif;
+  max-width: 38rem;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+
+.profile-user-additional-birth-date{
+  margin-top: 0.3rem;
+  display: flex;
+  gap: 1rem;
+  color: var(--text-primary);
+  font-size: 1rem;
+  font-weight: 100;
+  font-family: "Montserrat", sans-serif;
+}
+
+.no-location{
+  color: var(--text-primary);
+  font-size: 1rem;
+  font-family: "Montserrat", sans-serif;
+  font-weight: 100;
+  margin: 0;
+  opacity: 0.5;
+}

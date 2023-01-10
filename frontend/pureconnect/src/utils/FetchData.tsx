@@ -221,4 +221,24 @@ export const unfollowUserByPost = async (token: string|null, postId: number) => 
     }
 }
 
+export const getMyProfile = async (token: string) => {
+    try {
+        const response = await fetch(`${BASE_URL}api/User/my-profile`, {
+            method: 'GET',
+            headers:{
+                'Authorization': 'Bearer ' + token,
+                'Content-Type': 'application/x-www-form-urlencoded'
+            }
+        });
+
+        const responseJson = await response.json()
+        return responseJson;
+    }
+    catch (error: any) {
+        console.log(error);
+        return error;
+    }
+}
+
+
 

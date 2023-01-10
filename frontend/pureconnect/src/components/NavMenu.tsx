@@ -7,6 +7,7 @@ import {Link} from "react-router-dom";
 import ModalHomeNavMenuMore from "./ModalHomeNavMenuMore";
 import LocalizedStrings from "react-localization";
 import person from '../assets/user.png'
+import {useNavigate} from "react-router";
 
 export enum Page { Home, Search, Notifications, Profile, Chats = 4};
 
@@ -44,6 +45,15 @@ const NavMenu = (props: {page: Page, theme: string, setTheme: any, avatar: strin
 
     const [isValidAvatar, setIsValidAvatar] = React.useState(false);
 
+    const nav = useNavigate()
+
+    const handleHome = () => {
+        nav('/home')
+    }
+    const handleProfile = () => {
+        nav('/my-profile')
+    }
+
     React.useEffect(() => {
         const image = new Image();
         image.src = props.avatar;
@@ -52,13 +62,13 @@ const NavMenu = (props: {page: Page, theme: string, setTheme: any, avatar: strin
     }, [props.avatar]);
 
     return (
-        <div className={"nav-menu-wrapper"}>
+        <div data-theme={props.theme} className={"nav-menu-wrapper"}>
             <div className={"nav-menu-image-wrapper"}>
                 <img className={"nav-menu-image"} src={props.theme == 'dark' ? mainLogoWhite : mainLogoBlack} alt="logo"/>
             </div>
             <div className={"nav-content"}>
                 <ul className={"nav-menu-items"}>
-                    <li className={props.page == Page.Home ? "nav-menu-item active-page" : "nav-menu-item"}>
+                    <li onClick={handleHome} className={props.page == Page.Home ? "nav-menu-item active-page" : "nav-menu-item"}>
                         <div className={"nav-menu-item-icon-wrapper"}>
                             <FontAwesomeIcon className={'nav-icon'} icon={solid('home')} />
                         </div>
@@ -82,7 +92,7 @@ const NavMenu = (props: {page: Page, theme: string, setTheme: any, avatar: strin
                         </div>
                         <div className={"nav-menu-item-text"}>{strings.notif}</div>
                     </li>
-                    <li className={props.page == Page.Profile ? "nav-menu-item active-page" : "nav-menu-item"}>
+                    <li onClick={handleProfile} className={props.page == Page.Profile ? "nav-menu-item active-page" : "nav-menu-item"}>
                         <div className={"nav-menu-item-icon-wrapper"}>
                             <img className={'nav-menu-avatar-profile-image'} src={!isValidAvatar ? person : props.avatar} alt=""/>
                         </div>
