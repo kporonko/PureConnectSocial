@@ -200,3 +200,25 @@ export const unLikePost = async (token: string|null, postId: number) => {
 }
 
 
+export const unfollowUserByPost = async (token: string|null, postId: number) => {
+    try {
+        const response = await fetch(`${BASE_URL}api/Follows/follow-by-post`, {
+            method: 'DELETE',
+            headers:{
+                'Content-Type': 'application/json',
+                'Accept-Language': getUsersLocale(),
+                'Authorization': 'Bearer ' + token,
+            },
+            body: JSON.stringify({
+                postId: postId
+            })
+        });
+        return response;
+    }
+    catch (error: any) {
+        console.log(error);
+        return error;
+    }
+}
+
+

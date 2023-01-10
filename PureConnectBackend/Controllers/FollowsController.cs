@@ -59,6 +59,23 @@ namespace PureConnectBackend.Controllers
         }
 
         /// <summary>
+        /// Deletes follow from db.
+        /// </summary>
+        /// <param name="followRequest">Follow info: ids of follower and followee.</param>
+        /// <returns>Status code of operation with localized text.</returns>
+        [HttpDelete("follow-by-post")]
+        [Authorize(Roles = "user")]
+        public async Task<IActionResult> DeleteFollowByPostId(DeletePostRequest followRequest)
+        {
+            var user = GetCurrentUser();
+            var res = await _followService.RemoveFollowByPostId(followRequest, user);
+            if (res == HttpStatusCode.Created)
+                return Ok(_stringLocalizer.GetString("FollowDeleted"));
+
+            return BadRequest(_stringLocalizer.GetString("DeleteFail"));
+        }
+        
+        /// <summary>
         /// Gets current user by authorizing jwt token.
         /// </summary>
         /// <returns></returns>

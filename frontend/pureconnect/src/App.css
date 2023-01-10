@@ -581,6 +581,7 @@ html, body{
 /* Post */
 
 .post-wrapper{
+  position: relative;
   margin-top: 3rem;
   width: 50rem;
   /*padding: 1rem;*/
@@ -677,6 +678,7 @@ html, body{
 .post-action-desc{
   font-size: 0.8rem;
   font-family: "Montserrat", sans-serif;
+  font-weight: 100;
   color: var(--text-primary);
   margin-bottom: 10px;
 }
@@ -692,4 +694,34 @@ html, body{
   font-size: 1.2rem;
   font-family: "Montserrat", sans-serif;
   color: var(--text-primary);
+}
+
+.modal-post-wrapper{
+  border: 1px solid var(--text-primary);
+  background: var(--background);
+  border-radius: 30px;
+  position: absolute;
+  top: -11rem;
+  right: -12rem;
+}
+
+.modal-post-item-last{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0.5rem 0;
+  cursor: pointer;
+  gap: 1rem;
+  text-align: center;
+}
+
+.modal-post-item-last:hover{
+  transition: 0.5s background-color ease;
+  background: var(--background-third);
+  border-radius: 0 0 30px 30px;
+}
+
+.modal-post-item-last:hover>div{
+  transition: 0.5s color ease;
+  color: var(--button-yellow);
 }

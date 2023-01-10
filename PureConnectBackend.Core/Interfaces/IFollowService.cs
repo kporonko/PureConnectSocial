@@ -13,5 +13,6 @@ namespace PureConnectBackend.Core.Interfaces
     {
         Task<HttpStatusCode> AddFollow(FollowAddRequest request, User user);
         Task<HttpStatusCode> RemoveFollow(FollowDeleteRequest request, User user);
+        Task<HttpStatusCode> RemoveFollowByPostId(DeletePostRequest request, User user);
     }
 }

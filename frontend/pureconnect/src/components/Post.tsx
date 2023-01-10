@@ -5,16 +5,18 @@ import PostDatePanel from "./PostDatePanel";
 import PostUser from "./PostUser";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {solid} from "@fortawesome/fontawesome-svg-core/import.macro";
+import ModalPost from "./ModalPost";
 
 const Post = (props: {post: IPost, theme: string}) => {
 
     const [isOpenReadMore, setIsOpenReadMore] = useState(false);
+    const [isOpenModal, setIsOpenModal] = useState(false);
 
     return (
         <div className='post-wrapper'>
             <div className='post-bar'>
                 <PostUser post={props.post}/>
-                <div className='post-menu'>
+                <div onClick={() => setIsOpenModal(!isOpenModal)} className='post-menu'>
                     <FontAwesomeIcon icon={solid('ellipsis')}/>
                 </div>
             </div>
@@ -45,6 +47,7 @@ const Post = (props: {post: IPost, theme: string}) => {
 
             <PostActionsPanel post={props.post} theme={props.theme}/>
             <PostDatePanel post={props.post}/>
+            <ModalPost post={props.post} isOpen={isOpenModal} setIsOpen={setIsOpenModal} theme={props.theme}/>
         </div>
     );
 };
