@@ -240,5 +240,24 @@ export const getMyProfile = async (token: string) => {
     }
 }
 
+export const getMyPosts = async (token: string) => {
+    try {
+        const response = await fetch(`${BASE_URL}api/Post/posts`, {
+            method: 'GET',
+            headers:{
+                'Authorization': 'Bearer ' + token,
+                'Content-Type': 'application/x-www-form-urlencoded'
+            }
+        });
+
+        const responseJson = await response.json()
+        return responseJson;
+    }
+    catch (error: any) {
+        console.log(error);
+        return error;
+    }
+}
+
 
 

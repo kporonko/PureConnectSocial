@@ -20,7 +20,7 @@ const RecommendedPostsList = (props:{theme: string}) => {
     return (
         <div>
             {recommendedPosts !== undefined ? recommendedPosts.map((post, index) => (
-                <Post post={post} key={index} theme={props.theme}/>
+                <Post post={post} key={index} theme={props.theme} isMy={false}/>
                     )) : "No recommendations"}
         </div>
     );

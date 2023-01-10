@@ -747,6 +747,7 @@ html, body{
 }
 
 .my-profile-user-grid{
+  margin-top: 1rem;
   background: var(--background-third);
   display: grid;
   grid-template-columns: 1fr 2fr;
@@ -869,14 +870,15 @@ html, body{
   background: var(--background-secondary);
 }
 .profile-user-stat{
-  border-radius: 0px;
   border: 1px solid var(--text-primary);
   padding: 0.7rem 1rem;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 0.5rem;
   color: var(--text-primary);
+  font-family: "Montserrat", sans-serif;
+  font-size: 0.9rem;
+  font-weight: 400;
   cursor: pointer;
 }
 .profile-user-stat:hover{
