@@ -13,7 +13,6 @@ const Post = (props: {post: IPost, theme: string, isMy: boolean}) => {
     const [isOpenReadMore, setIsOpenReadMore] = useState(false);
     const [isOpenModal, setIsOpenModal] = useState(false);
 
-    console.log(props.post);
     return (
         <div className='post-wrapper'>
             <div className='post-bar'>
@@ -31,7 +30,7 @@ const Post = (props: {post: IPost, theme: string, isMy: boolean}) => {
                 {isOpenReadMore ? (
                     <div className="read-more-content">
                         <p>
-                            {props.post.description}
+                            {decodeURI(props.post.description)}
                             <span className={'read-more-span'} onClick={() => setIsOpenReadMore(false)}>Close</span>
                         </p>
                     </div>
@@ -42,7 +41,7 @@ const Post = (props: {post: IPost, theme: string, isMy: boolean}) => {
                         </p>
                     </div> :
                     <div className="read-more-preview">
-                        <p>{props.post.description}</p>
+                        <p>{decodeURI(props.post.description)}</p>
                     </div>
                 }
             </div>
