@@ -933,3 +933,27 @@ html, body{
   margin: 0;
   opacity: 0.5;
 }
+
+
+.location-wrapper{
+  position: relative;
+  justify-self: left;
+  width: 100%;
+}
+.register-location-options{
+  position: absolute;
+  top: 2.2rem;
+  left: 0;
+  background: var(--background-third);
+  color: var(--text-primary);
+  max-height: 40vh;
+  max-width: 18vw ;
+  overflow: auto;
+  padding: 0;
+}
+.register-location-option{
+  padding: 1rem 0.5rem;
+  border: 1px solid var(--text-primary);
+  border-radius: 10px;
+}
+

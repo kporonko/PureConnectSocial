@@ -1,4 +1,4 @@
-import React, {ChangeEvent, FormEvent, useRef, useState} from 'react';
+import React, {ChangeEvent, FormEvent, useEffect, useRef, useState} from 'react';
 import LocalizedStrings from "react-localization";
 import {isEmail} from "../functions/stringFunctions";
 import { IRegisterUser } from '../interfaces/IRegisterUser';
@@ -7,6 +7,9 @@ import {login, register} from "../utils/FetchData";
 import {toast, ToastContainer} from "react-toastify";
 import {ILoginResponseOk} from "../interfaces/ILoginResponseOk";
 import {useNavigate} from "react-router";
+import {ILocation} from "../interfaces/ILocation";
+import {log} from "util";
+import { radar_key } from '../functions/secureData';
 
 const RegisterForm = (props: {theme: string}) => {
     let strings = new LocalizedStrings({
@@ -76,6 +79,7 @@ const RegisterForm = (props: {theme: string}) => {
     }
 
     const handleRegisterSubmit = async (e: FormEvent<HTMLFormElement>) => {
+        setUser({...user, location: inputValue})
         e.preventDefault()
         const res = await register(user)
 
@@ -107,6 +111,73 @@ const RegisterForm = (props: {theme: string}) => {
 
     const submitCheckForDisabled = () => {
         return !isEmail(user?.email) || user?.password.length < 1 || user.firstName.length < 1 || user.lastName.length < 1 || user.birthDate.length < 1 || user.username.length < 1
+    }
+
+
+    const [options, setOptions] = useState<ILocation[]>([
+        {
+            formattedAddress: "",
+            placeLabel: '',
+            state: '',
+            country: '',
+            city: '',
+            street: '',
+        }
+    ]);
+    const [inputValue, setInputValue] = useState("");
+    const [filteredOptions, setFilteredOptions] = useState([
+        {
+            formattedAddress: "",
+            placeLabel: '',
+            state: '',
+            country: '',
+            city: '',
+            street: '',
+        }
+    ]);
+    const [isFocused, setIsFocused] = useState(false);
+
+    useEffect(() => {
+        async function getOptions(location: string) {
+            try {
+                const response = await fetch(`https://api.radar.io/v1/search/autocomplete?query=${location}`, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': radar_key
+                    },
+                });
+                const data = await response.json();
+                setOptions(data.addresses);
+                setFilteredOptions(data.addresses);
+            } catch (error) {
+                console.error(error);
+            }
+        }
+        if(inputValue.length > 2) getOptions(inputValue);
+
+    }, [inputValue]);
+
+    useEffect(() => {
+
+        if (inputValue === "" && options !== undefined) {
+            setFilteredOptions(options);
+        } else {
+            setFilteredOptions(
+                options?.filter((option) => option.formattedAddress.toLowerCase().includes(inputValue.toLowerCase()))
+            );
+        }
+    }, [inputValue, options]);
+
+    const handleChooseLocation = (location: string) => {
+        setInputValue(location)
+    }
+
+    const checkUndefined = (string: string) => {
+        if (string === undefined){
+            return '';
+        }
+        return string;
     }
 
     return (
@@ -146,13 +217,36 @@ const RegisterForm = (props: {theme: string}) => {
                         onChange={(e) => setUser({...user, firstName: e.target.value} as IRegisterUser)}
                     />
 
-                    <input
-                        className={'login-form-input register-input-additional register-location-grid'}
-                        type="text"
-                        placeholder={strings.locationInp}
-                        value={user?.location}
-                        onChange={(e) => setUser({...user, location: e.target.value} as IRegisterUser)}
-                    />
+                    <div className={'location-wrapper'}>
+                        <input
+                            className={'login-form-input register-input-additional register-location-grid'}
+                            type="text"
+                            placeholder={strings.locationInp}
+                            // value={user?.location}
+                            value={inputValue}
+                            onFocus={() => setIsFocused(true)}
+                            // onBlur={() => setIsFocused(false)}
+                            onChange={(event) => setInputValue(event.target.value)}
+                            // onChange={(e) => {
+                            //     setUser({...user, location: e.target.value} as IRegisterUser)
+                            //     console.log(getData(e.target.value))
+                            // }}
+                        />
+                        {isFocused && (
+                            <ul
+                                className={'register-location-options'}
+                                onBlur={() => setIsFocused(false)}
+                            >
+                                {
+                                    filteredOptions.map((option, index) => (
+                                    <li onClick={(e) => handleChooseLocation(`${checkUndefined(option.formattedAddress)} ${checkUndefined(option.placeLabel)} ${checkUndefined(option.state)} ${checkUndefined(option.country)} ${checkUndefined(option.city)} ${checkUndefined(option.street)}`)} className={'register-location-option'} key={index}>
+                                        {option.formattedAddress} {option.placeLabel} {option.state} {option.country} {option.city} {option.street}
+                                    </li>
+                                ))}
+                            </ul>
+                        )}
+                    </div>
+
                     <input
                         className={'login-form-input register-input-additional register-birth-date-grid'}
                         type="date"

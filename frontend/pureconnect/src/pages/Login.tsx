@@ -48,6 +48,7 @@ const Login = (props:{theme: string, setTheme: any}) => {
             document.getElementById("signInDiv")!,
             {theme: themeButton, size: "large", type: "standard", shape: "rectangular", text: 'signin_with', logo_alignment: 'center', width: '100px'}
         );
+
     },[])
 
 
