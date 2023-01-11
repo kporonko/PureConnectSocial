@@ -49,7 +49,7 @@ const ProfileStatusBlock = (props: {user: IUser|undefined}) => {
                     </div>
                     :
                     <div className={'status-text'}>
-                        {props.user?.status}
+                        {decodeURI(props.user?.status!)}
                     </div>}
             </div>
 

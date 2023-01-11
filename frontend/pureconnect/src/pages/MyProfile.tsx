@@ -1,7 +1,7 @@
 import React, {useEffect} from 'react';
 import NavMenu from "../components/NavMenu";
 import {getAvatar, getMyPosts} from "../utils/FetchData";
-import {toast} from "react-toastify";
+import {toast, ToastContainer} from "react-toastify";
 import {useNavigate} from "react-router";
 import LocalizedStrings from "react-localization";
 import MainContentHome from "../components/MainContentHome";
@@ -47,6 +47,19 @@ const MyProfile = (props: {theme: string, setTheme: any}) => {
         <div className={'profile-wrapper'} data-theme={props.theme}>
             <NavMenu page={3} theme={props.theme} setTheme={props.setTheme} avatar={avatarImage}/>
             <MainContentMyProfile theme={props.theme}/>
+
+            <ToastContainer
+                position="top-right"
+                autoClose={5000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss={false}
+                draggable
+                pauseOnHover
+                theme={props.theme === 'dark' ? 'dark' : 'light'}
+            />
         </div>
     );
 };

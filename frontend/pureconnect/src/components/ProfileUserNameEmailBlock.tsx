@@ -22,7 +22,7 @@ const ProfileUserNameEmailBlock = (props: {user: IUser|undefined}) => {
                     {strings.username}
                 </label>
                 <div className='my-profile-user-text ma-bot-05'>
-                    @{props.user?.userName}
+                    @{decodeURI(props.user?.userName!)}
                 </div>
             </div>
 
@@ -31,7 +31,7 @@ const ProfileUserNameEmailBlock = (props: {user: IUser|undefined}) => {
                     {strings.email}
                 </label>
                 <div className='my-profile-user-text'>
-                    {props.user?.email}
+                    {decodeURI(props.user?.email!)}
                 </div>
             </div>
         </div>
