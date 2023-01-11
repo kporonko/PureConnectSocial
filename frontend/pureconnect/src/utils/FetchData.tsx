@@ -250,8 +250,7 @@ export const getMyPosts = async (token: string) => {
             }
         });
 
-        const responseJson = await response.json()
-        return responseJson;
+        return response;
     }
     catch (error: any) {
         console.log(error);
@@ -259,5 +258,22 @@ export const getMyPosts = async (token: string) => {
     }
 }
 
+export const getMyPostsImages = async (token: string) => {
+    try {
+        const response = await fetch(`${BASE_URL}api/Post/images`, {
+            method: 'GET',
+            headers:{
+                'Authorization': 'Bearer ' + token,
+                'Content-Type': 'application/x-www-form-urlencoded'
+            }
+        });
+
+        return response;
+    }
+    catch (error: any) {
+        console.log(error);
+        return error;
+    }
+}
 
 

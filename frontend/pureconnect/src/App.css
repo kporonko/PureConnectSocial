@@ -582,7 +582,7 @@ html, body{
 
 .post-wrapper{
   position: relative;
-  margin-top: 3rem;
+  margin-top: 2rem;
   width: 50rem;
   /*padding: 1rem;*/
   background: var(--background-secondary);
@@ -957,3 +957,52 @@ html, body{
   border-radius: 10px;
 }
 
+
+.profile-posts-actions-panel-wrapper{
+  margin: 0;
+  display: flex;
+  justify-content: space-between;
+  padding: 1rem 10rem;
+  border-bottom: 1px solid var(--text-primary);
+  color: var(--text-primary);
+  font-size: 1.3rem;
+  width: 40rem;
+}
+
+.profile-posts-actions-panel-wrapper>div{
+  padding: 0.5rem;
+  border-radius: 100%;
+}
+.px-size-25{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 25px;
+  height: 25px;
+  cursor: pointer;
+}
+.px-size-25:hover{
+  transition: 0.5s all ease;
+  background: var(--background-third);
+}
+
+.active-profile-display-action{
+  color: var(--button-yellow);
+  background: var(--background-third);
+}
+
+.my-posts-images-wrapper{
+  width: 60vw;
+  display: flex;
+  gap: 20px!important;
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+}
+.post-image-image{
+  width: 18rem;
+  height: 18rem;
+  cursor: pointer;
+}
