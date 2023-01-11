@@ -19,6 +19,8 @@ namespace PureConnectBackend.Core.Models.Responses
         public string Username { get; set; }
         public string FullName { get; set; }
         public bool IsLike { get; set; }
+
+        public bool IsMine { get; set; }
         public MyResponses Response { get; set; }
     }
 }

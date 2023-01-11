@@ -11,5 +11,6 @@ export interface IPost{
     fullName: string;
     response: string;
 
-    isLike: boolean
+    isLike: boolean;
+    isMine: boolean;
 }

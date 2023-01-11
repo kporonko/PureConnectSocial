@@ -277,7 +277,7 @@ namespace PureConnectBackend.Core.Services
             postResponse.FullName = $"{post.User.FirstName} {post.User.LastName}";
 
             postResponse.IsLike = post.PostLikes.Any(x => x.UserId == myId);
-            
+            postResponse.IsMine = post.User.Id== myId;
             return postResponse;
         }
 
