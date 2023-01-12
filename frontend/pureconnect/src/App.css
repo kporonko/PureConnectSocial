@@ -1025,8 +1025,8 @@ html, body{
   height: 100%;
 }
 .modal-add-post-content-with-panel{
-  width: 70vw;
-  height: 80vh;
+  width: 1150px;
+  height: 600px;
   background: var(--background);
   border: 1px solid var(--text-primary);
   border-radius: 20px;
@@ -1048,7 +1048,6 @@ html, body{
   font-size: 1rem;
   color: var(--text-primary);
   padding: 0.5rem 0.8rem;
-
   font-family: "Montserrat", sans-serif;
 }
 .modal-add-post-top-panel-header{
