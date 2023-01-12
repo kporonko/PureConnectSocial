@@ -1083,7 +1083,6 @@ html, body{
   flex-direction: column;
   align-items: center;
   justify-content: space-between;
-  min-width: 40vw;
 }
 .modal-add-post-image-wrapper{
   width: 42rem;
