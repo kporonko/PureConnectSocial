@@ -124,7 +124,8 @@ namespace PureConnectBackend.Core.Services
                 return null;
 
             List<PostImageResponse> resPostsImagesList = new();
-            foreach (var post in user.Posts)
+            var allPostsOrderByDateDesc = user.Posts.OrderByDescending(x => x.CreatedAt).ToList();
+            foreach (var post in allPostsOrderByDateDesc)
             {
                 var postImage = new PostImageResponse()
                 {
