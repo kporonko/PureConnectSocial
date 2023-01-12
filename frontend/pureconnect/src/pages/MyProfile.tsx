@@ -9,10 +9,12 @@ import MainContentMyProfile from "../components/MainContentMyProfile";
 import Post from "../components/Post";
 import {IPost} from "../interfaces/IPost";
 import MyPostsList from "../components/MyPostsList";
+import ModalAddPost from "../components/ModalAddPost";
 
 const MyProfile = (props: {theme: string, setTheme: any}) => {
 
     const [avatarImage, setAvatarImage] = React.useState("");
+    const [isActiveAddPost, setIsActiveAddPost] = React.useState(false);
 
     const nav = useNavigate();
     let strings = new LocalizedStrings({
@@ -23,8 +25,6 @@ const MyProfile = (props: {theme: string, setTheme: any}) => {
             expired:"Ваша сесія закінчилася. Будь ласка, увійдіть знову.",
         }
     });
-
-
 
     useEffect( () => {
         const getUserData = async() => {
@@ -44,10 +44,13 @@ const MyProfile = (props: {theme: string, setTheme: any}) => {
     }, []);
 
     return (
-        <div className={'profile-wrapper'} data-theme={props.theme}>
-            <NavMenu page={3} theme={props.theme} setTheme={props.setTheme} avatar={avatarImage}/>
-            <MainContentMyProfile theme={props.theme}/>
-
+        <div className={`profile-wrapper`} data-theme={props.theme}>
+            <div className={`${isActiveAddPost && 'content-while-active-modal'}`}>
+                <NavMenu page={3} theme={props.theme} setTheme={props.setTheme} avatar={avatarImage}/>
+                <MainContentMyProfile theme={props.theme} setIsActiveAddPost={setIsActiveAddPost}/>
+            </div>
+            {isActiveAddPost &&
+                <ModalAddPost isActiveAddPost={isActiveAddPost} setIsActiveAddPost={setIsActiveAddPost}/>}
             <ToastContainer
                 position="top-right"
                 autoClose={5000}

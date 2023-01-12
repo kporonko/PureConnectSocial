@@ -1,6 +1,7 @@
 html, body{
   margin: 0;
   padding: 0;
+  background: var(--background);
 }
 
 @media screen and (max-width: 1200px) {
@@ -1005,4 +1006,122 @@ html, body{
   width: 18rem;
   height: 18rem;
   cursor: pointer;
+}
+.post-image-image:hover{
+  opacity: 1.5;
+  filter: brightness(50%);
+  transition: 0.5s all ease;
+}
+
+.modal-add-post-wrapper{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+  height: 100%;
+}
+.modal-add-post-content-with-panel{
+  width: 70vw;
+  height: 80vh;
+  background: var(--background);
+  border: 1px solid var(--text-primary);
+  border-radius: 20px;
+  background: var(--background-secondary);
+}
+.content-while-active-modal{
+  opacity: 0.2;
+}
+
+.modal-add-post-top-panel-wrapper{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--text-primary);
+  background: var(--background);
+  border-radius: 20px 20px 0 0;
+}
+.modal-add-post-top-panel-text{
+  font-size: 1rem;
+  color: var(--text-primary);
+  padding: 0.5rem 0.8rem;
+
+  font-family: "Montserrat", sans-serif;
+}
+.modal-add-post-top-panel-header{
+  color: var(--button-yellow);
+  font-size: 1.3rem;
+  font-family: "Montserrat", sans-serif;
+}
+
+.modal-add-post-top-panel-text:first-child:hover{
+  cursor: pointer;
+  color: var(--button-yellow);
+  background: var(--background-third);
+  border-radius: 20px 0 0 0;
+  transition: 0.5s background-color ease;
+}
+.modal-add-post-top-panel-text:last-child:hover{
+  cursor: pointer;
+  color: var(--button-yellow);
+  background: var(--background-third);
+  border-radius: 0 20px 0 0;
+  transition: 0.5s background-color ease;
+}
+
+.modal-add-post-content{
+  display: flex;
+  align-items: center;
+  padding: 1rem;
+  border-radius: 20px;
+  gap: 2rem;
+}
+.modal-add-post-image-part-wrapper{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  min-width: 40vw;
+}
+.modal-add-post-image-wrapper{
+  width: 42rem;
+  height: 30rem;
+  border-radius: 5px;
+  border: 1px solid var(--text-primary);
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--background-third);
+}
+.modal-add-post-image{
+  width: 100%;
+  height: 100%;
+  border-radius: 20px;
+  object-fit: contain;
+}
+
+.modal-add-post-desc-part-wrapper{
+  gap: 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 2rem;
+}
+.modal-add-post-textarea{
+  border-radius: 5px;
+  background: var(--background-third);
+  color: var(--text-primary);
+  font-family: "Montserrat", sans-serif;
+  font-size: 1rem;
+}
+.modal-add-post-desc-text{
+  color: var(--text-primary);
+  font-family: "Montserrat", sans-serif;
+  font-size: 1rem;
+  font-weight: 400;
 }

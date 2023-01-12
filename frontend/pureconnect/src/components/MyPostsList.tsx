@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {SetStateAction, useEffect, useState} from 'react';
 import Post from "./Post";
 import {getAvatar, getMyPosts, getMyPostsImages} from "../utils/FetchData";
 import {toast} from "react-toastify";
@@ -9,10 +9,10 @@ import ProfilePostsActionsPanel from "./ProfilePostsActionsPanel";
 import PostImage from "./PostImage";
 import {IPostImage} from "../interfaces/IPostImage";
 
- const MyPostsList = (props: {theme: string}) => {
+ const MyPostsList = (props: {theme: string, setIsActiveAddPost: React.Dispatch<SetStateAction<boolean>>}) => {
 
     const [posts, setPosts] = React.useState<IPost[]>();
-     const [postsImage, setPostsImage] = React.useState<IPostImage[]>();
+    const [postsImage, setPostsImage] = React.useState<IPostImage[]>();
 
     const nav = useNavigate();
     let strings = new LocalizedStrings({
@@ -66,7 +66,7 @@ import {IPostImage} from "../interfaces/IPostImage";
     return (
         <div>
             <div>
-                <ProfilePostsActionsPanel isFeed={isFeed} setIsFeed={setIsFeed}/>
+                <ProfilePostsActionsPanel setIsActiveAddPost={props.setIsActiveAddPost} isFeed={isFeed} setIsFeed={setIsFeed}/>
             </div>
 
 
