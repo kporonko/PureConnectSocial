@@ -991,7 +991,10 @@ html, body{
   color: var(--button-yellow);
   background: var(--background-third);
 }
+.posts-images-wrapper{
+  background: var(--background-secondary);
 
+}
 .my-posts-images-wrapper{
   width: 60vw;
   display: flex;
@@ -1006,6 +1009,7 @@ html, body{
   width: 18rem;
   height: 18rem;
   cursor: pointer;
+  object-fit: contain;
 }
 .post-image-image:hover{
   opacity: 1.5;
