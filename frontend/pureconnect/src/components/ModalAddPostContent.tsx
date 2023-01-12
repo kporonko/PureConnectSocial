@@ -32,8 +32,6 @@ const ModalAddPostContent = (props: {post: IPostAddRequest, setPost: React.Dispa
     };
 
 
-
-    console.log(props.post);
     const convertImageToBase64 = (reader: FileReader, file: File) => {
         reader.onload = (event) => {
             props.setPost({...props.post, image: event.target?.result as string});

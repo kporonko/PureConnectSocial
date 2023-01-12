@@ -4,8 +4,18 @@ import {IPostAddRequest} from "../interfaces/IPostAddRequest";
 import {addPost} from "../utils/FetchData";
 import {toast, ToastContainer} from "react-toastify";
 import {useNavigate} from "react-router";
+import {IPost} from "../interfaces/IPost";
+import {IPostImage} from "../interfaces/IPostImage";
 
-const ModalAddPostTopPanel = (props: {theme: string,setIsActiveAddPostModal: React.Dispatch<SetStateAction<boolean>>, post: IPostAddRequest}) => {
+const ModalAddPostTopPanel = (props: {
+    theme: string,
+    setIsActiveAddPostModal: React.Dispatch<SetStateAction<boolean>>,
+    post: IPostAddRequest,
+    setPosts: React.Dispatch<SetStateAction<IPost[]|undefined>>,
+    setImages: React.Dispatch<SetStateAction<IPostImage[]|undefined>>,
+    posts: IPost[]|undefined,
+    postsImage: IPostImage[]|undefined
+}) => {
     let strings = new LocalizedStrings({
         en:{
             cancel:"Cancel",
@@ -39,10 +49,15 @@ const ModalAddPostTopPanel = (props: {theme: string,setIsActiveAddPostModal: Rea
 
         if (props.post.image.length > 0 && props.post.description.length > 0) {
             const res = await addPost(token, props.post);
-            console.log(res);
             if (res.status === 200) {
                 const notify = () => toast.success(strings.success);
                 notify();
+
+                // setPost and setImages logic
+                    props.setPosts(props.posts);
+                    props.setImages(props.postsImage);
+                //
+
                 setTimeout(() => props.setIsActiveAddPostModal(false), 1000);
             }
             else{

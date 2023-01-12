@@ -9,10 +9,17 @@ import ProfilePostsActionsPanel from "./ProfilePostsActionsPanel";
 import PostImage from "./PostImage";
 import {IPostImage} from "../interfaces/IPostImage";
 
- const MyPostsList = (props: {theme: string, setIsActiveAddPost: React.Dispatch<SetStateAction<boolean>>}) => {
+ const MyPostsList = (props:
+                          {
+                              theme: string,
+                              setIsActiveAddPost: React.Dispatch<SetStateAction<boolean>>,
+                              setPosts: React.Dispatch<SetStateAction<IPost[]|undefined>>,
+                              setImages: React.Dispatch<SetStateAction<IPostImage[]|undefined>>
+                              posts: IPost[]|undefined,
+                              postsImage: IPostImage[]|undefined
+                          }
+ ) => {
 
-    const [posts, setPosts] = React.useState<IPost[]>();
-    const [postsImage, setPostsImage] = React.useState<IPostImage[]>();
 
     const nav = useNavigate();
     let strings = new LocalizedStrings({
@@ -38,7 +45,7 @@ import {IPostImage} from "../interfaces/IPostImage";
                     const notify = () => toast.error(strings.expired);
                     notify();
                 }
-                setPosts(responsePostsBody);
+                props.setPosts(responsePostsBody);
             }
         };
         const handleCheckImages = async () => {
@@ -51,15 +58,14 @@ import {IPostImage} from "../interfaces/IPostImage";
                     const notify = () => toast.error(strings.expired);
                     notify();
                 }
-                setPostsImage(responsePostsImagesBody);
+                props.setImages(responsePostsImagesBody);
             }
         }
-        console.log(isFeed)
         if (isFeed)
             getUserData();
         else
             handleCheckImages();
-    }, [isFeed]);
+    }, [isFeed, props.posts, props.postsImage]);
 
 
 
@@ -72,7 +78,7 @@ import {IPostImage} from "../interfaces/IPostImage";
 
             {isFeed ?
             <div>
-                {posts && posts.length > 0 ? posts?.map((post, ind) => (
+                {props.posts && props.posts.length > 0 ? props.posts?.map((post, ind) => (
                     <div style={{display:'flex', justifyContent:'center'}}>
                         <Post key={ind} post={post} theme={props.theme} isMy={true}/>
                     </div>
@@ -80,7 +86,7 @@ import {IPostImage} from "../interfaces/IPostImage";
             </div>
             :
                 <div className={'my-posts-images-wrapper'}>
-                    {postsImage && postsImage.length > 0 ? postsImage?.map((post, ind) => (
+                    {props.postsImage && props.postsImage.length > 0 ? props.postsImage?.map((post, ind) => (
                         <PostImage postImage={post} key={ind}/>
                     )) : <div style={{marginTop: '5rem'}} className={'status-text'}>{strings.noposts}</div>}
                 </div>

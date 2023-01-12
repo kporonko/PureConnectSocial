@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {SetStateAction, useEffect} from 'react';
 import NavMenu from "../components/NavMenu";
 import {getAvatar, getMyPosts} from "../utils/FetchData";
 import {toast, ToastContainer} from "react-toastify";
@@ -10,11 +10,15 @@ import Post from "../components/Post";
 import {IPost} from "../interfaces/IPost";
 import MyPostsList from "../components/MyPostsList";
 import ModalAddPost from "../components/ModalAddPost";
+import {IPostImage} from "../interfaces/IPostImage";
 
-const MyProfile = (props: {theme: string, setTheme: any}) => {
+const MyProfile = (props:{theme: string, setTheme: any}) => {
 
     const [avatarImage, setAvatarImage] = React.useState("");
     const [isActiveAddPost, setIsActiveAddPost] = React.useState(false);
+
+    const [posts, setPosts] = React.useState<IPost[]>();
+    const [postsImage, setPostsImage] = React.useState<IPostImage[]>();
 
     const nav = useNavigate();
     let strings = new LocalizedStrings({
@@ -47,10 +51,10 @@ const MyProfile = (props: {theme: string, setTheme: any}) => {
         <div className={`profile-wrapper`} data-theme={props.theme}>
             <div className={`${isActiveAddPost && 'content-while-active-modal'}`}>
                 <NavMenu page={3} theme={props.theme} setTheme={props.setTheme} avatar={avatarImage}/>
-                <MainContentMyProfile theme={props.theme} setIsActiveAddPost={setIsActiveAddPost}/>
+                {<MainContentMyProfile theme={props.theme} posts={posts} postsImage={postsImage} setIsActiveAddPost={setIsActiveAddPost} setPosts={setPosts} setImages={setPostsImage}/>}
             </div>
             {isActiveAddPost &&
-                <ModalAddPost theme={props.theme} isActiveAddPost={isActiveAddPost} setIsActiveAddPost={setIsActiveAddPost}/>}
+                <ModalAddPost posts={posts} postsImage={postsImage} setPosts={setPosts} setImages={setPostsImage} theme={props.theme} isActiveAddPost={isActiveAddPost} setIsActiveAddPost={setIsActiveAddPost}/>}
             <ToastContainer
                 position="top-right"
                 autoClose={5000}
