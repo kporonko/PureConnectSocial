@@ -108,7 +108,7 @@ namespace PureConnectBackend.Core.Services
                 var postDto = ConvertEntityObjectToPostDto(post, user.Id);
                 resPostsList.Add(postDto);
             }
-
+            resPostsList = resPostsList.OrderByDescending(x => x.CreatedAt).ToList();
             return resPostsList;
         }
 
