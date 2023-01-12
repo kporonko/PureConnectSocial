@@ -1,6 +1,7 @@
 import {IUserLoginRequest} from "../interfaces/IUserLoginRequest";
 import {getUsersLocale} from "../functions/getUsersLocale";
 import {IRegisterUser} from "../interfaces/IRegisterUser";
+import {IPostAddRequest} from "../interfaces/IPostAddRequest";
 
 const BASE_URL = "https://localhost:7219/";
 
@@ -277,3 +278,25 @@ export const getMyPostsImages = async (token: string) => {
 }
 
 
+export const addPost = async (token: string|null, post: IPostAddRequest) => {
+    try {
+        const response = await fetch(`${BASE_URL}api/Post`, {
+            method: 'POST',
+            headers:{
+                'Content-Type': 'application/json',
+                'Accept-Language': getUsersLocale(),
+                'Authorization': 'Bearer ' + token,
+            },
+            body: JSON.stringify({
+                image: post.image,
+                description: post.description,
+                createdAt: new Date().toISOString()
+            })
+        });
+        return response;
+    }
+    catch (error: any) {
+        console.log(error);
+        return error;
+    }
+}

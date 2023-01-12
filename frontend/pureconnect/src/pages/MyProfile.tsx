@@ -50,7 +50,7 @@ const MyProfile = (props: {theme: string, setTheme: any}) => {
                 <MainContentMyProfile theme={props.theme} setIsActiveAddPost={setIsActiveAddPost}/>
             </div>
             {isActiveAddPost &&
-                <ModalAddPost isActiveAddPost={isActiveAddPost} setIsActiveAddPost={setIsActiveAddPost}/>}
+                <ModalAddPost theme={props.theme} isActiveAddPost={isActiveAddPost} setIsActiveAddPost={setIsActiveAddPost}/>}
             <ToastContainer
                 position="top-right"
                 autoClose={5000}

@@ -1,9 +1,9 @@
-import React, {ChangeEvent, useRef, useState} from 'react';
+import React, {ChangeEvent, SetStateAction, useRef, useState} from 'react';
 import {useNavigate} from "react-router";
 import {IPostAddRequest} from "../interfaces/IPostAddRequest";
 import LocalizedStrings from "react-localization";
 
-const ModalAddPostContent = () => {
+const ModalAddPostContent = (props: {post: IPostAddRequest, setPost: React.Dispatch<SetStateAction<IPostAddRequest>>}) => {
 
     let strings = new LocalizedStrings({
         en:{
@@ -18,7 +18,6 @@ const ModalAddPostContent = () => {
     const fileInput = useRef<HTMLInputElement>(null);
     const [preview, setPreview] = useState<string | ArrayBuffer | null>("");
 
-    const [post, setPost] = useState<IPostAddRequest>({ image: "", description: "", createdAt: undefined});
 
     const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
         if (fileInput.current && fileInput.current.files) {
@@ -32,10 +31,12 @@ const ModalAddPostContent = () => {
         }
     };
 
-    console.log(post);
+
+
+    console.log(props.post);
     const convertImageToBase64 = (reader: FileReader, file: File) => {
         reader.onload = (event) => {
-            setPost({...post, image: event.target?.result as string});
+            props.setPost({...props.post, image: event.target?.result as string});
         };
         reader.readAsDataURL(file);
     }
@@ -66,7 +67,7 @@ const ModalAddPostContent = () => {
                         id=""
                         cols={38}
                         rows={20}
-                        onChange={(e) => setPost({...post, description: e.target.value})}
+                        onChange={(e) => props.setPost({...props.post, description: e.target.value})}
                     ></textarea>
                 </div>
             </div>
