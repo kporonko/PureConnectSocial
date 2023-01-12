@@ -65,7 +65,7 @@ import {IPostImage} from "../interfaces/IPostImage";
 
     return (
         <div>
-            <div>
+            <div style={{display:'flex', justifyContent:'center'}}>
                 <ProfilePostsActionsPanel setIsActiveAddPost={props.setIsActiveAddPost} isFeed={isFeed} setIsFeed={setIsFeed}/>
             </div>
 
