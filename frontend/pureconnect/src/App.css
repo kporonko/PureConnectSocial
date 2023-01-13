@@ -1126,3 +1126,24 @@ html, body{
   font-size: 1rem;
   font-weight: 400;
 }
+
+.loader-wrapper{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5rem;
+  border-radius: 20px;
+  background: var(--background-third);
+  padding: 8rem 10rem;
+  margin-top: 1rem;
+}
+.loader-image{
+  font-size: 5rem;
+  object-fit: contain;
+}
+
+.loader-text{
+  font-size: 5rem;
+  font-family: "Montserrat", sans-serif;
+  color: var(--text-primary);
+}

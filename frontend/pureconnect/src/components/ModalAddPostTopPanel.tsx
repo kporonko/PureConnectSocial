@@ -60,6 +60,11 @@ const ModalAddPostTopPanel = (props: {
 
                 setTimeout(() => props.setIsActiveAddPostModal(false), 1000);
             }
+            else if (res.status === 401) {
+                const notify = () => toast.error(strings.expired);
+                notify();
+                setTimeout(() => nav('/'), 2000);
+            }
             else{
                 const notify = () => toast.error(strings.error);
                 notify();

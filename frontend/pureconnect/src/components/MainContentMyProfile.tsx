@@ -19,7 +19,7 @@ const MainContentMyProfile = (props: {
     return (
         <div data-theme={props.theme} className="main-content-profile">
             <div className='main-content-profile-block'>
-                <MyProfileInfo/>
+                <MyProfileInfo  theme={props.theme} />
                 {<MyPostsList theme={props.theme} setIsActiveAddPost={props.setIsActiveAddPost} setPosts={props.setPosts} setImages={props.setImages} posts={props.posts} postsImage={props.postsImage}/>}
             </div>
         </div>

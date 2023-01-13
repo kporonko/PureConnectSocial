@@ -8,8 +8,9 @@ import ProfileAdditionalBlock from "./ProfileAdditionalBlock";
 import {getMyProfile} from "../utils/FetchData";
 import {useNavigate} from "react-router";
 import userDefault from "../assets/user.png";
+import Loader from "./Loader";
 
-const MyProfileInfo = () => {
+const MyProfileInfo = (props: {theme: string}) => {
 
     const [user, setUser] = useState<IUser>()
 
@@ -36,18 +37,22 @@ const MyProfileInfo = () => {
     }, [user]);
 
     return (
-        <div className='my-profile-user-grid'>
-            <div className={'my-profile-user-left'}>
-                <img className={'my-profile-user-avatar'} src={isValidAvatar? user?.avatar : userDefault} alt=""/>
-                <ProfileUserNameEmailBlock user={user}/>
-            </div>
+        <div>
+            {user !== undefined ?
+                <div className='my-profile-user-grid'>
+                    <div className={'my-profile-user-left'}>
+                        <img className={'my-profile-user-avatar'} src={isValidAvatar? user?.avatar : userDefault} alt=""/>
+                        <ProfileUserNameEmailBlock user={user}/>
+                    </div>
 
-            <div className={'my-profile-user-right'}>
-                <MyProfileName user={user}/>
-                <ProfileStatusBlock user={user}/>
-                <ProfileAdditionalBlock user={user}/>
-            </div>
-
+                    <div className={'my-profile-user-right'}>
+                        <MyProfileName user={user}/>
+                        <ProfileStatusBlock user={user}/>
+                        <ProfileAdditionalBlock user={user}/>
+                    </div>
+                </div> :
+                <Loader theme={props.theme}/>
+            }
         </div>
     );
 };

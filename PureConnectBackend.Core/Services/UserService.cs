@@ -32,7 +32,10 @@ namespace PureConnectBackend.Core.Services
         /// <returns>ProfileResponse object with user`s data.</returns>
         public async Task<ProfileResponse?> GetProfile(User user)
         {
-            var currUser = await _context.Users.Include(x => x.Follower).Include(x => x.Followee).Include(x => x.Posts).FirstOrDefaultAsync(x => x.Email == user.Email);
+            var currUser = await _context.Users.FirstOrDefaultAsync(x => x.Id == user.Id);
+            _context.Entry(currUser).Collection(x => x.Follower).Load();
+            _context.Entry(currUser).Collection(x => x.Followee).Load();
+            _context.Entry(currUser).Collection(x => x.Posts).Load();
             if (currUser is null)
                 return null;
 
