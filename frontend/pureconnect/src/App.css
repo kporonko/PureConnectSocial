@@ -1168,9 +1168,10 @@ html, body{
   min-height: 100vh;
   margin-left: 17vw; /* same as width of #left-nav */
   width: calc(100% - 17vw);
+  overflow: hidden;
 }
 .post-page-content{
-  padding: 0.2rem 2rem;
+  padding: 0.2% 2%;
 }
 .post-page-top-panel-wrapper{
   display: flex;
@@ -1181,20 +1182,22 @@ html, body{
   display: flex;
   flex-direction: column;
   align-items: center;
+  width: 100%;
 }
 .post-page-author-block{
   display: flex;
   background: var(--background-third);
-  padding: 0.7rem 3rem;
+  padding: 1% 5%;
   border-radius: 5px;
-  gap: 5rem;
-  width: 42vw;
+  gap: 5%;
+  width: 60%;
   justify-content: space-between;
 }
 .post-page-author-data{
   display: flex;
-  justify-content: space-between;
-  gap: 2rem;
+  justify-content: start;
+  gap: 5%;
+  width: 80%;
   align-items: center;
   margin-left: 1rem;
 }
@@ -1228,7 +1231,7 @@ html, body{
   font-family: "Montserrat", sans-serif;
 }
 .post-page-icon{
-  margin-top: 1rem;
+  margin-top: 1%;
   font-size: 2rem;
   color: var(--text-primary);
   cursor: pointer;
@@ -1248,12 +1251,12 @@ html, body{
   display: flex;
   align-items: center;
   background: var(--background-third);
-  width: 55vw;
-  height: 75vh;
+  width: 100%;
+  height: 100%;
   border-radius: 5px;
 }
 .post-page-image-block{
-  margin-top: 1rem;
+  margin-top: 1%;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -1261,19 +1264,20 @@ html, body{
 .post-page-right-grid-block{
   display: flex;
   flex-direction: column;
-  margin-top: 1rem;
+  margin-top: 1%;
 }
 .post-page-description-wrapper{
   display: flex;
   flex-direction: column;
   align-items: center;
+  height: 100%;
 }
 .post-page-description{
-  height: 40vh;
-  width: 20vw;
+  height: 100%;
+  width: 90%;
   background: var(--background-third);
   border-radius: 5px;
-  padding: 1rem;
+  padding: 5%;
   color: var(--text-primary);
   font-family: "Montserrat", sans-serif;
   font-size: 1rem;
@@ -1281,15 +1285,15 @@ html, body{
 }
 
 .post-page-stats-wrapper{
-  margin-top: 0.7rem;
+  margin-top: 2%;
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 .post-page-stats{
   padding: 1rem;
-  height: 22.5vh;
-  width: 20vw;
+  height: 100%;
+  width: 90%;
   display: flex;
   align-items: start;
   justify-content: space-between;
@@ -1299,11 +1303,11 @@ html, body{
 }
 .post-page-stat{
   display: flex;
-  width: 17vw;
+  width: 95%;
   align-items: center;
   justify-content: start;
   gap: 2rem;
-  padding-left: 50px;
+  padding-left: 5%;
 }
 .post-page-stat:nth-child(1){
   border-bottom: 1px solid var(--text-primary);

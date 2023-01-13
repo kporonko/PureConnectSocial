@@ -30,9 +30,7 @@ const PostPageContent = (props: {
             <div className={'post-page-content'}>
                 <div className='post-page-top-panel-wrapper'>
                     <FontAwesomeIcon className={'post-page-icon'} icon={solid('arrow-left')}/>
-                    <div>
-                        <AuthorOfPostPageBlock post={props.post}/>
-                    </div>
+                    <AuthorOfPostPageBlock post={props.post}/>
                     { props.post.isMine ?
                         <FontAwesomeIcon className={'post-page-icon'} icon={solid('edit')}/> :
                         <FontAwesomeIcon className={'post-page-icon'} icon={solid('circle-exclamation')}/>
