@@ -98,9 +98,13 @@ namespace PureConnectBackend.Core.Services
         /// <returns>List of all user`s posts info or null if token was invalid.</returns>
         public async Task<List<PostResponse>?> GetPosts(User userFromJwt)
         {
-            var user = await _context.Users.Include(x => x.Posts).ThenInclude(x => x.PostLikes).Include(x => x.Posts).ThenInclude(x => x.PostComments).FirstOrDefaultAsync(x => x.Email == userFromJwt.Email);
+            var user = await _context.Users.FirstOrDefaultAsync(x => x.Id == userFromJwt.Id);
+
             if (user is null)
                 return null;
+            
+            _context.Entry(user).Collection(x => x.Posts).Query().Include(x => x.PostLikes).Load();
+            _context.Entry(user).Collection(x => x.Posts).Query().Include(x => x.PostComments).Load();
             
             List<PostResponse> resPostsList = new();
             foreach (var post in user.Posts)
@@ -119,10 +123,12 @@ namespace PureConnectBackend.Core.Services
         /// <returns>List of all user`s posts images or null if token was invalid.</returns>
         public async Task<List<PostImageResponse>?> GetPostsImages(User userFromJwt)
         {
-            var user = await _context.Users.Include(x => x.Posts).FirstOrDefaultAsync(x => x.Email == userFromJwt.Email);
+            var user = await _context.Users.FirstOrDefaultAsync(x => x.Id == userFromJwt.Id);
+           
             if (user is null)
                 return null;
 
+            _context.Entry(user).Collection(x => x.Posts).Load();
             List<PostImageResponse> resPostsImagesList = new();
             var allPostsOrderByDateDesc = user.Posts.OrderByDescending(x => x.CreatedAt).ToList();
             foreach (var post in allPostsOrderByDateDesc)
