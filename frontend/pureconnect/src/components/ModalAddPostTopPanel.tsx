@@ -15,8 +15,8 @@ const ModalAddPostTopPanel = (props: {
     setImages: React.Dispatch<SetStateAction<IPostImage[]|undefined>>,
     posts: IPost[]|undefined,
     postsImage: IPostImage[]|undefined,
-    isAdd: boolean,
-    setIsAdd: React.Dispatch<SetStateAction<boolean>>
+    isChangedPosts: boolean,
+    setIsChangedPosts: React.Dispatch<SetStateAction<boolean>>
 }) => {
     let strings = new LocalizedStrings({
         en:{
@@ -58,7 +58,7 @@ const ModalAddPostTopPanel = (props: {
                 // setPost and setImages logic
                     //     props.setPosts(props.posts);
                     //     props.setImages(props.postsImage);
-                    props.setIsAdd(!props.isAdd);
+                    props.setIsChangedPosts(!props.isChangedPosts);
                 //
 
                 setTimeout(() => props.setIsActiveAddPostModal(false), 1000);

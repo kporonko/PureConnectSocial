@@ -300,3 +300,25 @@ export const addPost = async (token: string|null, post: IPostAddRequest) => {
         return error;
     }
 }
+
+export const deletePost = async (token: string|null, postId: number) => {
+    try {
+        const response = await fetch(`${BASE_URL}api/Post`, {
+            method: 'DELETE',
+            headers:{
+                'Content-Type': 'application/json',
+                'Accept-Language': getUsersLocale(),
+                'Authorization': 'Bearer ' + token,
+            },
+            body: JSON.stringify({
+                postId: postId
+            })
+        });
+        console.log(response);
+        return response;
+    }
+    catch (error: any) {
+        console.log(error);
+        return error;
+    }
+}

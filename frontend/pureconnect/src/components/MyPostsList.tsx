@@ -17,7 +17,8 @@ import {IPostImage} from "../interfaces/IPostImage";
                               setImages: React.Dispatch<SetStateAction<IPostImage[]|undefined>>
                               posts: IPost[]|undefined,
                               postsImage: IPostImage[]|undefined,
-                              isAdd: boolean
+                              isChangedPosts: boolean|undefined,
+                              setIsChangedPosts: React.Dispatch<SetStateAction<boolean>>
                           }
  ) => {
 
@@ -62,12 +63,11 @@ import {IPostImage} from "../interfaces/IPostImage";
      }
 
     useEffect( () => {
-        console.log('useEffect')
         if (isFeed)
             getUserData();
         else
             handleCheckImages();
-    }, [isFeed, props.isAdd]);
+    }, [isFeed, props.isChangedPosts]);
 
 
 
@@ -82,7 +82,7 @@ import {IPostImage} from "../interfaces/IPostImage";
             <div>
                 {props.posts && props.posts.length > 0 ? props.posts?.map((post, ind) => (
                     <div key={ind} style={{display:'flex', justifyContent:'center'}}>
-                        <Post key={ind} post={post} theme={props.theme} isMy={true}/>
+                        <Post isChangedPosts={props.isChangedPosts} setIsChangedPosts={props.setIsChangedPosts} key={ind} post={post} theme={props.theme} isMy={true}/>
                     </div>
                 )) : <div style={{marginTop: '5rem'}} className={'status-text'}>{strings.noposts}</div>}
             </div>

@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {SetStateAction, useState} from 'react';
 import {IPost} from "../interfaces/IPost";
 import PostActionsPanel from "./PostActionsPanel";
 import PostDatePanel from "./PostDatePanel";
@@ -8,7 +8,13 @@ import {solid} from "@fortawesome/fontawesome-svg-core/import.macro";
 import ModalPost from "./ModalPost";
 import ModalPostMine from "./ModalPostMine";
 
-const Post = (props: {post: IPost, theme: string, isMy: boolean}) => {
+const Post = (props: {
+    post: IPost,
+    theme: string,
+    isMy: boolean,
+    setIsChangedPosts?: React.Dispatch<SetStateAction<boolean>>
+    isChangedPosts?: boolean
+}) => {
 
     const [isOpenReadMore, setIsOpenReadMore] = useState(false);
     const [isOpenModal, setIsOpenModal] = useState(false);
@@ -49,7 +55,7 @@ const Post = (props: {post: IPost, theme: string, isMy: boolean}) => {
             <PostActionsPanel post={props.post} theme={props.theme}/>
             <PostDatePanel post={props.post}/>
             {props.isMy ?
-                <ModalPostMine post={props.post} isOpen={isOpenModal} setIsOpen={setIsOpenModal} theme={props.theme}/>
+                <ModalPostMine isChangedPosts={props.isChangedPosts} setIsChangedPosts={props.setIsChangedPosts} post={props.post} isOpen={isOpenModal} setIsOpen={setIsOpenModal} theme={props.theme}/>
                 :
                 <ModalPost post={props.post} isOpen={isOpenModal} setIsOpen={setIsOpenModal} theme={props.theme}/>
             }

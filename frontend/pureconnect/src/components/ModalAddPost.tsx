@@ -13,8 +13,8 @@ const ModalAddPost = (props: {
     setIsActiveAddPost: React.Dispatch<SetStateAction<boolean>>,
     posts: IPost[]|undefined,
     postsImage: IPostImage[]|undefined,
-    isAdd: boolean,
-    setIsAdd: React.Dispatch<SetStateAction<boolean>>
+    isChangedPosts: boolean,
+    setIsChangedPosts: React.Dispatch<SetStateAction<boolean>>
 }) => {
 
     const closeModal = (e:any) => {
@@ -27,7 +27,7 @@ const ModalAddPost = (props: {
     return (
         <div onClick={(e) => closeModal(e)} className={'modal-add-post-wrapper'}>
             <div onClick={(e) => e.stopPropagation()} className="modal-add-post-content-with-panel">
-                <ModalAddPostTopPanel setIsAdd={props.setIsAdd} isAdd={props.isAdd} posts={props.posts} postsImage={props.postsImage} setPosts={props.setPosts} setImages={props.setImages} theme={props.theme} setIsActiveAddPostModal={props.setIsActiveAddPost} post={post}/>
+                <ModalAddPostTopPanel setIsChangedPosts={props.setIsChangedPosts} isChangedPosts={props.isChangedPosts} posts={props.posts} postsImage={props.postsImage} setPosts={props.setPosts} setImages={props.setImages} theme={props.theme} setIsActiveAddPostModal={props.setIsActiveAddPost} post={post}/>
                 <ModalAddPostContent theme={props.theme} post={post} setPost={setPost}/>
             </div>
         </div>
