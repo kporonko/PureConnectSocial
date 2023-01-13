@@ -8,6 +8,8 @@ import LocalizedStrings from "react-localization";
 import ProfilePostsActionsPanel from "./ProfilePostsActionsPanel";
 import PostImage from "./PostImage";
 import {IPostImage} from "../interfaces/IPostImage";
+import AOS from 'aos';
+import 'aos/dist/aos.css';
 
  const MyPostsList = (props:
                           {
@@ -69,10 +71,18 @@ import {IPostImage} from "../interfaces/IPostImage";
             handleCheckImages();
     }, [isFeed, props.isChangedPosts]);
 
-
+    useEffect(() => {
+        AOS.init({
+            offset: 200,
+            duration: 600,
+            easing: 'ease-in-sine',
+            delay: 100,
+        });
+    }, [])
 
     return (
         <div>
+
             <div style={{display:'flex', justifyContent:'center'}}>
                 <ProfilePostsActionsPanel setIsActiveAddPost={props.setIsActiveAddPost} isFeed={isFeed} setIsFeed={setIsFeed}/>
             </div>
@@ -81,7 +91,7 @@ import {IPostImage} from "../interfaces/IPostImage";
             {isFeed ?
             <div>
                 {props.posts && props.posts.length > 0 ? props.posts?.map((post, ind) => (
-                    <div key={ind} style={{display:'flex', justifyContent:'center'}}>
+                    <div data-aos={'fade-up'} key={ind} style={{display:'flex', justifyContent:'center'}}>
                         <Post isChangedPosts={props.isChangedPosts} setIsChangedPosts={props.setIsChangedPosts} key={ind} post={post} theme={props.theme} isMy={true}/>
                     </div>
                 )) : <div style={{marginTop: '5rem'}} className={'status-text'}>{strings.noposts}</div>}
