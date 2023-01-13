@@ -7,6 +7,7 @@ import AdminHome from "./pages/AdminHome";
 import useLocalStorage from 'use-local-storage'
 import Register from "./pages/Register";
 import MyProfile from "./pages/MyProfile";
+import PostPage from "./pages/PostPage";
 
 function App() {
 
@@ -18,6 +19,7 @@ function App() {
         <Routes>
             <Route path="/" element={<Login theme={theme} setTheme={setTheme}/>}/>
             <Route path="/register" element={<Register theme={theme} setTheme={setTheme}/>}/>
+            <Route path="/post/:postId" element={<PostPage theme={theme} setTheme={setTheme}/>}/>
 
             {/* User*/}
             <Route path="/home" element={<Home theme={theme} setTheme={setTheme}/>}/>

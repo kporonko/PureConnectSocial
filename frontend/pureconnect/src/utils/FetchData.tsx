@@ -322,3 +322,23 @@ export const deletePost = async (token: string|null, postId: number) => {
         return error;
     }
 }
+
+
+export const getPostById = async (token: string, postId: number) => {
+    try {
+        const response = await fetch(`${BASE_URL}api/Post/post/${postId}`, {
+            method: 'GET',
+            headers:{
+                'Authorization': 'Bearer ' + token,
+                'Content-Type': 'application/x-www-form-urlencoded'
+            }
+        });
+
+        return response;
+    }
+    catch (error: any) {
+        console.log(error);
+        return error;
+    }
+}
+

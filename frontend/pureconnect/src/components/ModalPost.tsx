@@ -74,7 +74,7 @@ const ModalPost = (props:{post: IPost, isOpen: boolean, theme: string, setIsOpen
                         </div>
                     </div>
 
-                    <div onClick={() =>  nav(`post/${props.post.postId}`)} className="modal-home-nav-menu-more-item">
+                    <div onClick={() =>  nav(`/post/${props.post.postId}`)} className="modal-home-nav-menu-more-item">
                         <div className='modal-home-nav-menu-more-item-text'>
                             {strings.goToPost}
                         </div>
