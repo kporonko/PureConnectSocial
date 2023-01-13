@@ -14,7 +14,9 @@ const ModalAddPostTopPanel = (props: {
     setPosts: React.Dispatch<SetStateAction<IPost[]|undefined>>,
     setImages: React.Dispatch<SetStateAction<IPostImage[]|undefined>>,
     posts: IPost[]|undefined,
-    postsImage: IPostImage[]|undefined
+    postsImage: IPostImage[]|undefined,
+    isAdd: boolean,
+    setIsAdd: React.Dispatch<SetStateAction<boolean>>
 }) => {
     let strings = new LocalizedStrings({
         en:{
@@ -46,7 +48,7 @@ const ModalAddPostTopPanel = (props: {
             notify();
             setTimeout(() => nav('/'), 2000);
         }
-
+        console.log(props.isAdd)
         if (props.post.image.length > 0 && props.post.description.length > 0) {
             const res = await addPost(token, props.post);
             if (res.status === 200) {
@@ -54,8 +56,9 @@ const ModalAddPostTopPanel = (props: {
                 notify();
 
                 // setPost and setImages logic
-                    props.setPosts(props.posts);
-                    props.setImages(props.postsImage);
+                    //     props.setPosts(props.posts);
+                    //     props.setImages(props.postsImage);
+                    props.setIsAdd(!props.isAdd);
                 //
 
                 setTimeout(() => props.setIsActiveAddPostModal(false), 1000);

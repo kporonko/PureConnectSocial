@@ -224,7 +224,9 @@ namespace PureConnectBackend.Core.Services
                 Description = postInfo.Description,
                 Image = postInfo.Image,
                 User = user,
-                UserId = user.Id
+                UserId = user.Id,
+                PostLikes = new List<PostLike>(),
+                PostComments = new List<PostComment>()
             };
         }
 
@@ -276,8 +278,13 @@ namespace PureConnectBackend.Core.Services
                 CreatedAt = post.CreatedAt,
                 Response = MyResponses.Ok
             };
-
-            postResponse.LikesCount = post.PostLikes.Count;
+            try
+            {
+                postResponse.LikesCount = post.PostLikes.Count;
+            }
+            catch (Exception)
+            {
+            }
             postResponse.CommentsCount = post.PostComments.Count;
             postResponse.Avatar = post.User.Avatar;
             postResponse.Username = post.User.UserName;

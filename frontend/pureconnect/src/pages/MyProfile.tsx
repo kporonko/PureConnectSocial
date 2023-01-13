@@ -1,4 +1,4 @@
-import React, {SetStateAction, useEffect} from 'react';
+import React, {SetStateAction, useEffect, useState} from 'react';
 import NavMenu from "../components/NavMenu";
 import {getAvatar, getMyPosts} from "../utils/FetchData";
 import {toast, ToastContainer} from "react-toastify";
@@ -46,15 +46,16 @@ const MyProfile = (props:{theme: string, setTheme: any}) => {
         };
         getUserData();
     }, []);
+    const [isAdd, setIsAdd] = useState(false)
 
     return (
         <div className={`profile-wrapper`} data-theme={props.theme}>
             <div className={`${isActiveAddPost && 'content-while-active-modal'}`}>
                 <NavMenu page={3} theme={props.theme} setTheme={props.setTheme} avatar={avatarImage}/>
-                {<MainContentMyProfile theme={props.theme} posts={posts} postsImage={postsImage} setIsActiveAddPost={setIsActiveAddPost} setPosts={setPosts} setImages={setPostsImage}/>}
+                {<MainContentMyProfile isAdd={isAdd} theme={props.theme} posts={posts} postsImage={postsImage} setIsActiveAddPost={setIsActiveAddPost} setPosts={setPosts} setImages={setPostsImage}/>}
             </div>
             {isActiveAddPost &&
-                <ModalAddPost posts={posts} postsImage={postsImage} setPosts={setPosts} setImages={setPostsImage} theme={props.theme} isActiveAddPost={isActiveAddPost} setIsActiveAddPost={setIsActiveAddPost}/>}
+                <ModalAddPost setIsAdd={setIsAdd} isAdd={isAdd} posts={posts} postsImage={postsImage} setPosts={setPosts} setImages={setPostsImage} theme={props.theme} isActiveAddPost={isActiveAddPost} setIsActiveAddPost={setIsActiveAddPost}/>}
             <ToastContainer
                 position="top-right"
                 autoClose={5000}

@@ -13,14 +13,15 @@ const MainContentMyProfile = (props: {
     setPosts: React.Dispatch<SetStateAction<IPost[]|undefined>>,
     setImages: React.Dispatch<SetStateAction<IPostImage[]|undefined>>
     posts: IPost[]|undefined,
-    postsImage: IPostImage[]|undefined
+    postsImage: IPostImage[]|undefined,
+    isAdd: boolean
 }) => {
 
     return (
         <div data-theme={props.theme} className="main-content-profile">
             <div className='main-content-profile-block'>
                 <MyProfileInfo  theme={props.theme} />
-                {<MyPostsList theme={props.theme} setIsActiveAddPost={props.setIsActiveAddPost} setPosts={props.setPosts} setImages={props.setImages} posts={props.posts} postsImage={props.postsImage}/>}
+                {<MyPostsList isAdd={props.isAdd} theme={props.theme} setIsActiveAddPost={props.setIsActiveAddPost} setPosts={props.setPosts} setImages={props.setImages} posts={props.posts} postsImage={props.postsImage}/>}
             </div>
         </div>
     );
