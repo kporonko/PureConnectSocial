@@ -33,11 +33,13 @@ namespace PureConnectBackend.Core.Services
         public async Task<ProfileResponse?> GetProfile(User user)
         {
             var currUser = await _context.Users.FirstOrDefaultAsync(x => x.Id == user.Id);
+            if (currUser is null)
+                return null;
+
             _context.Entry(currUser).Collection(x => x.Follower).Load();
             _context.Entry(currUser).Collection(x => x.Followee).Load();
             _context.Entry(currUser).Collection(x => x.Posts).Load();
-            if (currUser is null)
-                return null;
+
 
             return ConvertUserToProfileResponse(currUser);
         }
