@@ -42,15 +42,15 @@ const ModalAddPostTopPanel = (props: {
     const nav = useNavigate();
     const handleAddPost = async () => {
         const token = localStorage.getItem('access_token');
+        const encodedDescription = encodeURIComponent(props.post.description);
 
         if (token === null){
             const notify = () => toast.error(strings.expired);
             notify();
             setTimeout(() => nav('/'), 2000);
         }
-        console.log(props.isAdd)
         if (props.post.image.length > 0 && props.post.description.length > 0) {
-            const res = await addPost(token, props.post);
+            const res = await addPost(token, {...props.post, description: encodedDescription} as IPostAddRequest);
             if (res.status === 200) {
                 const notify = () => toast.success(strings.success);
                 notify();

@@ -28,7 +28,7 @@ const ModalAddPost = (props: {
         <div onClick={(e) => closeModal(e)} className={'modal-add-post-wrapper'}>
             <div onClick={(e) => e.stopPropagation()} className="modal-add-post-content-with-panel">
                 <ModalAddPostTopPanel setIsAdd={props.setIsAdd} isAdd={props.isAdd} posts={props.posts} postsImage={props.postsImage} setPosts={props.setPosts} setImages={props.setImages} theme={props.theme} setIsActiveAddPostModal={props.setIsActiveAddPost} post={post}/>
-                <ModalAddPostContent post={post} setPost={setPost}/>
+                <ModalAddPostContent theme={props.theme} post={post} setPost={setPost}/>
             </div>
         </div>
     );

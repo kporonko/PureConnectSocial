@@ -1075,6 +1075,7 @@ html, body{
 }
 
 .modal-add-post-content{
+  position: relative;
   display: flex;
   align-items: center;
   padding: 1rem;
@@ -1106,12 +1107,10 @@ html, body{
 }
 
 .modal-add-post-desc-part-wrapper{
-  gap: 1rem;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 2rem;
 }
 .modal-add-post-textarea{
   border-radius: 5px;
@@ -1121,6 +1120,7 @@ html, body{
   font-size: 1rem;
 }
 .modal-add-post-desc-text{
+  margin-bottom: 1rem;
   color: var(--text-primary);
   font-family: "Montserrat", sans-serif;
   font-size: 1rem;
@@ -1146,4 +1146,19 @@ html, body{
   font-size: 5rem;
   font-family: "Montserrat", sans-serif;
   color: var(--text-primary);
+}
+
+.emoji-open-block-wrapper{
+  display: flex;
+  gap: 2rem;
+  font-size: 1rem;
+  font-family: "Montserrat", sans-serif;
+  color: var(--button-yellow);
+  cursor: pointer;
+  padding: 0.2rem 3rem;
+  border-radius: 20px;
+}
+.emoji-open-block-wrapper:hover{
+  background: var(--background-third);
+  transition: all 1s ease;
 }

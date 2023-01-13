@@ -2,15 +2,22 @@ import React, {ChangeEvent, SetStateAction, useRef, useState} from 'react';
 import {useNavigate} from "react-router";
 import {IPostAddRequest} from "../interfaces/IPostAddRequest";
 import LocalizedStrings from "react-localization";
+import EmojiPicker, {EmojiClickData, EmojiStyle, SuggestionMode, Theme} from 'emoji-picker-react';
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {solid} from "@fortawesome/fontawesome-svg-core/import.macro";
 
-const ModalAddPostContent = (props: {post: IPostAddRequest, setPost: React.Dispatch<SetStateAction<IPostAddRequest>>}) => {
+const ModalAddPostContent = (props: {theme: string,post: IPostAddRequest, setPost: React.Dispatch<SetStateAction<IPostAddRequest>>}) => {
 
     let strings = new LocalizedStrings({
         en:{
             description:"Description",
+            openEmojis: 'Open Emoji',
+            closeEmojis: 'Close Emoji'
         },
         ua: {
             description:'Опис',
+            openEmojis: 'Відкрити емоджі',
+            closeEmojis: 'Закрти емоджі'
         }
     });
 
@@ -18,6 +25,7 @@ const ModalAddPostContent = (props: {post: IPostAddRequest, setPost: React.Dispa
     const fileInput = useRef<HTMLInputElement>(null);
     const [preview, setPreview] = useState<string | ArrayBuffer | null>("");
 
+    const [isEmojiPicker, setIsEmojiPicker] = useState(false)
 
     const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
         if (fileInput.current && fileInput.current.files) {
@@ -37,6 +45,14 @@ const ModalAddPostContent = (props: {post: IPostAddRequest, setPost: React.Dispa
             props.setPost({...props.post, image: event.target?.result as string});
         };
         reader.readAsDataURL(file);
+    }
+
+    const toggleEmojiPicker = () => {
+        setIsEmojiPicker(!isEmojiPicker)
+    }
+
+    const handleEmojiClick = (emoji: EmojiClickData) => {
+        props.setPost({...props.post, description: props.post.description + emoji.emoji})
     }
 
     return (
@@ -63,10 +79,32 @@ const ModalAddPostContent = (props: {post: IPostAddRequest, setPost: React.Dispa
                         className={'modal-add-post-textarea'}
                         name=""
                         id=""
+                        value={props.post.description}
                         cols={38}
                         rows={20}
                         onChange={(e) => props.setPost({...props.post, description: e.target.value})}
-                    ></textarea>
+                    >
+
+
+                    </textarea>
+
+                </div>
+                <div>
+                    <div style={{position: 'absolute', top: '60px', left: '410px'}}>
+                        {isEmojiPicker &&
+                            <EmojiPicker
+                                width={300}
+                                height={400}
+                                theme={props.theme === 'dark' ? Theme.DARK : Theme.LIGHT}
+                                onEmojiClick={(emoji) => handleEmojiClick(emoji)}
+                            />}
+                    </div>
+                    <div onClick={toggleEmojiPicker}  className={'emoji-open-block-wrapper'}>
+                        <FontAwesomeIcon icon={solid('face-smile')}/>
+                        <div>
+                            {isEmojiPicker ? strings.closeEmojis : strings.openEmojis}
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
