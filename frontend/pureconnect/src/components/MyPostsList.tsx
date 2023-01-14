@@ -99,7 +99,9 @@ import 'aos/dist/aos.css';
             :
                 <div className={'my-posts-images-wrapper'}>
                     {props.postsImage && props.postsImage.length > 0 ? props.postsImage?.map((post, ind) => (
-                        <PostImage postImage={post} key={ind}/>
+                        <div data-aos={'fade-right'} >
+                            <PostImage postImage={post} key={ind}/>
+                        </div>
                     )) : <div style={{marginTop: '5rem'}} className={'status-text'}>{strings.noposts}</div>}
                 </div>
             }
