@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {IUser} from "../interfaces/IUser";
 import LocalizedStrings from "react-localization";
 import ProfileUserNameEmailBlock from "./ProfileUserNameEmailBlock";
@@ -13,7 +13,6 @@ import Loader from "./Loader";
 const MyProfileInfo = (props: {theme: string}) => {
 
     const [user, setUser] = useState<IUser>()
-
     useEffect(() => {
         const getUser = async () => {
             const token = localStorage.getItem('access_token')

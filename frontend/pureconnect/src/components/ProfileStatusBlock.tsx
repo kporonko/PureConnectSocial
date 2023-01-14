@@ -37,6 +37,10 @@ const ProfileStatusBlock = (props: {user: IUser|undefined}) => {
         return count;
     }
 
+    const handleLookPosts = () => {
+        window.scrollTo({left: 0, top: 520, behavior: 'smooth'});
+    }
+
     return (
         <div>
             <div className='profile-user-status'>
@@ -53,7 +57,7 @@ const ProfileStatusBlock = (props: {user: IUser|undefined}) => {
                     </div>}
             </div>
 
-            <div className='profile-user-stats'>
+            <div onClick={handleLookPosts} className='profile-user-stats'>
                 <div className='profile-user-stat'>
                     <div>
                         {shortenCount(props.user?.postsCount)} {strings.posts}
