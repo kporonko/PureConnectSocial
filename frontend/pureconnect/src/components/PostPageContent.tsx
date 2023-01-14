@@ -6,6 +6,7 @@ import {solid} from "@fortawesome/fontawesome-svg-core/import.macro";
 import AuthorOfPostPageBlock from "./AuthorOfPostPageBlock";
 import LocalizedStrings from "react-localization";
 import PostPageStats from "./PostPageStats";
+import {useNavigate} from "react-router";
 
 const PostPageContent = (props: {
     theme: string,
@@ -24,12 +25,14 @@ const PostPageContent = (props: {
         }
     })
 
+    const history = useNavigate();
+
     return (
         <div className={'post-page-content-wrapper'}>
             {props.post ?
             <div className={'post-page-content'}>
                 <div className='post-page-top-panel-wrapper'>
-                    <FontAwesomeIcon className={'post-page-icon'} icon={solid('arrow-left')}/>
+                    <FontAwesomeIcon onClick={() => history(-1)} className={'post-page-icon'} icon={solid('arrow-left')}/>
                     <AuthorOfPostPageBlock post={props.post}/>
                     { props.post.isMine ?
                         <FontAwesomeIcon className={'post-page-icon'} icon={solid('edit')}/> :
