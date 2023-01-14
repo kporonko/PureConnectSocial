@@ -80,18 +80,18 @@ const PostActionsPanel = (props: {post: IPost, theme: string}) => {
                     <FontAwesomeIcon icon={regular('paper-plane')}/>
                 </div>
             </div>
-            <ToastContainer
-                position="top-right"
-                autoClose={5000}
-                hideProgressBar={false}
-                newestOnTop={false}
-                closeOnClick
-                rtl={false}
-                pauseOnFocusLoss={false}
-                draggable
-                pauseOnHover
-                theme={props.theme === 'dark' ? 'dark' : 'light'}
-            />
+            {/*<ToastContainer*/}
+            {/*    position="top-right"*/}
+            {/*    autoClose={5000}*/}
+            {/*    hideProgressBar={false}*/}
+            {/*    newestOnTop={false}*/}
+            {/*    closeOnClick*/}
+            {/*    rtl={false}*/}
+            {/*    pauseOnFocusLoss={false}*/}
+            {/*    draggable*/}
+            {/*    pauseOnHover*/}
+            {/*    theme={props.theme === 'dark' ? 'dark' : 'light'}*/}
+            {/*/>*/}
         </div>
     );
 };

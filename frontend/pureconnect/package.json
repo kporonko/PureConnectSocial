@@ -22,6 +22,7 @@
     "get-user-locale": "^2.0.0",
     "jsonwebtoken": "^9.0.0",
     "react": "^18.2.0",
+    "react-confirm-alert": "^3.0.6",
     "react-detect-offline": "^2.4.5",
     "react-dom": "^18.2.0",
     "react-google-autocomplete": "^2.7.1",
