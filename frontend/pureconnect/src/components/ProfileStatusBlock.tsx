@@ -57,8 +57,8 @@ const ProfileStatusBlock = (props: {user: IUser|undefined}) => {
                     </div>}
             </div>
 
-            <div onClick={handleLookPosts} className='profile-user-stats'>
-                <div className='profile-user-stat'>
+            <div className='profile-user-stats'>
+                <div onClick={handleLookPosts} className='profile-user-stat'>
                     <div>
                         {shortenCount(props.user?.postsCount)} {strings.posts}
                     </div>
