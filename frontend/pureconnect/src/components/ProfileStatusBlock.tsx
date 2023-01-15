@@ -2,7 +2,11 @@ import React from 'react';
 import {IUser} from "../interfaces/IUser";
 import LocalizedStrings from "react-localization";
 
-const ProfileStatusBlock = (props: {user: IUser|undefined}) => {
+const ProfileStatusBlock = (props: {
+    user: IUser|undefined,
+    isEdit: boolean,
+    setUser: React.Dispatch<React.SetStateAction<IUser|undefined>>,
+}) => {
 
     let strings = new LocalizedStrings({
         en:{
@@ -43,6 +47,7 @@ const ProfileStatusBlock = (props: {user: IUser|undefined}) => {
 
     return (
         <div>
+            {!props.isEdit ?
             <div className='profile-user-status'>
                 <h6 className={'my-profile-user-label'}>
                     {strings.status}
@@ -56,7 +61,21 @@ const ProfileStatusBlock = (props: {user: IUser|undefined}) => {
                         {decodeURI(props.user?.status!)}
                     </div>}
             </div>
+            :
+                <div>
+                    <label className={'my-profile-user-label'} htmlFor="">Status</label>
+                        <textarea
+                            className='login-form-input'
+                            value={props.user?.status}
+                            rows={15}
+                            cols={15}
+                            style={{ height: '200px', margin: '0', paddingTop: '10px' }}
+                            onChange={(e) => {props.setUser({...props.user!, status: e.target.value})}}
+                        />
+                </div>
+            }
 
+            {!props.isEdit &&
             <div className='profile-user-stats'>
                 <div onClick={handleLookPosts} className='profile-user-stat'>
                     <div>
@@ -75,7 +94,7 @@ const ProfileStatusBlock = (props: {user: IUser|undefined}) => {
                         {shortenCount(props.user?.friendsCount)} {strings.friends}
                     </div>
                 </div>
-            </div>
+            </div>}
         </div>
     );
 };

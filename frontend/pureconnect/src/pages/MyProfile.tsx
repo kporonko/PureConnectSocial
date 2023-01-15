@@ -13,6 +13,7 @@ import ModalAddPost from "../components/ModalAddPost";
 import {IPostImage} from "../interfaces/IPostImage";
 import ModalEditPost from "../components/ModalEditPost";
 import {IPostAddRequest} from "../interfaces/IPostAddRequest";
+import ModalEditProfile from "../components/ModalEditProfile";
 
 const MyProfile = (props:{theme: string, setTheme: any}) => {
 
@@ -51,19 +52,19 @@ const MyProfile = (props:{theme: string, setTheme: any}) => {
     const [isChangedPosts, setIsChangedPosts] = useState(false)
     const [isOpenEdit, setIsOpenEdit] = useState(false)
     const [post, setPost] = useState<IPostAddRequest>({description: '', createdAt: undefined, image: '', postId: undefined});
-
-    console.log(isOpenEdit)
-
+    const [isOpenEditProfile, setIsOpenEditProfile] = useState(false)
     return (
         <div className={`profile-wrapper`} data-theme={props.theme}>
-            <div className={`${(isActiveAddPost || isOpenEdit) && 'content-while-active-modal'}`}>
+            <div className={`${(isActiveAddPost || isOpenEdit || isOpenEditProfile) && 'content-while-active-modal'}`}>
                 <NavMenu page={3} theme={props.theme} setTheme={props.setTheme} avatar={avatarImage}/>
-                {<MainContentMyProfile isOpenEdit={isOpenEdit} setIsOpenEdit={setIsOpenEdit} postEdit={post} setPostEdit={setPost} isChangedPosts={isChangedPosts} setIsChangedPosts={setIsChangedPosts} theme={props.theme} posts={posts} postsImage={postsImage} setIsActiveAddPost={setIsActiveAddPost} setPosts={setPosts} setImages={setPostsImage}/>}
+                {<MainContentMyProfile isOpenEditProfile={isOpenEditProfile} setIsOpenEditProfile={setIsOpenEditProfile} isOpenEdit={isOpenEdit} setIsOpenEdit={setIsOpenEdit} postEdit={post} setPostEdit={setPost} isChangedPosts={isChangedPosts} setIsChangedPosts={setIsChangedPosts} theme={props.theme} posts={posts} postsImage={postsImage} setIsActiveAddPost={setIsActiveAddPost} setPosts={setPosts} setImages={setPostsImage}/>}
             </div>
             {isActiveAddPost &&
                 <ModalAddPost setIsChangedPosts={setIsChangedPosts} isChangedPosts={isChangedPosts} posts={posts} postsImage={postsImage} setPosts={setPosts} setImages={setPostsImage} theme={props.theme} isActiveAddPost={isActiveAddPost} setIsActiveAddPost={setIsActiveAddPost}/>}
             {isOpenEdit &&
                 <ModalEditPost isActiveEditPost={isOpenEdit} setIsActiveEditPost={setIsOpenEdit} theme={props.theme} setIsChangedPosts={setIsChangedPosts} isChangedPosts={isChangedPosts} post={post} setPost={setPost}/>}
+            {isOpenEditProfile &&
+                <ModalEditProfile isActiveEditProfile={isOpenEditProfile} setIsOpenEditProfile={setIsOpenEditProfile} theme={props.theme}/>}
 
             <ToastContainer
                 position="top-right"

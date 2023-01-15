@@ -1338,3 +1338,11 @@ html, body{
 .ma-top-2{
     margin-top: 2%;
 }
+.flex-column{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.relative{
+  position: relative;
+}

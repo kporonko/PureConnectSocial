@@ -21,12 +21,14 @@ const MainContentMyProfile = (props: {
     setPostEdit: React.Dispatch<SetStateAction<IPostAddRequest>>,
     isOpenEdit: boolean,
     setIsOpenEdit: React.Dispatch<SetStateAction<boolean>>,
+    isOpenEditProfile: boolean,
+    setIsOpenEditProfile: React.Dispatch<SetStateAction<boolean>>,
 }) => {
 
     return (
         <div data-theme={props.theme} className="main-content-profile">
             <div className='main-content-profile-block'>
-                <MyProfileInfo theme={props.theme} />
+                <MyProfileInfo isActiveEditProfile={props.isOpenEditProfile} setIsOpenEditProfile={props.setIsOpenEditProfile} isEdit={false} theme={props.theme} />
                 {<MyPostsList setIsOpenEdit={props.setIsOpenEdit} isOpenEdit={props.isOpenEdit} postEdit={props.postEdit} setPostEdit={props.setPostEdit} isChangedPosts={props.isChangedPosts} setIsChangedPosts={props.setIsChangedPosts} theme={props.theme} setIsActiveAddPost={props.setIsActiveAddPost} setPosts={props.setPosts} setImages={props.setImages} posts={props.posts} postsImage={props.postsImage}/>}
             </div>
         </div>
