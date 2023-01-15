@@ -26,6 +26,8 @@ import {IPostAddRequest} from "../interfaces/IPostAddRequest";
               setPostEdit: React.Dispatch<SetStateAction<IPostAddRequest>>,
               isOpenEdit: boolean,
               setIsOpenEdit: React.Dispatch<SetStateAction<boolean>>,
+              isToggleProfile: boolean,
+              setIsToggleProfile: React.Dispatch<SetStateAction<boolean>>,
           }
  ) => {
 
@@ -74,7 +76,7 @@ import {IPostAddRequest} from "../interfaces/IPostAddRequest";
             getUserData();
         else
             handleCheckImages();
-    }, [isFeed, props.isChangedPosts]);
+    }, [isFeed, props.isChangedPosts, props.isToggleProfile]);
 
     useEffect(() => {
         AOS.init({

@@ -15,6 +15,8 @@ const MyProfileInfo = (props: {
     isEdit: boolean,
     isActiveEditProfile: boolean,
     setIsOpenEditProfile: React.Dispatch<SetStateAction<boolean>>,
+    setIsToggleProfile: React.Dispatch<SetStateAction<boolean>>,
+    isToggleProfile: boolean,
 }) => {
 
     const [user, setUser] = useState<IUser|undefined>();
@@ -27,7 +29,7 @@ const MyProfileInfo = (props: {
             }
         }
         getUser()
-    }, [])
+    }, [props.isToggleProfile])
 
     const [isValidAvatar, setIsValidAvatar] = React.useState(false);
 
@@ -83,7 +85,7 @@ const MyProfileInfo = (props: {
                     </div>
 
                     <div className={'my-profile-user-right'}>
-                        <MyProfileName setUser={setUser} isEdit={props.isEdit} setIsOpenEditProfile={props.setIsOpenEditProfile} isActiveEditProfile={props.isActiveEditProfile} user={user}/>
+                        <MyProfileName setIsToggleProfile={props.setIsToggleProfile} isToggleProfile={props.isToggleProfile} setUser={setUser} isEdit={props.isEdit} setIsOpenEditProfile={props.setIsOpenEditProfile} isActiveEditProfile={props.isActiveEditProfile} user={user}/>
                         <ProfileStatusBlock setUser={setUser} isEdit={props.isEdit} user={user}/>
                         <ProfileAdditionalBlock setUser={setUser} isEdit={props.isEdit}  user={user}/>
                     </div>

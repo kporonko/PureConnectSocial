@@ -12,6 +12,8 @@ const MyProfileName = (props: {
     setIsOpenEditProfile: React.Dispatch<SetStateAction<boolean>>,
     isEdit: boolean,
     setUser: React.Dispatch<React.SetStateAction<IUser|undefined>>,
+    isToggleProfile?: boolean,
+    setIsToggleProfile?: React.Dispatch<React.SetStateAction<boolean>>,
 }) => {
 
     let strings = new LocalizedStrings({
@@ -41,9 +43,11 @@ const MyProfileName = (props: {
                 const notify = () => toast.success(strings.updatedProfile);
                 notify();
                 props.setIsOpenEditProfile(false)
-                setTimeout(() => {
-                    window.location.reload()
-                }, 1000)
+                console.log(props.isToggleProfile)
+                props.setIsToggleProfile!(!props.isToggleProfile)
+                // setTimeout(() => {
+                //     window.location.reload()
+                // }, 1000)
             }
             else {
                 const notify = () => toast.error(response.error);
