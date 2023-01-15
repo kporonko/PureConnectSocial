@@ -1,4 +1,4 @@
-import React, {SetStateAction} from 'react';
+import React, {SetStateAction, useState} from 'react';
 import {IPost} from "../interfaces/IPost";
 import LocalizedStrings from "react-localization";
 import {useNavigate} from "react-router";
@@ -7,7 +7,10 @@ import {toast, ToastContainer} from "react-toastify";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {solid} from "@fortawesome/fontawesome-svg-core/import.macro";
 import { confirmAlert } from 'react-confirm-alert';
-import 'react-confirm-alert/src/react-confirm-alert.css'; // Import css
+import 'react-confirm-alert/src/react-confirm-alert.css';
+import ModalEditPost from "./ModalEditPost";
+import {IPostAddRequest} from "../interfaces/IPostAddRequest";
+import post from "./Post"; // Import css
 
 const ModalPostMine = (props:{
     post: IPost,
@@ -16,6 +19,10 @@ const ModalPostMine = (props:{
     setIsChangedPosts: React.Dispatch<SetStateAction<boolean>>|undefined,
     setIsOpen: React.Dispatch<SetStateAction<boolean>>,
     isChangedPosts: boolean|undefined,
+    postEdit: IPostAddRequest|undefined,
+    setPostEdit: React.Dispatch<SetStateAction<IPostAddRequest>>|undefined,
+    isOpenEdit: boolean|undefined,
+    setIsOpenEdit: React.Dispatch<SetStateAction<boolean>>|undefined,
 }) => {
 
     let strings = new LocalizedStrings({
@@ -45,6 +52,7 @@ const ModalPostMine = (props:{
         }
     });
 
+    console.log(props.post)
     const nav = useNavigate();
 
     const handleClose = () => {
@@ -95,7 +103,10 @@ const ModalPostMine = (props:{
     }
 
     const handleEdit = async () => {
-
+        console.log(props.post)
+        props.setIsOpenEdit!(!props.isOpenEdit)
+        console.log(props.post as IPostAddRequest)
+        props.setPostEdit!(props.post as IPostAddRequest)
     }
 
     return (

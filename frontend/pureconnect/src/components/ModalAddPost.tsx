@@ -1,6 +1,6 @@
 import React, {SetStateAction, useState} from 'react';
 import ModalAddPostTopPanel from "./ModalAddPostTopPanel";
-import ModalAddPostContent from "./ModalAddPostContent";
+import ModalAddEditPostContent from "./ModalAddEditPostContent";
 import {IPostAddRequest} from "../interfaces/IPostAddRequest";
 import {IPost} from "../interfaces/IPost";
 import {IPostImage} from "../interfaces/IPostImage";
@@ -21,14 +21,14 @@ const ModalAddPost = (props: {
         e.stopPropagation()
         props.setIsActiveAddPost(false)
     }
-    const [post, setPost] = useState<IPostAddRequest>({ image: "", description: "", createdAt: undefined});
+    const [post, setPost] = useState<IPostAddRequest>({ image: "", description: "", createdAt: undefined, postId: undefined});
 
 
     return (
         <div onClick={(e) => closeModal(e)} className={'modal-add-post-wrapper'}>
             <div onClick={(e) => e.stopPropagation()} className="modal-add-post-content-with-panel">
                 <ModalAddPostTopPanel setIsChangedPosts={props.setIsChangedPosts} isChangedPosts={props.isChangedPosts} posts={props.posts} postsImage={props.postsImage} setPosts={props.setPosts} setImages={props.setImages} theme={props.theme} setIsActiveAddPostModal={props.setIsActiveAddPost} post={post}/>
-                <ModalAddPostContent theme={props.theme} post={post} setPost={setPost}/>
+                <ModalAddEditPostContent isEdit={false} theme={props.theme} post={post} setPost={setPost}/>
             </div>
         </div>
     );

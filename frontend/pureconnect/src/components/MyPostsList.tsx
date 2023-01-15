@@ -10,18 +10,23 @@ import PostImage from "./PostImage";
 import {IPostImage} from "../interfaces/IPostImage";
 import AOS from 'aos';
 import 'aos/dist/aos.css';
+import {IPostAddRequest} from "../interfaces/IPostAddRequest";
 
  const MyPostsList = (props:
-                          {
-                              theme: string,
-                              setIsActiveAddPost: React.Dispatch<SetStateAction<boolean>>,
-                              setPosts: React.Dispatch<SetStateAction<IPost[]|undefined>>,
-                              setImages: React.Dispatch<SetStateAction<IPostImage[]|undefined>>
-                              posts: IPost[]|undefined,
-                              postsImage: IPostImage[]|undefined,
-                              isChangedPosts: boolean|undefined,
-                              setIsChangedPosts: React.Dispatch<SetStateAction<boolean>>
-                          }
+          {
+              theme: string,
+              setIsActiveAddPost: React.Dispatch<SetStateAction<boolean>>,
+              setPosts: React.Dispatch<SetStateAction<IPost[]|undefined>>,
+              setImages: React.Dispatch<SetStateAction<IPostImage[]|undefined>>
+              posts: IPost[]|undefined,
+              postsImage: IPostImage[]|undefined,
+              isChangedPosts: boolean|undefined,
+              setIsChangedPosts: React.Dispatch<SetStateAction<boolean>>,
+              postEdit: IPostAddRequest|undefined,
+              setPostEdit: React.Dispatch<SetStateAction<IPostAddRequest>>,
+              isOpenEdit: boolean,
+              setIsOpenEdit: React.Dispatch<SetStateAction<boolean>>,
+          }
  ) => {
 
 
@@ -92,7 +97,7 @@ import 'aos/dist/aos.css';
             <div>
                 {props.posts && props.posts.length > 0 ? props.posts?.map((post, ind) => (
                     <div data-aos={'fade-up'} key={ind} style={{display:'flex', justifyContent:'center'}}>
-                        <Post isChangedPosts={props.isChangedPosts} setIsChangedPosts={props.setIsChangedPosts} key={ind} post={post} theme={props.theme} isMy={true}/>
+                        <Post setIsOpenEdit={props.setIsOpenEdit} isOpenEdit={props.isOpenEdit} postEdit={props.postEdit} setPostEdit={props.setPostEdit} isChangedPosts={props.isChangedPosts} setIsChangedPosts={props.setIsChangedPosts} key={ind} post={post} theme={props.theme} isMy={true}/>
                     </div>
                 )) : <div style={{marginTop: '5rem'}} className={'status-text'}>{strings.noposts}</div>}
             </div>

@@ -6,7 +6,12 @@ import EmojiPicker, {EmojiClickData, EmojiStyle, SuggestionMode, Theme} from 'em
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {solid} from "@fortawesome/fontawesome-svg-core/import.macro";
 
-const ModalAddPostContent = (props: {theme: string,post: IPostAddRequest, setPost: React.Dispatch<SetStateAction<IPostAddRequest>>}) => {
+const ModalAddEditPostContent = (props: {
+    theme: string,
+    post: IPostAddRequest,
+    setPost: React.Dispatch<SetStateAction<IPostAddRequest>>,
+    isEdit: boolean
+}) => {
 
     let strings = new LocalizedStrings({
         en:{
@@ -23,7 +28,7 @@ const ModalAddPostContent = (props: {theme: string,post: IPostAddRequest, setPos
 
     const nav = useNavigate();
     const fileInput = useRef<HTMLInputElement>(null);
-    const [preview, setPreview] = useState<string | ArrayBuffer | null>("");
+    const [preview, setPreview] = useState<string | ArrayBuffer | null>(`${props.isEdit ? props.post.image : ''}`);
 
     const [isEmojiPicker, setIsEmojiPicker] = useState(false)
 
@@ -111,4 +116,4 @@ const ModalAddPostContent = (props: {theme: string,post: IPostAddRequest, setPos
     );
 };
 
-export default ModalAddPostContent;
+export default ModalAddEditPostContent;
