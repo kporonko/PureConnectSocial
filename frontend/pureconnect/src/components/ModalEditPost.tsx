@@ -12,7 +12,7 @@ const ModalEditPost = (props: {
     setIsChangedPosts: React.Dispatch<SetStateAction<boolean>>|undefined,
     theme: string,
     isActiveEditPost: boolean,
-    setIsActiveEditPost: React.Dispatch<SetStateAction<boolean>>
+    setIsActiveEditPost: React.Dispatch<SetStateAction<boolean>>,
 }) => {
     const closeModal = (e:any) => {
         e.stopPropagation()

@@ -10,19 +10,21 @@ const ModalAddEditPostContent = (props: {
     theme: string,
     post: IPostAddRequest,
     setPost: React.Dispatch<SetStateAction<IPostAddRequest>>,
-    isEdit: boolean
+    isEdit: boolean,
 }) => {
 
     let strings = new LocalizedStrings({
         en:{
             description:"Description",
             openEmojis: 'Open Emoji',
-            closeEmojis: 'Close Emoji'
+            closeEmojis: 'Close Emoji',
+            changeDescription: 'Change description',
         },
         ua: {
             description:'Опис',
             openEmojis: 'Відкрити емоджі',
-            closeEmojis: 'Закрти емоджі'
+            closeEmojis: 'Закрти емоджі',
+            changeDescription: 'Змінити опис',
         }
     });
 
@@ -62,29 +64,29 @@ const ModalAddEditPostContent = (props: {
 
     return (
         <div className={'modal-add-post-content'}>
-            <div className={"modal-add-post-image-part-wrapper"}>
+            <div className={`modal-add-post-image-part-wrapper`}>
+                {!props.isEdit &&
                 <input
                     type="file"
                     ref={fileInput}
                     accept="image/*"
                     onChange={(e) => handleChange(e)}
-                />
-
-                <div className={"modal-add-post-image-wrapper"}>
+                />}
+                <div  className={`modal-add-post-image-wrapper ${props.isEdit && 'ma-top-2'}`}>
                     <img className="modal-add-post-image" src={preview?.toString()} alt="Preview" />
                 </div>
             </div>
 
             <div className={"modal-add-post-desc-part-wrapper"}>
                 <div className={'modal-add-post-desc-text'}>
-                    {strings.description}
+                    {props.isEdit ? strings.changeDescription : strings.description}
                 </div>
                 <div>
                     <textarea
                         className={'modal-add-post-textarea'}
                         name=""
                         id=""
-                        value={props.post.description}
+                        value={decodeURI(props.post.description)}
                         cols={38}
                         rows={20}
                         onChange={(e) => props.setPost({...props.post, description: e.target.value})}
