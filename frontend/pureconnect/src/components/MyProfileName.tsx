@@ -41,6 +41,9 @@ const MyProfileName = (props: {
                 const notify = () => toast.success(strings.updatedProfile);
                 notify();
                 props.setIsOpenEditProfile(false)
+                setTimeout(() => {
+                    window.location.reload()
+                }, 1000)
             }
             else {
                 const notify = () => toast.error(response.error);
