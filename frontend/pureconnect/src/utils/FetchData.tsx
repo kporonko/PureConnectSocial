@@ -2,6 +2,7 @@ import {IUserLoginRequest} from "../interfaces/IUserLoginRequest";
 import {getUsersLocale} from "../functions/getUsersLocale";
 import {IRegisterUser} from "../interfaces/IRegisterUser";
 import {IPostAddRequest} from "../interfaces/IPostAddRequest";
+import {IPostPutRequest} from "../interfaces/IPostPutRequest";
 
 const BASE_URL = "https://localhost:7219/";
 
@@ -342,3 +343,25 @@ export const getPostById = async (token: string, postId: number) => {
     }
 }
 
+
+export const editPost = async (token: string|null, post: IPostPutRequest) => {
+    try {
+        const response = await fetch(`${BASE_URL}api/Post`, {
+            method: 'PUT',
+            headers:{
+                'Content-Type': 'application/json',
+                'Accept-Language': getUsersLocale(),
+                'Authorization': 'Bearer ' + token,
+            },
+            body: JSON.stringify({
+                postId: post.postId,
+                description: post.description,
+            })
+        });
+        return response;
+    }
+    catch (error: any) {
+        console.log(error);
+        return error;
+    }
+}

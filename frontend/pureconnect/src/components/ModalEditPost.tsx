@@ -21,7 +21,7 @@ const ModalEditPost = (props: {
     return (
         <div onClick={closeModal} className={'modal-add-post-wrapper'}>
             <div onClick={(e) => e.stopPropagation()} className="modal-add-post-content-with-panel">
-                <ModalEditPostTopPanel theme={props.theme} isChangedPosts={props.isChangedPosts} setIsChangedPosts={props.setIsChangedPosts}/>
+                <ModalEditPostTopPanel post={props.post} setIsActiveEditPost={props.setIsActiveEditPost} theme={props.theme} isChangedPosts={props.isChangedPosts} setIsChangedPosts={props.setIsChangedPosts}/>
                 {props.post && <ModalAddEditPostContent isEdit={true} theme={props.theme} post={props.post} setPost={props.setPost}/>}
             </div>
         </div>
