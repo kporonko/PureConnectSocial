@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using PureConnectBackend.Core.Interfaces;
 using PureConnectBackend.Core.Models;
+using PureConnectBackend.Core.Models.Requests;
 using PureConnectBackend.Core.Models.Responses;
 using PureConnectBackend.Infrastructure.Data;
 using PureConnectBackend.Infrastructure.Models;
@@ -8,6 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics.Metrics;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -119,6 +121,48 @@ namespace PureConnectBackend.Core.Services
             }
 
             return null;
+        }
+
+
+        /// <summary>
+        /// Updates user`s profile.
+        /// </summary>
+        /// <param name="user">User to update.</param>
+        /// <param name="profileEdit">New user`s data.</param>
+        /// <returns>200 if user was updated. 400 if request isnt valid.</returns>
+        public async Task<HttpStatusCode> EditProfile(User user, ProfileEditRequest profileEdit)
+        {
+            if (user is null || user.Id != profileEdit.Id)
+                return HttpStatusCode.BadRequest;
+
+            var currUser = await _context.Users.FirstOrDefaultAsync(x => x.Id == profileEdit.Id);
+
+            if (currUser is null)
+                return HttpStatusCode.BadRequest;
+
+            return EditUser(currUser, profileEdit);
+        }
+
+        /// <summary>
+        /// Updatea user`s data in database.
+        /// </summary>
+        /// <param name="currUser">User to update.</param>
+        /// <param name="profileEdit">New user`s data.</param>
+        /// <returns>200 if user was updated.</returns>
+        private HttpStatusCode EditUser(User currUser, ProfileEditRequest profileEdit)
+        {
+            currUser.Email = profileEdit.Email;
+            currUser.FirstName = profileEdit.FirstName;
+            currUser.LastName = profileEdit.LastName;
+            currUser.BirthDate = profileEdit.BirthDate;
+            currUser.UserName = profileEdit.UserName;
+            currUser.Location = profileEdit.Location;
+            currUser.Status = profileEdit.Status;
+            currUser.Avatar = profileEdit.Avatar;
+
+            _context.Users.Update(currUser);
+            _context.SaveChanges();
+            return HttpStatusCode.OK;
         }
 
         /// <summary>

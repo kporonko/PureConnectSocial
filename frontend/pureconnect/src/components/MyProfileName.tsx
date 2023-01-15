@@ -3,6 +3,8 @@ import {IUser} from "../interfaces/IUser";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {solid} from "@fortawesome/fontawesome-svg-core/import.macro";
 import LocalizedStrings from "react-localization";
+import {editUser} from "../utils/FetchData";
+import {toast} from "react-toastify";
 
 const MyProfileName = (props: {
     user: IUser|undefined,
@@ -16,15 +18,35 @@ const MyProfileName = (props: {
         en:{
             edit: "Edit profile",
             save: "Save",
+            updatedProfile: "Profile is updated",
+            error: "Error",
         },
         ua: {
             edit: 'Редагувати профіль',
             save: 'Зберегти',
+            updatedProfile: 'Профіль оновлено',
+            error: 'Помилка',
         }
     });
 
     const handleOpenEditProfileModal = () => {
         props.setIsOpenEditProfile(true)
+    }
+
+    const handleSaveProfile = async () => {
+        const token = localStorage.getItem('access_token')
+        if (token) {
+            const response = await editUser(token, props.user!)
+            if (response.status === 200) {
+                const notify = () => toast.success(strings.updatedProfile);
+                notify();
+                props.setIsOpenEditProfile(false)
+            }
+            else {
+                const notify = () => toast.error(response.error);
+                notify();
+            }
+        }
     }
 
     return (
@@ -60,7 +82,7 @@ const MyProfileName = (props: {
                 {strings.edit}
             </div>
                 :
-            <div style={{fontSize: '1.5rem', marginLeft:'2rem'}} className={'profile-user-edit'}>
+            <div onClick={handleSaveProfile} style={{fontSize: '1.5rem', marginLeft:'2rem'}} className={'profile-user-edit'}>
                 <FontAwesomeIcon icon={solid('save')}/>
                 {strings.save}
             </div>}

@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Localization;
 using PureConnectBackend.Core.Interfaces;
+using PureConnectBackend.Core.Models.Requests;
 using PureConnectBackend.Core.Models.Responses;
 using PureConnectBackend.Infrastructure.Models;
 using System.Security.Claims;
@@ -95,7 +96,19 @@ namespace PureConnectBackend.Controllers
 
             return Ok(response);
         }
-        
+
+        [HttpPut("profile")]
+        [Authorize]
+        public async Task<ActionResult<ProfileResponse>> UpdateProfile([FromBody] ProfileEditRequest request)
+        {
+            var currUser = GetCurrentUser();
+            var response = await _userService.EditProfile(currUser, request);
+            if (response == System.Net.HttpStatusCode.BadRequest)
+                return BadRequest();
+
+            return Ok(response);
+        }
+
         /// <summary>
         /// Gets current user by authorizing jwt token.
         /// </summary>
