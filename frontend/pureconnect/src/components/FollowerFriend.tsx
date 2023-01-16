@@ -81,12 +81,10 @@ const FollowerFriend = (props: {
     const [isHover, setIsHover] = React.useState(false);
 
     const handleMouseEnter = () => {
-        console.log('Enter',isHover)
         setIsHover( true );
     };
 
     const handleMouseLeave = () => {
-        console.log('Leave',isHover)
         setIsHover( false );
     };
 
