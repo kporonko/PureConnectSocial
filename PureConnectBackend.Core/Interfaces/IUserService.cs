@@ -18,5 +18,8 @@ namespace PureConnectBackend.Core.Interfaces
         public Task<ProfileResponse> GetProfileById (User currUser, int requestedUserProfileId);
 
         public Task<HttpStatusCode> EditProfile(User user, ProfileEditRequest profileEdit);
+        public Task<MyFollowersFriendsListResponse> GetMyFollowers(User user);
+        public Task<MyFollowersFriendsListResponse> GetMyFriends(User user);
+
     }
 }

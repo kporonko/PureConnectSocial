@@ -144,6 +144,86 @@ namespace PureConnectBackend.Core.Services
         }
 
         /// <summary>
+        /// Gets the list of user`s followers.
+        /// </summary>
+        /// <param name="user">Current user making a request.</param>
+        /// <returns>MyFollowersFriendsListResponse object with followers data.</returns>
+        public async Task<MyFollowersFriendsListResponse> GetMyFollowers(User user)
+        {
+            var currUser = await _context.Users.FirstOrDefaultAsync(x => x.Id == user.Id);
+            if (currUser is null)
+                return null;
+
+            _context.Entry(currUser).Collection(x => x.Follower).Load();
+            _context.Entry(currUser).Collection(x => x.Followee).Load();
+
+            var listOfFollowers = new MyFollowersFriendsListResponse();
+            var followers = await GetUserFollowers(currUser);
+            foreach (var follower in followers)
+            {
+                var followerDto = ConvertUserToFollowerResponse(currUser, follower);
+                listOfFollowers.Users.Add(followerDto);
+            }
+
+            return listOfFollowers;
+        }
+
+        /// <summary>
+        /// Gets the list of user`s friends.
+        /// </summary>
+        /// <param name="user">Current user making a request.</param>
+        /// <returns>MyFollowersFriendsListResponse object with friends data.</returns>
+        public async Task<MyFollowersFriendsListResponse?> GetMyFriends(User user)
+        {
+            var currUser = await _context.Users.FirstOrDefaultAsync(x => x.Id == user.Id);
+            if (currUser is null)
+                return null;
+
+            _context.Entry(currUser).Collection(x => x.Follower).Load();
+            _context.Entry(currUser).Collection(x => x.Followee).Load();
+
+            var listOfFriends = new MyFollowersFriendsListResponse();
+            var friends = await GetUserFriends(currUser);
+            foreach (var friend in friends)
+            {
+                var friendDto = ConvertUserToFriendResponse(currUser, friend);
+                listOfFriends.Users.Add(friendDto);
+            }
+
+            return listOfFriends;
+        }
+
+        private MyFollowerFriendResponse ConvertUserToFriendResponse(User currUser, User friend)
+        {
+            var friendDateOne = currUser.Followee.FirstOrDefault(x => x.FollowerId == friend.Id).RequestDate;
+            var friendDateTwo = currUser.Follower.FirstOrDefault(x => x.FolloweeId == friend.Id).RequestDate;
+            
+            return new MyFollowerFriendResponse
+            {
+                LastName = friend.LastName,
+                FirstName = friend.FirstName,
+                Id = friend.Id,
+                Avatar = friend.Avatar,
+                UserName = friend.UserName,
+                FollowDate = friendDateOne > friendDateTwo ? friendDateOne : friendDateTwo
+            };
+        }
+
+        private MyFollowerFriendResponse ConvertUserToFollowerResponse(User currUser, User friend)
+        {
+            var friendDateOne = currUser.Followee.FirstOrDefault(x => x.FollowerId == friend.Id).RequestDate;
+
+            return new MyFollowerFriendResponse
+            {
+                LastName = friend.LastName,
+                FirstName = friend.FirstName,
+                Id = friend.Id,
+                Avatar = friend.Avatar,
+                UserName = friend.UserName,
+                FollowDate = friendDateOne
+            };
+        }
+        /// <summary>
         /// Updatea user`s data in database.
         /// </summary>
         /// <param name="currUser">User to update.</param>
@@ -260,6 +340,24 @@ namespace PureConnectBackend.Core.Services
             return friends;
         }
 
+        private async Task<List<User>> GetUserFollowers(User currUser)
+        {
+            List<User> followers = new();
+            if (currUser.Follower is null || currUser.Followee is null)
+                return new List<User>();
+
+            foreach (var follower in currUser.Followee)
+            {
+                var followee = currUser.Follower?.FirstOrDefault(x => x.FollowerId == currUser.Id && x.FolloweeId == follower.FollowerId);
+                if (followee is null)
+                {
+                    User? followerUser = await _context.Users.FirstOrDefaultAsync(x => x.Id == follower.FollowerId);
+                    followers.Add(followerUser!);
+                }
+            }
+
+            return followers;
+        }
 
         /// <summary>
         /// Checks whether two users are friends or not.

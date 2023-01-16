@@ -75,7 +75,37 @@ namespace PureConnectBackend.Controllers
             return Ok(response.Take(5));
         }
 
+        /// <summary>
+        /// Gets a list of current user`s friends.
+        /// </summary>
+        /// <returns>MyFollowersFriendsListResponse object with data about friends.</returns>
+        [HttpGet("friends")]
+        [Authorize]
+        public async Task<ActionResult<MyFollowersFriendsListResponse?>> GetFriends()
+        {
+            var currUser = GetCurrentUser();
+            var response = await _userService.GetMyFriends(currUser);
+            if (response is null)
+                return BadRequest();
 
+            return Ok(response);
+        }
+
+        /// <summary>
+        /// Gets a list of current user`s followers.
+        /// </summary>
+        /// <returns>MyFollowersFriendsListResponse object with data about followers.</returns>
+        [HttpGet("followers")]
+        [Authorize]
+        public async Task<ActionResult<MyFollowersFriendsListResponse?>> GetFollowers()
+        {
+            var currUser = GetCurrentUser();
+            var response = await _userService.GetMyFollowers(currUser);
+            if (response is null)
+                return BadRequest();
+
+            return Ok(response);
+        }
 
         /// <summary>
         /// Gets profile info of requested user.
