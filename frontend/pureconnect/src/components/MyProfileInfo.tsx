@@ -21,15 +21,16 @@ const MyProfileInfo = (props: {
     setIsOpenFollowers?: React.Dispatch<SetStateAction<boolean>>,
     isOpenFriends?: boolean,
     setIsOpenFriends?: React.Dispatch<SetStateAction<boolean>>,
+    user?: IUser|undefined,
+    setUser?: React.Dispatch<SetStateAction<IUser|undefined>>
 }) => {
 
-    const [user, setUser] = useState<IUser|undefined>();
     useEffect(() => {
         const getUser = async () => {
             const token = localStorage.getItem('access_token')
             if (token) {
                 const response = await getMyProfile(token);
-                setUser(response)
+                props.setUser!(response)
             }
         }
         getUser()
@@ -38,16 +39,16 @@ const MyProfileInfo = (props: {
     const [isValidAvatar, setIsValidAvatar] = React.useState(false);
 
     React.useEffect(() => {
-        if (user?.avatar) {
+        if (props.user?.avatar) {
             const image = new Image();
-            image.src = user.avatar;
+            image.src = props.user.avatar;
             image.onload = () => setIsValidAvatar(true);
             image.onerror = () => setIsValidAvatar(false);
         }
-    }, [user]);
+    }, [props.user]);
 
     const fileInput = useRef<HTMLInputElement>(null);
-    const [preview, setPreview] = useState<string | ArrayBuffer | null>(`${props.isEdit ? user?.avatar : ''}`);
+    const [preview, setPreview] = useState<string | ArrayBuffer | null>(`${props.isEdit ? props.user?.avatar : ''}`);
 
     const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
         if (fileInput.current && fileInput.current.files) {
@@ -58,20 +59,19 @@ const MyProfileInfo = (props: {
 
             // Implement image to base64
             convertAvatarImageToBase64(reader, file);
-            console.log(user?.avatar)
         }
     };
 
     const convertAvatarImageToBase64 = (reader: FileReader, file: File) => {
         reader.onload = (event) => {
-            if (user)
-                setUser({...user, avatar: event.target?.result as string});
+            if (props.user)
+                props.setUser!({...props.user, avatar: event.target?.result as string});
         };
         reader.readAsDataURL(file);
     }
     return (
         <div>
-            {user !== undefined ?
+            {props.user !== undefined ?
                 <div className='my-profile-user-grid'>
                     <div className={'my-profile-user-left'}>
                         <div className={props.isEdit ? 'flex-column' : ''}>
@@ -83,15 +83,15 @@ const MyProfileInfo = (props: {
                                     onChange={(e) => handleChange(e)}
                                 />
                             }
-                            <img className={'my-profile-user-avatar'} src={isValidAvatar? user?.avatar : userDefault} alt=""/>
+                            <img className={'my-profile-user-avatar'} src={isValidAvatar? props.user?.avatar : userDefault} alt=""/>
                         </div>
-                        <ProfileUserNameEmailBlock setUser={setUser} isEdit={props.isEdit} user={user}/>
+                        <ProfileUserNameEmailBlock setUser={props.setUser!} isEdit={props.isEdit} user={props.user}/>
                     </div>
 
                     <div className={'my-profile-user-right'}>
-                        <MyProfileName setIsToggleProfile={props.setIsToggleProfile} isToggleProfile={props.isToggleProfile} setUser={setUser} isEdit={props.isEdit} setIsOpenEditProfile={props.setIsOpenEditProfile} isActiveEditProfile={props.isActiveEditProfile} user={user}/>
-                        <ProfileStatusBlock isOpenFollowers={props.isOpenFollowers} setIsOpenFollowers={props.setIsOpenFollowers} isOpenFriends={props.isOpenFriends} setIsOpenFriends={props.setIsOpenFriends}  setUser={setUser} isEdit={props.isEdit} user={user}/>
-                        <ProfileAdditionalBlock setUser={setUser} isEdit={props.isEdit}  user={user}/>
+                        <MyProfileName setIsToggleProfile={props.setIsToggleProfile} isToggleProfile={props.isToggleProfile} setUser={props.setUser!} isEdit={props.isEdit} setIsOpenEditProfile={props.setIsOpenEditProfile} isActiveEditProfile={props.isActiveEditProfile} user={props.user}/>
+                        <ProfileStatusBlock isOpenFollowers={props.isOpenFollowers} setIsOpenFollowers={props.setIsOpenFollowers} isOpenFriends={props.isOpenFriends} setIsOpenFriends={props.setIsOpenFriends}  setUser={props.setUser!} isEdit={props.isEdit} user={props.user}/>
+                        <ProfileAdditionalBlock setUser={props.setUser!} isEdit={props.isEdit} user={props.user}/>
                     </div>
                 </div> :
                 <Loader theme={props.theme}/>

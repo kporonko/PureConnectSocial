@@ -6,11 +6,14 @@ import {getMyFollowers, getMyFriends} from "../utils/FetchData";
 import FollowerFriend from "./FollowerFriend";
 import FollowerTopPanel from "./FollowerTopPanel";
 import FriendTopPanel from "./FriendTopPanel";
+import {IUser} from "../interfaces/IUser";
 
 const FollowersFriendsListModal = (props: {
     isFollowers: boolean,
     setIsOpenFollowers?: React.Dispatch<SetStateAction<boolean>>,
     setIsOpenFriends?: React.Dispatch<SetStateAction<boolean>>,
+    user:IUser|undefined,
+    setUser: React.Dispatch<SetStateAction<IUser|undefined>>
 }) => {
 
     const [followers, setFollowers] = React.useState<IFriendFollower[]>();
@@ -59,13 +62,13 @@ const FollowersFriendsListModal = (props: {
                 {props.isFollowers ?
                     followers?.map((follower, ind) => (
                         <div key={ind} >
-                            <FollowerFriend isFriend={false} key={ind} data={follower}/>
+                            <FollowerFriend user={props.user} setUser={props.setUser} isFriend={false} key={ind} data={follower}/>
                         </div>
                 ))
                 :
                     friends?.map((friend, ind) => (
                         <div key={ind}>
-                            <FollowerFriend isFriend={true} key={ind} data={friend}/>
+                            <FollowerFriend user={props.user} setUser={props.setUser} isFriend={true} key={ind} data={friend}/>
                         </div>
                     ))
                 }

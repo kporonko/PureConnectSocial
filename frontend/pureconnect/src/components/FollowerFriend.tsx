@@ -7,9 +7,12 @@ import UnFollowButton from "./UnFollowButton";
 import {followUser, unfollowUser} from "../utils/FetchData";
 import {toast} from "react-toastify";
 import LocalizedStrings from "react-localization";
+import {IUser} from "../interfaces/IUser";
 const FollowerFriend = (props: {
     data: IFriendFollower,
     isFriend: boolean,
+    user: IUser|undefined,
+    setUser: React.Dispatch<React.SetStateAction<IUser|undefined>>
 }) => {
 
     const strings = new LocalizedStrings({
@@ -43,8 +46,9 @@ const FollowerFriend = (props: {
             const response = await followUser(token, props.data.id);
 
             if (response.status === 200) {
+                props.setUser({...props.user!, followersCount: props.user!.followersCount - 1, friendsCount: props.user!.friendsCount + 1})
+
                 setIsToggleFollow(!isToggleFollow);
-                console.log("Followed", isToggleFollow)
                 const notify = () => toast.success(strings.successFollow);
                 notify();
             }
@@ -60,6 +64,7 @@ const FollowerFriend = (props: {
             const response = await unfollowUser(token, props.data.id);
 
             if (response.status === 200) {
+                props.setUser({...props.user!, followersCount: props.user!.followersCount + 1, friendsCount: props.user!.friendsCount - 1})
                 setIsToggleFollow(!isToggleFollow);
                 const notify = () => toast.success(strings.successUnFollow);
                 notify();

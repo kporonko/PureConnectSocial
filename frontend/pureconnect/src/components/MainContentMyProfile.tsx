@@ -7,6 +7,7 @@ import ModalAddPost from "./ModalAddPost";
 import {IPost} from "../interfaces/IPost";
 import {IPostImage} from "../interfaces/IPostImage";
 import {IPostAddRequest} from "../interfaces/IPostAddRequest";
+import {IUser} from "../interfaces/IUser";
 
 const MainContentMyProfile = (props: {
     theme: string,
@@ -29,12 +30,14 @@ const MainContentMyProfile = (props: {
     setIsOpenFollowers: React.Dispatch<SetStateAction<boolean>>,
     isOpenFriends: boolean,
     setIsOpenFriends: React.Dispatch<SetStateAction<boolean>>,
+    user: IUser|undefined,
+    setUser: React.Dispatch<SetStateAction<IUser|undefined>>
 }) => {
 
     return (
         <div data-theme={props.theme} className="main-content-profile">
             <div className='main-content-profile-block'>
-                <MyProfileInfo isOpenFollowers={props.isOpenFollowers} setIsOpenFollowers={props.setIsOpenFollowers} isOpenFriends={props.isOpenFriends} setIsOpenFriends={props.setIsOpenFriends} isToggleProfile={props.isToggleProfile} setIsToggleProfile={props.setIsToggleProfile} isActiveEditProfile={props.isOpenEditProfile} setIsOpenEditProfile={props.setIsOpenEditProfile} isEdit={false} theme={props.theme} />
+                <MyProfileInfo user={props.user} setUser={props.setUser} isOpenFollowers={props.isOpenFollowers} setIsOpenFollowers={props.setIsOpenFollowers} isOpenFriends={props.isOpenFriends} setIsOpenFriends={props.setIsOpenFriends} isToggleProfile={props.isToggleProfile} setIsToggleProfile={props.setIsToggleProfile} isActiveEditProfile={props.isOpenEditProfile} setIsOpenEditProfile={props.setIsOpenEditProfile} isEdit={false} theme={props.theme} />
                 {<MyPostsList isToggleProfile={props.isToggleProfile} setIsToggleProfile={props.setIsToggleProfile} setIsOpenEdit={props.setIsOpenEdit} isOpenEdit={props.isOpenEdit} postEdit={props.postEdit} setPostEdit={props.setPostEdit} isChangedPosts={props.isChangedPosts} setIsChangedPosts={props.setIsChangedPosts} theme={props.theme} setIsActiveAddPost={props.setIsActiveAddPost} setPosts={props.setPosts} setImages={props.setImages} posts={props.posts} postsImage={props.postsImage}/>}
             </div>
         </div>
