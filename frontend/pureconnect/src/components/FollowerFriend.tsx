@@ -4,12 +4,29 @@ import {getDate} from "../functions/dateFunctions";
 import FollowButton from "./FollowButton";
 import defaultUser from '../assets/user.png'
 import UnFollowButton from "./UnFollowButton";
+import {followUser, unfollowUser} from "../utils/FetchData";
+import {toast} from "react-toastify";
+import LocalizedStrings from "react-localization";
 const FollowerFriend = (props: {
     data: IFriendFollower,
     isFriend: boolean,
 }) => {
 
+    const strings = new LocalizedStrings({
+        en:{
+            successFollow:"You have successfully followed this user",
+            successUnFollow:"You have successfully unfollowed this user",
+            error:"Something went wrong",
+        },
+        ua: {
+            successFollow:"Ви успішно підписалися на цього користувача",
+            successUnFollow:"Ви успішно відписалися від цього користувача",
+            error:"Щось пішло не так",
+        }
+    });
     const [isValidAvatar, setIsValidAvatar] = React.useState(false);
+
+    const [isToggleFollow, setIsToggleFollow] = React.useState(false);
 
     React.useEffect(() => {
         if (props.data?.avatar) {
@@ -19,6 +36,40 @@ const FollowerFriend = (props: {
             image.onerror = () => setIsValidAvatar(false);
         }
     }, [props.data?.avatar]);
+
+    const followFollower = async () => {
+        const token = localStorage.getItem('access_token')
+        if (token) {
+            const response = await followUser(token, props.data.id);
+
+            if (response.status === 200) {
+                setIsToggleFollow(!isToggleFollow);
+                console.log("Followed", isToggleFollow)
+                const notify = () => toast.success(strings.successFollow);
+                notify();
+            }
+            else{
+                const notify = () => toast.error(strings.error);
+                notify();
+            }
+        }
+    }
+    const unFollowFriend = async () => {
+        const token = localStorage.getItem('access_token')
+        if (token) {
+            const response = await unfollowUser(token, props.data.id);
+
+            if (response.status === 200) {
+                setIsToggleFollow(!isToggleFollow);
+                const notify = () => toast.success(strings.successUnFollow);
+                notify();
+            }
+            else{
+                const notify = () => toast.error(strings.error);
+                notify();
+            }
+        }
+    }
 
     return (
         <div className={'follower-wrapper'}>
@@ -39,11 +90,25 @@ const FollowerFriend = (props: {
                     {getDate(props.data.followDate)}
                 </div>
                 {props.isFriend ?
-                    <UnFollowButton userId={props.data.id}/>
-                    :
-                    <FollowButton userId={props.data.id}/>
+                    isToggleFollow ?
+                    <div onClick={followFollower}>
+                        <FollowButton userId={props.data.id}/>
+                    </div>
+                        :
+                    <div onClick={unFollowFriend}>
+                        <UnFollowButton userId={props.data.id}/>
+                    </div>
+                    : isToggleFollow ?
+                    <div onClick={unFollowFriend}>
+                        <UnFollowButton userId={props.data.id}/>
+                    </div>
+                        :
+                    <div onClick={followFollower}>
+                        <FollowButton userId={props.data.id}/>
+                    </div>
 
-                }</div>
+                }
+            </div>
         </div>
     );
 };
