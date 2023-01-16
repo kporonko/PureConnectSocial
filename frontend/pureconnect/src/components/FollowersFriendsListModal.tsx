@@ -58,13 +58,13 @@ const FollowersFriendsListModal = (props: {
                 {props.isFollowers ? <FollowerTopPanel/> : <FriendTopPanel/>}
                 {props.isFollowers ?
                     followers?.map((follower, ind) => (
-                        <div>
+                        <div key={ind} >
                             <FollowerFriend isFriend={false} key={ind} data={follower}/>
                         </div>
                 ))
                 :
                     friends?.map((friend, ind) => (
-                        <div>
+                        <div key={ind}>
                             <FollowerFriend isFriend={true} key={ind} data={friend}/>
                         </div>
                     ))
