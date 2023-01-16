@@ -369,7 +369,6 @@ export const editPost = async (token: string|null, post: IPostPutRequest) => {
 
 export const editUser = async (token: string|null, user: IUser) => {
     try {
-        console.log("FETCH", user);
         const response = await fetch(`${BASE_URL}api/User/profile`, {
             method: 'PUT',
             headers:{
@@ -388,6 +387,42 @@ export const editUser = async (token: string|null, user: IUser) => {
                 birthDate: user.birthDate,
                 location: user.location,
             })
+        });
+        return response;
+    }
+    catch (error: any) {
+        console.log(error);
+        return error;
+    }
+}
+
+export const getMyFriends = async (token: string|null) => {
+    try {
+        const response = await fetch(`${BASE_URL}api/User/friends`, {
+            method: 'GET',
+            headers:{
+                'Content-Type': 'application/json',
+                'Accept-Language': getUsersLocale(),
+                'Authorization': 'Bearer ' + token,
+            }
+        });
+        return response;
+    }
+    catch (error: any) {
+        console.log(error);
+        return error;
+    }
+}
+
+export const getMyFollowers = async (token: string|null) => {
+    try {
+        const response = await fetch(`${BASE_URL}api/User/followers`, {
+            method: 'GET',
+            headers:{
+                'Content-Type': 'application/json',
+                'Accept-Language': getUsersLocale(),
+                'Authorization': 'Bearer ' + token,
+            }
         });
         return response;
     }

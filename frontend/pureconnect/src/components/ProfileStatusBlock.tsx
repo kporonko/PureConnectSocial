@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {SetStateAction} from 'react';
 import {IUser} from "../interfaces/IUser";
 import LocalizedStrings from "react-localization";
 
@@ -6,6 +6,10 @@ const ProfileStatusBlock = (props: {
     user: IUser|undefined,
     isEdit: boolean,
     setUser: React.Dispatch<React.SetStateAction<IUser|undefined>>,
+    isOpenFollowers?: boolean,
+    setIsOpenFollowers?: React.Dispatch<SetStateAction<boolean>>,
+    isOpenFriends?: boolean,
+    setIsOpenFriends?: React.Dispatch<SetStateAction<boolean>>,
 }) => {
 
     let strings = new LocalizedStrings({
@@ -83,13 +87,13 @@ const ProfileStatusBlock = (props: {
                     </div>
                 </div>
 
-                <div className='profile-user-stat'>
+                <div onClick={() => props.setIsOpenFollowers!(true)} className='profile-user-stat'>
                     <div>
                         {shortenCount(props.user?.followersCount)} {strings.followers}
                     </div>
                 </div>
 
-                <div className='profile-user-stat'>
+                <div onClick={() => props.setIsOpenFriends!(true)} className='profile-user-stat'>
                     <div>
                         {shortenCount(props.user?.friendsCount)} {strings.friends}
                     </div>

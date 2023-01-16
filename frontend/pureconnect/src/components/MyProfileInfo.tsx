@@ -17,6 +17,10 @@ const MyProfileInfo = (props: {
     setIsOpenEditProfile: React.Dispatch<SetStateAction<boolean>>,
     setIsToggleProfile: React.Dispatch<SetStateAction<boolean>>,
     isToggleProfile: boolean,
+    isOpenFollowers?: boolean,
+    setIsOpenFollowers?: React.Dispatch<SetStateAction<boolean>>,
+    isOpenFriends?: boolean,
+    setIsOpenFriends?: React.Dispatch<SetStateAction<boolean>>,
 }) => {
 
     const [user, setUser] = useState<IUser|undefined>();
@@ -86,7 +90,7 @@ const MyProfileInfo = (props: {
 
                     <div className={'my-profile-user-right'}>
                         <MyProfileName setIsToggleProfile={props.setIsToggleProfile} isToggleProfile={props.isToggleProfile} setUser={setUser} isEdit={props.isEdit} setIsOpenEditProfile={props.setIsOpenEditProfile} isActiveEditProfile={props.isActiveEditProfile} user={user}/>
-                        <ProfileStatusBlock setUser={setUser} isEdit={props.isEdit} user={user}/>
+                        <ProfileStatusBlock isOpenFollowers={props.isOpenFollowers} setIsOpenFollowers={props.setIsOpenFollowers} isOpenFriends={props.isOpenFriends} setIsOpenFriends={props.setIsOpenFriends}  setUser={setUser} isEdit={props.isEdit} user={user}/>
                         <ProfileAdditionalBlock setUser={setUser} isEdit={props.isEdit}  user={user}/>
                     </div>
                 </div> :

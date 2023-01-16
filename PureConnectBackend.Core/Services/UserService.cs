@@ -161,7 +161,7 @@ namespace PureConnectBackend.Core.Services
             var followers = await GetUserFollowers(currUser);
             foreach (var follower in followers)
             {
-                var followerDto = ConvertUserToFollowerResponse(currUser, follower);
+                var followerDto = ConvertUserToFollowerResponse (currUser, follower);
                 listOfFollowers.Users.Add(followerDto);
             }
 

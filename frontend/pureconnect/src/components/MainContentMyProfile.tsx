@@ -25,12 +25,16 @@ const MainContentMyProfile = (props: {
     setIsOpenEditProfile: React.Dispatch<SetStateAction<boolean>>,
     isToggleProfile: boolean,
     setIsToggleProfile: React.Dispatch<SetStateAction<boolean>>,
+    isOpenFollowers: boolean,
+    setIsOpenFollowers: React.Dispatch<SetStateAction<boolean>>,
+    isOpenFriends: boolean,
+    setIsOpenFriends: React.Dispatch<SetStateAction<boolean>>,
 }) => {
 
     return (
         <div data-theme={props.theme} className="main-content-profile">
             <div className='main-content-profile-block'>
-                <MyProfileInfo isToggleProfile={props.isToggleProfile} setIsToggleProfile={props.setIsToggleProfile} isActiveEditProfile={props.isOpenEditProfile} setIsOpenEditProfile={props.setIsOpenEditProfile} isEdit={false} theme={props.theme} />
+                <MyProfileInfo isOpenFollowers={props.isOpenFollowers} setIsOpenFollowers={props.setIsOpenFollowers} isOpenFriends={props.isOpenFriends} setIsOpenFriends={props.setIsOpenFriends} isToggleProfile={props.isToggleProfile} setIsToggleProfile={props.setIsToggleProfile} isActiveEditProfile={props.isOpenEditProfile} setIsOpenEditProfile={props.setIsOpenEditProfile} isEdit={false} theme={props.theme} />
                 {<MyPostsList isToggleProfile={props.isToggleProfile} setIsToggleProfile={props.setIsToggleProfile} setIsOpenEdit={props.setIsOpenEdit} isOpenEdit={props.isOpenEdit} postEdit={props.postEdit} setPostEdit={props.setPostEdit} isChangedPosts={props.isChangedPosts} setIsChangedPosts={props.setIsChangedPosts} theme={props.theme} setIsActiveAddPost={props.setIsActiveAddPost} setPosts={props.setPosts} setImages={props.setImages} posts={props.posts} postsImage={props.postsImage}/>}
             </div>
         </div>
