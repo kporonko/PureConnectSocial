@@ -52,7 +52,6 @@ const ModalPostMine = (props:{
         }
     });
 
-    console.log(props.post)
     const nav = useNavigate();
 
     const handleClose = () => {
@@ -60,7 +59,6 @@ const ModalPostMine = (props:{
     }
 
     const confirmWindow = (e: React.MouseEvent<HTMLDivElement>) => {
-        console.log('confirmWindow')
         e.preventDefault()
         confirmAlert({
             message: strings.areSure,
@@ -78,11 +76,9 @@ const ModalPostMine = (props:{
         })
     }
     const handleDelete = async () => {
-        console.log('handleDelete')
         const token = localStorage.getItem('access_token');
         if(token !== null) {
             const response = await deletePost(token, props.post.postId)
-            console.log(response)
             if(response.status === 200){
                 const notify = () => toast.success(strings.deletedPost);
                 notify();
@@ -103,9 +99,7 @@ const ModalPostMine = (props:{
     }
 
     const handleEdit = async () => {
-        console.log(props.post)
         props.setIsOpenEdit!(!props.isOpenEdit)
-        console.log(props.post as IPostAddRequest)
         props.setPostEdit!(props.post as IPostAddRequest)
     }
 

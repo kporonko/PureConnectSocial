@@ -20,7 +20,6 @@ const ProfileAdditionalBlock = (props: {
         }
     });
 
-    console.log(props.user)
     return (
         <div className={'profile-user-additional-wrapper'}>
             <h6 className={'my-profile-user-label'}>

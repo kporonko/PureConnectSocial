@@ -31,7 +31,6 @@ const FollowersFriendsListModal = (props: {
         if (token) {
             const response = await getMyFollowers(token);
             const body = await response.json();
-            console.log(body.users)
             setFollowers(body.users)
         }
     }
@@ -40,7 +39,6 @@ const FollowersFriendsListModal = (props: {
         if (token) {
             const response = await getMyFriends(token);
             const body = await response.json();
-            console.log(body.users)
             setFriends(body.users)
         }
     }
