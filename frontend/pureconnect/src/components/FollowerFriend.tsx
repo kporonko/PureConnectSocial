@@ -8,6 +8,7 @@ import {followUser, unfollowUser} from "../utils/FetchData";
 import {toast} from "react-toastify";
 import LocalizedStrings from "react-localization";
 import {IUser} from "../interfaces/IUser";
+import {useNavigate} from "react-router";
 const FollowerFriend = (props: {
     data: IFriendFollower,
     isFriend: boolean,
@@ -40,7 +41,8 @@ const FollowerFriend = (props: {
         }
     }, [props.data?.avatar]);
 
-    const followFollower = async () => {
+    const followFollower = async (e: React.MouseEvent<HTMLDivElement>) => {
+        e.stopPropagation()
         const token = localStorage.getItem('access_token')
         if (token) {
             const response = await followUser(token, props.data.id);
@@ -58,7 +60,8 @@ const FollowerFriend = (props: {
             }
         }
     }
-    const unFollowFriend = async () => {
+    const unFollowFriend = async (e: React.MouseEvent<HTMLDivElement>) => {
+        e.stopPropagation()
         const token = localStorage.getItem('access_token')
         if (token) {
             const response = await unfollowUser(token, props.data.id);
@@ -75,9 +78,22 @@ const FollowerFriend = (props: {
             }
         }
     }
+    const [isHover, setIsHover] = React.useState(false);
+
+    const handleMouseEnter = () => {
+        console.log('Enter',isHover)
+        setIsHover( true );
+    };
+
+    const handleMouseLeave = () => {
+        console.log('Leave',isHover)
+        setIsHover( false );
+    };
+
+    const nav = useNavigate();
 
     return (
-        <div className={'follower-wrapper'}>
+        <div onClick={() => nav(`/user/${props.user?.userId}`)} className={`follower-wrapper ${isHover ? 'no-hover' : ''}`}>
             <div className={'follower-data-avatar'}>
                 <img className={'follower-avatar'} src={isValidAvatar ? props.data.avatar : defaultUser} alt=""/>
                 <div className={'follower-names'}>
@@ -96,19 +112,19 @@ const FollowerFriend = (props: {
                 </div>
                 {props.isFriend ?
                     isToggleFollow ?
-                    <div onClick={followFollower}>
+                    <div onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave} onClick={(e) => followFollower(e)}>
                         <FollowButton userId={props.data.id}/>
                     </div>
                         :
-                    <div onClick={unFollowFriend}>
+                    <div onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}  onClick={(e) => unFollowFriend(e)}>
                         <UnFollowButton userId={props.data.id}/>
                     </div>
                     : isToggleFollow ?
-                    <div onClick={unFollowFriend}>
+                    <div onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}  onClick={(e) => unFollowFriend(e)}>
                         <UnFollowButton userId={props.data.id}/>
                     </div>
                         :
-                    <div onClick={followFollower}>
+                    <div onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}  onClick={(e) => followFollower(e)}>
                         <FollowButton userId={props.data.id}/>
                     </div>
 
