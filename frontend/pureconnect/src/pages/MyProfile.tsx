@@ -72,7 +72,7 @@ const MyProfile = (props:{theme: string, setTheme: any}) => {
             {isOpenEdit &&
                 <ModalEditPost isActiveEditPost={isOpenEdit} setIsActiveEditPost={setIsOpenEdit} theme={props.theme} setIsChangedPosts={setIsChangedPosts} isChangedPosts={isChangedPosts} post={post} setPost={setPost}/>}
             {isOpenEditProfile &&
-                <ModalEditProfile isToggleProfile={isToggleProfile} setIsToggleProfile={setIsToggleProfile} isActiveEditProfile={isOpenEditProfile} setIsOpenEditProfile={setIsOpenEditProfile} theme={props.theme}/>}
+                <ModalEditProfile user={user} setUser={setUser} isToggleProfile={isToggleProfile} setIsToggleProfile={setIsToggleProfile} isActiveEditProfile={isOpenEditProfile} setIsOpenEditProfile={setIsOpenEditProfile} theme={props.theme}/>}
             {isOpenFollowers &&
                 <FollowersFriendsListModal user={user} setUser={setUser} setIsOpenFollowers={setIsOpenFollowers} isFollowers={true}/>}
             {isOpenFriends &&

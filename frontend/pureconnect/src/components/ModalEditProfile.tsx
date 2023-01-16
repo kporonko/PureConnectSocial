@@ -3,6 +3,7 @@ import MyProfile from "../pages/MyProfile";
 import MyProfileInfo from "./MyProfileInfo";
 import ModalEditPostTopPanel from "./ModalEditPostTopPanel";
 import ModalAddEditPostContent from "./ModalAddEditPostContent";
+import {IUser} from "../interfaces/IUser";
 
 const ModalEditProfile = (props: {
     isActiveEditProfile: boolean,
@@ -10,6 +11,8 @@ const ModalEditProfile = (props: {
     theme: string,
     setIsToggleProfile: React.Dispatch<SetStateAction<boolean>>,
     isToggleProfile: boolean,
+    setUser: React.Dispatch<SetStateAction<IUser|undefined>>,
+    user: IUser|undefined
 }) => {
 
     const closeModal = (e:any) => {
@@ -20,7 +23,7 @@ const ModalEditProfile = (props: {
     return (
         <div onClick={closeModal} className={'modal-add-post-wrapper'}>
             <div onClick={(e) => e.stopPropagation()} >
-                <MyProfileInfo setIsToggleProfile={props.setIsToggleProfile} isToggleProfile={props.isToggleProfile} isActiveEditProfile={props.isActiveEditProfile} setIsOpenEditProfile={props.setIsOpenEditProfile} isEdit={true} theme={props.theme}/>
+                <MyProfileInfo user={props.user} setUser={props.setUser} setIsToggleProfile={props.setIsToggleProfile} isToggleProfile={props.isToggleProfile} isActiveEditProfile={props.isActiveEditProfile} setIsOpenEditProfile={props.setIsOpenEditProfile} isEdit={true} theme={props.theme}/>
             </div>
         </div>
     );
