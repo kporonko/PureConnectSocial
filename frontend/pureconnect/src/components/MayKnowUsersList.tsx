@@ -4,7 +4,12 @@ import {IMayKnowUser} from "../interfaces/IMayKnowUser";
 import LocalizedStrings from "react-localization";
 import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a loader
 
-const MayKnowUsersList = (props: {users: IMayKnowUser[] | undefined, theme: string}) => {
+const MayKnowUsersList = (props: {
+    users: IMayKnowUser[] | undefined,
+    theme: string,
+    setIsOpenCommonFriendsModal: React.Dispatch<React.SetStateAction<boolean>>,
+    setCurrMayKnowUser: React.Dispatch<React.SetStateAction<IMayKnowUser | undefined>>,
+}) => {
 
     let strings = new LocalizedStrings({
         en:{
@@ -21,7 +26,7 @@ const MayKnowUsersList = (props: {users: IMayKnowUser[] | undefined, theme: stri
         <div className={'may-know-them-content'}>
 
             {props.users !== undefined ? props.users.length > 0 ? props.users.map((user, index) => (
-                <MayKnowUser user={user} key={index} theme={props.theme}/>
+                <MayKnowUser setCurrMayKnowUser={props.setCurrMayKnowUser} setIsOpenCommonFriendsModal={props.setIsOpenCommonFriendsModal} user={user} key={index} theme={props.theme}/>
                     )) : strings.noRecommendations : strings.errorMayKnowLoading}
         </div>
     );

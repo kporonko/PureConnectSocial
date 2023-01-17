@@ -431,3 +431,21 @@ export const getMyFollowers = async (token: string|null) => {
         return error;
     }
 }
+
+export const getCommonFriends = async (token: string|null, profileId: number) => {
+    try {
+        const response = await fetch(`${BASE_URL}api/User/common-friends/${profileId}`, {
+            method: 'GET',
+            headers:{
+                'Content-Type': 'application/json',
+                'Accept-Language': getUsersLocale(),
+                'Authorization': 'Bearer ' + token,
+            }
+        });
+        return response;
+    }
+    catch (error: any) {
+        console.log(error);
+        return error;
+    }
+}

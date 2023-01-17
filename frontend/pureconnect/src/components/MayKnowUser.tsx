@@ -6,7 +6,12 @@ import {regular, solid} from "@fortawesome/fontawesome-svg-core/import.macro";
 import user from "../assets/user.png";
 import {followUser, unfollowUser} from "../utils/FetchData";
 import {toast, ToastContainer} from "react-toastify";
-const MayKnowUser = (props:{user: IMayKnowUser, theme: string}) => {
+const MayKnowUser = (props:{
+    user: IMayKnowUser,
+    theme: string,
+    setIsOpenCommonFriendsModal: React.Dispatch<React.SetStateAction<boolean>>,
+    setCurrMayKnowUser: React.Dispatch<React.SetStateAction<IMayKnowUser | undefined>>,
+}) => {
 
     let strings = new LocalizedStrings({
         en:{
@@ -73,7 +78,10 @@ const MayKnowUser = (props:{user: IMayKnowUser, theme: string}) => {
             <div  className='may-know-user-name'>
                 {props.user.lastName} {props.user.firstName}
             </div>
-            <div className='may-know-user-friends-count'>
+            <div onClick={() => {
+                props.setIsOpenCommonFriendsModal(true)
+                props.setCurrMayKnowUser(props.user)
+            }} className='may-know-user-friends-count'>
                 {props.user.commonFriendsCount} {strings.common}
             </div>
 

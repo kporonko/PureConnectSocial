@@ -193,6 +193,48 @@ namespace PureConnectBackend.Core.Services
             return listOfFriends;
         }
 
+        public async Task<List<CommonFriend>> GetCommonFriends(User user, int secondUserId)
+        {
+            var currUser = _context.Users.FirstOrDefault(x => x.Id == user.Id);
+            _context.Entry(currUser).Collection(x => x.Follower).Load();
+            _context.Entry(currUser).Collection(x => x.Followee).Load();
+
+            if (currUser is null)
+                return null;
+            
+            var secondUser = _context.Users.FirstOrDefault(x => x.Id == secondUserId);
+            _context.Entry(secondUser).Collection(x => x.Follower).Load();
+            _context.Entry(secondUser).Collection(x => x.Followee).Load();
+
+            if (secondUser is null)
+                return null;
+            
+            var currUserFriends = await GetUserFriends(currUser);
+            var secondUserFriends = await GetUserFriends(secondUser);
+
+            var commonFriends = currUserFriends.Intersect(secondUserFriends).ToList();
+            return ConvertUserListToCommonFriendList(commonFriends);
+        }
+
+        private List<CommonFriend> ConvertUserListToCommonFriendList(List<User> commonFriends)
+        {
+            List<CommonFriend> commonFriendsResList = new List<CommonFriend>();
+            foreach (var friend in commonFriends)
+            {
+                var commonFriendResDto = new CommonFriend()
+                {
+                    Id = friend.Id,
+                    LastName = friend.LastName,
+                    FirstName = friend.FirstName,
+                    Avatar = friend.Avatar,
+                    UserName = friend.UserName,
+                };
+                commonFriendsResList.Add(commonFriendResDto);
+            }
+            
+            return commonFriendsResList;
+        }
+
         private MyFollowerFriendResponse ConvertUserToFriendResponse(User currUser, User friend)
         {
             var friendDateOne = currUser.Followee.FirstOrDefault(x => x.FollowerId == friend.Id).RequestDate;

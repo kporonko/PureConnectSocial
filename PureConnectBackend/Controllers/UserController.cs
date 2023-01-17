@@ -139,6 +139,18 @@ namespace PureConnectBackend.Controllers
             return Ok(response);
         }
 
+        [HttpGet("common-friends/{profileId}")]
+        [Authorize]
+        public async Task<ActionResult<List<RecommendedUserResponse>?>> GetCommonFriends([FromRoute] int profileId)
+        {
+            var currUser = GetCurrentUser();
+            var response = await _userService.GetCommonFriends(currUser, profileId);
+            if (response is null)
+                return BadRequest();
+
+            return Ok(response);
+        }
+
         /// <summary>
         /// Gets current user by authorizing jwt token.
         /// </summary>

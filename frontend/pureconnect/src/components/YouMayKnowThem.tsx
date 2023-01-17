@@ -6,6 +6,8 @@ import {IMayKnowUser} from "../interfaces/IMayKnowUser";
 import MayKnowUser from "./MayKnowUser";
 import {getRecommendedUsers} from "../utils/FetchData";
 import MayKnowUsersList from "./MayKnowUsersList";
+import {ICommonFriend} from "../interfaces/ICommonFriend";
+import CommonFriendsModal from "./CommonFriendsModal";
 
 
 
@@ -15,6 +17,8 @@ const YouMayKnowThem = (props:{theme: string}) => {
 
     const [showMessage, setShowMessage] = useState(isShow);
 
+    const [isOpenCommonFriendsModal, setIsOpenCommonFriendsModal] = useState(false);
+    const [commonFriends, setCommonFriends] = useState<ICommonFriend[]>();
     const handleClose = () => {
         setShowMessage(false);
         localStorage.setItem('isShowMayKnowThem', 'false');
@@ -28,8 +32,9 @@ const YouMayKnowThem = (props:{theme: string}) => {
             youMayKnowThem:"Можливо, ви знаєте їх",
         }
     });
-
     const [users, setUsers] = React.useState<IMayKnowUser[]>();
+    const [currMayKnowUser, setCurrMayKnowUser] = useState<IMayKnowUser>();
+
     useEffect( () => {
         const users = async() => {
             const token = localStorage.getItem('access_token');
@@ -46,7 +51,7 @@ const YouMayKnowThem = (props:{theme: string}) => {
     }
 
     return (
-        <div className={'may-know-them-wrapper'}>
+        <div className={`may-know-them-wrapper`}>
             <div className={'may-know-them-bar'}>
                 <div>
                     {strings.youMayKnowThem}
@@ -56,8 +61,9 @@ const YouMayKnowThem = (props:{theme: string}) => {
                 </div>
             </div>
 
-            <MayKnowUsersList users={users} theme={props.theme}/>
-
+            <MayKnowUsersList setCurrMayKnowUser={setCurrMayKnowUser} setIsOpenCommonFriendsModal={setIsOpenCommonFriendsModal} users={users} theme={props.theme}/>
+            {isOpenCommonFriendsModal &&
+                <CommonFriendsModal currMayKnowUser={currMayKnowUser} commonFriends={commonFriends} setCommonFriends={setCommonFriends} isOpenCommonFriends={isOpenCommonFriendsModal} setIsOpenCommonFriends={setIsOpenCommonFriendsModal}/>}
         </div>
     );
 };
