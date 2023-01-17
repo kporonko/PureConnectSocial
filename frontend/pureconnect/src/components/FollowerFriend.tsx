@@ -89,9 +89,8 @@ const FollowerFriend = (props: {
     };
 
     const nav = useNavigate();
-
     return (
-        <div onClick={() => nav(`/user/${props.user?.userId}`)} className={`follower-wrapper ${isHover ? 'no-hover' : ''}`}>
+        <div onClick={() => nav(`/user/${props.data?.id}`)} className={`follower-wrapper ${isHover ? 'no-hover' : ''}`}>
             <div className={'follower-data-avatar'}>
                 <img className={'follower-avatar'} src={isValidAvatar ? props.data.avatar : defaultUser} alt=""/>
                 <div className={'follower-names'}>
