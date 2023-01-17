@@ -9,6 +9,8 @@ import {IPost} from "../interfaces/IPost";
 import PostPageContent from "../components/PostPageContent";
 import Loader from "../components/Loader";
 import NavMenu from "../components/NavMenu";
+import ModalEditPost from "../components/ModalEditPost";
+import {IPostAddRequest} from "../interfaces/IPostAddRequest";
 
 const PostPage = (props: {theme: string, setTheme: any}) => {
 
@@ -16,6 +18,8 @@ const PostPage = (props: {theme: string, setTheme: any}) => {
     const nav = useNavigate();
 
     const [post, setPost] = React.useState<IPost>();
+    const [postEdit, setPostEdit] = React.useState<IPostAddRequest>(post as IPostAddRequest);
+
     const [avatar, setAvatar] = React.useState<string>("");
 
     const strings = new LocalizedStrings({
@@ -36,6 +40,7 @@ const PostPage = (props: {theme: string, setTheme: any}) => {
             if (postResponse.status === 200) {
                 const post = await postResponse.json();
                 setPost(post);
+                setPostEdit(post);
             }
             else if (postResponse.status === 401) {
                 setTimeout(() => nav('/'), 2000);
@@ -69,10 +74,13 @@ const PostPage = (props: {theme: string, setTheme: any}) => {
         const avatar = getAvatarImage();
     }, [postId])
 
+    const [isActiveEditPost, setIsActiveEditPost] = React.useState<boolean>(false);
     return (
         <div data-theme={props.theme}>
-            <NavMenu page={-1} theme={props.theme} setTheme={props.setTheme} avatar={avatar}/>
-            <PostPageContent theme={props.theme} post={post} setPost={setPost}/>
+            <div className={isActiveEditPost ? `dark` : ''}>
+                <NavMenu page={-1} theme={props.theme} setTheme={props.setTheme} avatar={avatar}/>
+                <PostPageContent setIsActiveEditPost={setIsActiveEditPost} theme={props.theme} post={post} setPost={setPost}/>
+            </div>
             <ToastContainer
                 position="top-right"
                 autoClose={5000}
@@ -85,6 +93,8 @@ const PostPage = (props: {theme: string, setTheme: any}) => {
                 pauseOnHover
                 theme={props.theme === 'dark' ? 'dark' : 'light'}
             />
+            {isActiveEditPost &&
+                <ModalEditPost isChangedPosts={undefined} setIsChangedPosts={undefined} post={postEdit} setPost={setPostEdit} theme={props.theme} isActiveEditPost={isActiveEditPost} setIsActiveEditPost={setIsActiveEditPost}/>}
         </div>
     );
 };

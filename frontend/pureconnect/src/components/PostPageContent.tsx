@@ -11,7 +11,8 @@ import {useNavigate} from "react-router";
 const PostPageContent = (props: {
     theme: string,
     post: IPost|undefined,
-    setPost: React.Dispatch<React.SetStateAction<IPost|undefined>>
+    setPost: React.Dispatch<React.SetStateAction<IPost|undefined>>,
+    setIsActiveEditPost: React.Dispatch<React.SetStateAction<boolean>>,
 }) => {
 
     const strings = new LocalizedStrings({
@@ -35,7 +36,9 @@ const PostPageContent = (props: {
                     <FontAwesomeIcon onClick={() => history(-1)} className={'post-page-icon'} icon={solid('arrow-left')}/>
                     <AuthorOfPostPageBlock post={props.post}/>
                     { props.post.isMine ?
-                        <FontAwesomeIcon className={'post-page-icon'} icon={solid('edit')}/> :
+                        <div onClick={() => props.setIsActiveEditPost(true)}>
+                            <FontAwesomeIcon className={'post-page-icon'} icon={solid('edit')}/>
+                        </div> :
                         <FontAwesomeIcon className={'post-page-icon'} icon={solid('circle-exclamation')}/>
                     }
                 </div>

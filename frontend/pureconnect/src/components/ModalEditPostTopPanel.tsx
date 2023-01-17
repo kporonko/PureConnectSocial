@@ -35,13 +35,15 @@ const ModalEditPostTopPanel = (props: {
     }
 
     const handleSaveChanges = async () => {
+        console.log("SAVE CHANGES")
         const token = localStorage.getItem('access_token')
         const encodedDescription = encodeURIComponent(props.post!.description);
 
         if (token) {
             const res = await editPost(token, {postId: props.post!.postId, description: encodedDescription} as IPostPutRequest);
             if (res.status === 200) {
-                props.setIsChangedPosts!(!props.isChangedPosts!)
+                if (props.setIsChangedPosts)
+                    props.setIsChangedPosts(!props.isChangedPosts!)
                 props.setIsActiveEditPost!(false)
                 const notify = () => toast.success(strings.saved);
                 notify();
