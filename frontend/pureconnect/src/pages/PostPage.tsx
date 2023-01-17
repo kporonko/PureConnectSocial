@@ -67,12 +67,12 @@ const PostPage = (props: {theme: string, setTheme: any}) => {
             setAvatar(body.avatar);
         }
     }
-
+    const [isChangedPost, setIsChangedPost] = React.useState<boolean>(false);
     useEffect(() => {
         const token = localStorage.getItem('access_token');
         const post = getPost();
         const avatar = getAvatarImage();
-    }, [postId])
+    }, [postId, isChangedPost])
 
     const [isActiveEditPost, setIsActiveEditPost] = React.useState<boolean>(false);
     return (
@@ -94,7 +94,7 @@ const PostPage = (props: {theme: string, setTheme: any}) => {
                 theme={props.theme === 'dark' ? 'dark' : 'light'}
             />
             {isActiveEditPost &&
-                <ModalEditPost isChangedPosts={undefined} setIsChangedPosts={undefined} post={postEdit} setPost={setPostEdit} theme={props.theme} isActiveEditPost={isActiveEditPost} setIsActiveEditPost={setIsActiveEditPost}/>}
+                <ModalEditPost isChangedPosts={isChangedPost} setIsChangedPosts={setIsChangedPost} post={postEdit} setPost={setPostEdit} theme={props.theme} isActiveEditPost={isActiveEditPost} setIsActiveEditPost={setIsActiveEditPost}/>}
         </div>
     );
 };

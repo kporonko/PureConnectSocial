@@ -36,7 +36,9 @@ const PostPageContent = (props: {
                     <FontAwesomeIcon onClick={() => history(-1)} className={'post-page-icon'} icon={solid('arrow-left')}/>
                     <AuthorOfPostPageBlock post={props.post}/>
                     { props.post.isMine ?
-                        <div onClick={() => props.setIsActiveEditPost(true)}>
+                        <div onClick={() => {
+                            props.setIsActiveEditPost(true)
+                        }}>
                             <FontAwesomeIcon className={'post-page-icon'} icon={solid('edit')}/>
                         </div> :
                         <FontAwesomeIcon className={'post-page-icon'} icon={solid('circle-exclamation')}/>
