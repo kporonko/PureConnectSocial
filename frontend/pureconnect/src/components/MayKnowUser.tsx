@@ -6,6 +6,7 @@ import {regular, solid} from "@fortawesome/fontawesome-svg-core/import.macro";
 import user from "../assets/user.png";
 import {followUser, unfollowUser} from "../utils/FetchData";
 import {toast, ToastContainer} from "react-toastify";
+import {useNavigate} from "react-router";
 const MayKnowUser = (props:{
     user: IMayKnowUser,
     theme: string,
@@ -42,7 +43,8 @@ const MayKnowUser = (props:{
         image.onerror = () => setIsValidAvatar(false);
     }, [props.user.avatar]);
 
-    const handleFollow = async () => {
+    const handleFollow = async (e: React.MouseEvent<HTMLDivElement>) => {
+        e.stopPropagation()
         const token = localStorage.getItem('access_token')
 
         if (!followed){
@@ -72,20 +74,44 @@ const MayKnowUser = (props:{
 
     }
 
+    const nav = useNavigate();
+
+    const [isHover, setIsHover] = React.useState(false);
+
+    const handleMouseEnter = () => {
+        console.log("enter", isHover)
+        setIsHover( true );
+    };
+
+    const handleMouseLeave = () => {
+        console.log("leave", isHover)
+        setIsHover( false );
+    };
+
     return (
-        <div className='may-know-user'>
+        <div onClick={() => nav(`/user/${props.user.userId}`)} className={`may-know-user ${isHover ? 'may-know-user-no-hover' : ''}`}>
             <img className='may-know-user-image' src={isValidAvatar? props.user.avatar : user} alt=""/>
-            <div  className='may-know-user-name'>
+            <div className='may-know-user-name'>
                 {props.user.lastName} {props.user.firstName}
             </div>
-            <div onClick={() => {
-                props.setIsOpenCommonFriendsModal(true)
-                props.setCurrMayKnowUser(props.user)
-            }} className='may-know-user-friends-count'>
+            <div
+                onMouseEnter={handleMouseEnter}
+                onMouseLeave={handleMouseLeave}
+                onClick={(e) => {
+                    e.stopPropagation()
+                    props.setIsOpenCommonFriendsModal(true)
+                    props.setCurrMayKnowUser(props.user)
+                }}
+                className='may-know-user-friends-count'>
                 {props.user.commonFriendsCount} {strings.common}
             </div>
 
-            <div onClick={handleFollow} className={followed ? 'may-know-user-button may-know-user-button-followed' : 'may-know-user-button'}>
+            <div
+                onClick={(e) => handleFollow(e)}
+                className={followed ? 'may-know-user-button may-know-user-button-followed' : 'may-know-user-button'}
+                onMouseEnter={handleMouseEnter}
+                onMouseLeave={handleMouseLeave}
+            >
                 <div>
                     <FontAwesomeIcon icon={solid('user-plus')}/>
                 </div>

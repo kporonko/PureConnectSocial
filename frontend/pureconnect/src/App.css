@@ -524,6 +524,14 @@ html, body{
   background: var(--background);
   border-radius: 15px;
 }
+.may-know-user-no-hover:hover{
+  background: var(--background) !important;
+}
+.may-know-user:hover{
+  transition: 0.5s background-color ease;
+  background: var(--background-secondary);
+  cursor: pointer;
+}
 .may-know-user-image{
   width: 6rem;
   height: 6rem;
