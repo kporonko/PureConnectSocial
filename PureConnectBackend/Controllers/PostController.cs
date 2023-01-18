@@ -180,8 +180,19 @@ namespace PureConnectBackend.Controllers
 
             return NotFound();
         }
-        
-        
+
+        [Authorize]
+        [HttpGet("users-liked-post/{postId}")]
+        public async Task<ActionResult<List<UserLikedPost>>> UsersLikedPost([FromRoute] int postId)
+        {
+            var user = GetCurrentUser();
+            var users = await _postService.GetUsersLikedPost(user, postId);
+            if (users is null)
+                return NotFound();
+
+            return Ok(users);
+        }
+
         /// <summary>
         /// Gets current user by authorizing jwt token.
         /// </summary>

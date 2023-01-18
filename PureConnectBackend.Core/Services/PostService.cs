@@ -209,6 +209,36 @@ namespace PureConnectBackend.Core.Services
         }
 
 
+        public async Task<List<UserLikedPost>> GetUsersLikedPost(User userFromJwt, int postId)
+        {
+            var currentUser = await _context.Users.FirstOrDefaultAsync(x => x.Id == userFromJwt.Id);
+            _context.Entry(currentUser).Collection(x => x.Follower).Load();
+            var post = await _context.Posts.FirstOrDefaultAsync(x => x.Id == postId);
+            _context.Entry(post).Collection(x => x.PostLikes).Load();
+
+            List<UserLikedPost> usersLikedPost = new();
+            foreach (var postLike in post.PostLikes)
+            {
+                var user = _context.Users.FirstOrDefault(x => x.Id == postLike.UserId);
+                usersLikedPost.Add(ConvertUserToUserLikedPost(currentUser, user));
+            }
+
+            return usersLikedPost;
+        }
+
+        private UserLikedPost ConvertUserToUserLikedPost(User currUser, User likedUser)
+        {
+            return new UserLikedPost()
+            {
+                Id = likedUser.Id,
+                UserName = likedUser.UserName,
+                Avatar = likedUser.Avatar,
+                LastName = likedUser.LastName,
+                FirstName = likedUser.FirstName,
+                IsFollowed = currUser.Follower.Any(x => x.FolloweeId == likedUser.Id),
+                IsMe = currUser.Id == likedUser.Id
+            };
+        }
 
         /// <summary>
         /// Converts post DTO to Post entity.

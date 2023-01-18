@@ -23,5 +23,7 @@ namespace PureConnectBackend.Core.Interfaces
 
         Task<HttpStatusCode> LikePost(LikePostRequest likeInfo, User userFromJwt);
         Task<HttpStatusCode> UnlikePost(LikePostDeleteRequest likeInfo, User userFromJwt);
+
+        Task<List<UserLikedPost>> GetUsersLikedPost(User userFromJwt, int postId);
     }
 }
