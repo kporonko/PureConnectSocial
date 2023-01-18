@@ -11,14 +11,16 @@ import CommonFriendsModal from "./CommonFriendsModal";
 
 
 
-const YouMayKnowThem = (props:{theme: string}) => {
+const YouMayKnowThem = (props:{
+    theme: string,
+    setCurrMayKnowUser: React.Dispatch<React.SetStateAction<IMayKnowUser|undefined>>,
+    setIsOpenCommonFriendsModal: React.Dispatch<React.SetStateAction<boolean>>,
+}) => {
 
     const isShow: boolean = localStorage.getItem('isShowMayKnowThem') === 'true' ? true : false;
 
     const [showMessage, setShowMessage] = useState(isShow);
 
-    const [isOpenCommonFriendsModal, setIsOpenCommonFriendsModal] = useState(false);
-    const [commonFriends, setCommonFriends] = useState<ICommonFriend[]>();
     const handleClose = () => {
         setShowMessage(false);
         localStorage.setItem('isShowMayKnowThem', 'false');
@@ -33,7 +35,6 @@ const YouMayKnowThem = (props:{theme: string}) => {
         }
     });
     const [users, setUsers] = React.useState<IMayKnowUser[]>();
-    const [currMayKnowUser, setCurrMayKnowUser] = useState<IMayKnowUser>();
 
     useEffect( () => {
         const users = async() => {
@@ -61,9 +62,7 @@ const YouMayKnowThem = (props:{theme: string}) => {
                 </div>
             </div>
 
-            <MayKnowUsersList setCurrMayKnowUser={setCurrMayKnowUser} setIsOpenCommonFriendsModal={setIsOpenCommonFriendsModal} users={users} theme={props.theme}/>
-            {isOpenCommonFriendsModal &&
-                <CommonFriendsModal currMayKnowUser={currMayKnowUser} commonFriends={commonFriends} setCommonFriends={setCommonFriends} isOpenCommonFriends={isOpenCommonFriendsModal} setIsOpenCommonFriends={setIsOpenCommonFriendsModal}/>}
+            <MayKnowUsersList setCurrMayKnowUser={props.setCurrMayKnowUser} setIsOpenCommonFriendsModal={props.setIsOpenCommonFriendsModal} users={users} theme={props.theme}/>
         </div>
     );
 };
