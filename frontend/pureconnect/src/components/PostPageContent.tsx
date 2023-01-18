@@ -57,7 +57,7 @@ const PostPageContent = (props: {
                         <div className='post-page-description-wrapper'>
                             <label className={'post-page-label'}>{strings.description}</label>
                             <div className='post-page-description'>
-                                {props.post.description}
+                                {decodeURI(props.post.description)}
                             </div>
                         </div>
                         <PostPageStats post={props.post}/>
