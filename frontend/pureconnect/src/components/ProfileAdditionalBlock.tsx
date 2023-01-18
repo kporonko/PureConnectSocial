@@ -28,7 +28,7 @@ const ProfileAdditionalBlock = (props: {
             {!props.isEdit ?
             <div className={'profile-user-additional-location'}>
                 <FontAwesomeIcon icon={solid('location-dot')}/>
-                {props.user?.location === undefined || props.user.location.length === 0 ?
+                {props.user?.location === undefined || props.user.location === null || props.user.location.length === 0 ?
                     <div className={'no-location'}>
                         No location
                     </div> :
