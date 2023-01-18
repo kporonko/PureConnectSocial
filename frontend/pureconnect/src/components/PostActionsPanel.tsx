@@ -6,7 +6,12 @@ import {IPost} from "../interfaces/IPost";
 import {likePost, unLikePost} from "../utils/FetchData";
 import {toast, ToastContainer} from "react-toastify";
 
-const PostActionsPanel = (props: {post: IPost, theme: string}) => {
+const PostActionsPanel = (props: {
+    post: IPost,
+    theme: string,
+    setIsOpenUsersLikedPost: React.Dispatch<React.SetStateAction<boolean>>|undefined,
+    setCurrPostIdUsersLiked: React.Dispatch<React.SetStateAction<number|undefined>>|undefined,
+}) => {
 
     const [isLike, setIsLike] = useState(props.post.isLike)
     const [likeCount, setLikeCount] = useState(props.post.likesCount)
@@ -61,7 +66,10 @@ const PostActionsPanel = (props: {post: IPost, theme: string}) => {
                     }
                 </div>
 
-                <div className='post-action-desc'>
+                <div onClick={() => {
+                    props.setIsOpenUsersLikedPost && props.setIsOpenUsersLikedPost(true)
+                    props.setCurrPostIdUsersLiked && props.setCurrPostIdUsersLiked(props.post.postId)
+                }} className='post-action-desc'>
                     {likeCount} {strings.likeCount}
                 </div>
             </div>

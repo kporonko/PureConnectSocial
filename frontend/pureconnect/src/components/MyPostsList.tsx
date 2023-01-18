@@ -28,6 +28,8 @@ import {IPostAddRequest} from "../interfaces/IPostAddRequest";
               setIsOpenEdit: React.Dispatch<SetStateAction<boolean>>,
               isToggleProfile: boolean,
               setIsToggleProfile: React.Dispatch<SetStateAction<boolean>>,
+              setIsOpenUsersLikedPost: React.Dispatch<SetStateAction<boolean>>,
+              setCurrPostIdUsersLiked: React.Dispatch<SetStateAction<number|undefined>>,
           }
  ) => {
 
@@ -99,7 +101,7 @@ import {IPostAddRequest} from "../interfaces/IPostAddRequest";
             <div>
                 {props.posts && props.posts.length > 0 ? props.posts?.map((post, ind) => (
                     <div data-aos={'fade-up'} key={ind} style={{display:'flex', justifyContent:'center'}}>
-                        <Post setIsOpenEdit={props.setIsOpenEdit} isOpenEdit={props.isOpenEdit} postEdit={props.postEdit} setPostEdit={props.setPostEdit} isChangedPosts={props.isChangedPosts} setIsChangedPosts={props.setIsChangedPosts} key={ind} post={post} theme={props.theme} isMy={true}/>
+                        <Post setCurrPostIdUsersLiked={props.setCurrPostIdUsersLiked} setIsOpenUsersLikedPost={props.setIsOpenUsersLikedPost} setIsOpenEdit={props.setIsOpenEdit} isOpenEdit={props.isOpenEdit} postEdit={props.postEdit} setPostEdit={props.setPostEdit} isChangedPosts={props.isChangedPosts} setIsChangedPosts={props.setIsChangedPosts} key={ind} post={post} theme={props.theme} isMy={true}/>
                     </div>
                 )) : <div style={{marginTop: '5rem'}} className={'status-text'}>{strings.noposts}</div>}
             </div>

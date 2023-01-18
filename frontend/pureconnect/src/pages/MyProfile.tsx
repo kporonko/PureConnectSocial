@@ -16,6 +16,7 @@ import {IPostAddRequest} from "../interfaces/IPostAddRequest";
 import ModalEditProfile from "../components/ModalEditProfile";
 import FollowersFriendsListModal from "../components/FollowersFriendsListModal";
 import {IUser} from "../interfaces/IUser";
+import UsersLikedPostModal from "../components/UsersLikedPostModal";
 
 const MyProfile = (props:{theme: string, setTheme: any}) => {
 
@@ -61,11 +62,14 @@ const MyProfile = (props:{theme: string, setTheme: any}) => {
     const [isOpenFriends, setIsOpenFriends] = useState(false)
     const [user, setUser] = useState<IUser|undefined>();
 
+    const [isOpenUsersLikedPost, setIsOpenUsersLikedPost] = useState(false)
+    const [currPostIdUsersLiked, setCurrPostIdUsersLiked] = useState<number|undefined>();
+
     return (
         <div className={`profile-wrapper`} data-theme={props.theme}>
             <div className={`${(isActiveAddPost || isOpenEdit || isOpenEditProfile || isOpenFollowers || isOpenFriends) && 'content-while-active-modal'}`}>
                 <NavMenu page={3} theme={props.theme} setTheme={props.setTheme} avatar={avatarImage}/>
-                {<MainContentMyProfile user={user} setUser={setUser} isOpenFollowers={isOpenFollowers} setIsOpenFollowers={setIsOpenFollowers} isOpenFriends={isOpenFriends} setIsOpenFriends={setIsOpenFriends} isToggleProfile={isToggleProfile} setIsToggleProfile={setIsToggleProfile} isOpenEditProfile={isOpenEditProfile} setIsOpenEditProfile={setIsOpenEditProfile} isOpenEdit={isOpenEdit} setIsOpenEdit={setIsOpenEdit} postEdit={post} setPostEdit={setPost} isChangedPosts={isChangedPosts} setIsChangedPosts={setIsChangedPosts} theme={props.theme} posts={posts} postsImage={postsImage} setIsActiveAddPost={setIsActiveAddPost} setPosts={setPosts} setImages={setPostsImage}/>}
+                {<MainContentMyProfile setCurrPostIdUsersLiked={setCurrPostIdUsersLiked} setIsOpenUsersLikedPost={setIsOpenUsersLikedPost} user={user} setUser={setUser} isOpenFollowers={isOpenFollowers} setIsOpenFollowers={setIsOpenFollowers} isOpenFriends={isOpenFriends} setIsOpenFriends={setIsOpenFriends} isToggleProfile={isToggleProfile} setIsToggleProfile={setIsToggleProfile} isOpenEditProfile={isOpenEditProfile} setIsOpenEditProfile={setIsOpenEditProfile} isOpenEdit={isOpenEdit} setIsOpenEdit={setIsOpenEdit} postEdit={post} setPostEdit={setPost} isChangedPosts={isChangedPosts} setIsChangedPosts={setIsChangedPosts} theme={props.theme} posts={posts} postsImage={postsImage} setIsActiveAddPost={setIsActiveAddPost} setPosts={setPosts} setImages={setPostsImage}/>}
             </div>
             {isActiveAddPost &&
                 <ModalAddPost setIsChangedPosts={setIsChangedPosts} isChangedPosts={isChangedPosts} posts={posts} postsImage={postsImage} setPosts={setPosts} setImages={setPostsImage} theme={props.theme} isActiveAddPost={isActiveAddPost} setIsActiveAddPost={setIsActiveAddPost}/>}
@@ -77,6 +81,9 @@ const MyProfile = (props:{theme: string, setTheme: any}) => {
                 <FollowersFriendsListModal user={user} setUser={setUser} setIsOpenFollowers={setIsOpenFollowers} isFollowers={true}/>}
             {isOpenFriends &&
                 <FollowersFriendsListModal user={user} setUser={setUser} setIsOpenFriends={setIsOpenFriends} isFollowers={false}/>}
+            {isOpenUsersLikedPost &&
+                <UsersLikedPostModal postId={currPostIdUsersLiked} setUser={setUser} user={user} setIsOpenUsersLikedPost={setIsOpenUsersLikedPost}/>}
+
             <ToastContainer
                 position="top-right"
                 autoClose={5000}

@@ -449,3 +449,20 @@ export const getCommonFriends = async (token: string|null, profileId: number) =>
         return error;
     }
 }
+export const getUsersLikedPost = async (token: string|null, postId: number) => {
+    try {
+        const response = await fetch(`${BASE_URL}api/Post/users-liked-post/${postId}`, {
+            method: 'GET',
+            headers:{
+                'Content-Type': 'application/json',
+                'Accept-Language': getUsersLocale(),
+                'Authorization': 'Bearer ' + token,
+            }
+        });
+        return response;
+    }
+    catch (error: any) {
+        console.log(error);
+        return error;
+    }
+}

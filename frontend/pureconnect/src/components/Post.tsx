@@ -19,6 +19,8 @@ const Post = (props: {
     setPostEdit?: React.Dispatch<SetStateAction<IPostAddRequest>>,
     isOpenEdit?: boolean,
     setIsOpenEdit?: React.Dispatch<SetStateAction<boolean>>,
+    setIsOpenUsersLikedPost?: React.Dispatch<SetStateAction<boolean>>,
+    setCurrPostIdUsersLiked?: React.Dispatch<SetStateAction<number|undefined>>,
 }) => {
 
     const [isOpenReadMore, setIsOpenReadMore] = useState(false);
@@ -57,7 +59,7 @@ const Post = (props: {
                 }
             </div>
 
-            <PostActionsPanel post={props.post} theme={props.theme}/>
+            <PostActionsPanel setCurrPostIdUsersLiked={props.setCurrPostIdUsersLiked} setIsOpenUsersLikedPost={props.setIsOpenUsersLikedPost} post={props.post} theme={props.theme}/>
             <PostDatePanel post={props.post}/>
             {props.isMy ?
                 <ModalPostMine isOpenEdit={props.isOpenEdit} setIsOpenEdit={props.setIsOpenEdit} postEdit={props.postEdit} setPostEdit={props.setPostEdit} isChangedPosts={props.isChangedPosts} setIsChangedPosts={props.setIsChangedPosts} post={props.post} isOpen={isOpenModal} setIsOpen={setIsOpenModal} theme={props.theme}/>
