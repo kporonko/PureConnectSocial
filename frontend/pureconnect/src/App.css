@@ -1370,6 +1370,9 @@ html, body{
   height: 100%;
   background: rgba(0, 0, 0, 0.7);
 }
+.modal-followers-friends-content::-webkit-scrollbar {
+  display: none;
+}
 .modal-followers-friends-content{
   position: absolute;
   width: 400px;
