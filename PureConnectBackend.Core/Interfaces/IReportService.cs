@@ -1,4 +1,5 @@
 ﻿using PureConnectBackend.Core.Models.Requests;
+using PureConnectBackend.Infrastructure.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,7 +11,7 @@ namespace PureConnectBackend.Core.Interfaces
 {
     public interface IReportService
     {
-        Task<HttpStatusCode> AddReport(AddReportRequest report);
-        Task<HttpStatusCode> AddPostReport(AddPostReportRequest postReport);
+        Task<HttpStatusCode> AddReport(User currUser, AddReportRequest report);
+        Task<HttpStatusCode> AddPostReport(User currUser, AddPostReportRequest postReport);
     }
 }

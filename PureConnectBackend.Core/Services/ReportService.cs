@@ -1,4 +1,5 @@
-﻿using PureConnectBackend.Core.Interfaces;
+﻿using Microsoft.EntityFrameworkCore;
+using PureConnectBackend.Core.Interfaces;
 using PureConnectBackend.Core.Models.Requests;
 using PureConnectBackend.Infrastructure.Data;
 using PureConnectBackend.Infrastructure.Models;
@@ -23,14 +24,18 @@ namespace PureConnectBackend.Core.Services
             _context = context;
         }
 
-        public async Task<HttpStatusCode> AddPostReport(AddPostReportRequest postReport)
+        public async Task<HttpStatusCode> AddPostReport(User userJwt, AddPostReportRequest postReport)
         {
+            var currUser = await _context.Users.FirstOrDefaultAsync(x => x.Id == userJwt.Id);
+            if (currUser is null)
+                return HttpStatusCode.BadRequest;
+
             PostReport postReportResult = new PostReport
             {
                 CreatedAt = postReport.CreatedAt,
                 PostId = postReport.PostId,
                 Text = postReport.Text,
-                UserId = postReport.UserId
+                UserId = currUser.Id
             };
 
             var response = await AddPostReportObjectToDb(postReportResult);
@@ -38,13 +43,17 @@ namespace PureConnectBackend.Core.Services
         }
 
 
-        public async Task<HttpStatusCode> AddReport(AddReportRequest report)
+        public async Task<HttpStatusCode> AddReport(User userJwt, AddReportRequest report)
         {
+            var currUser = await _context.Users.FirstOrDefaultAsync(x => x.Id == userJwt.Id);
+            if (currUser is null)
+                return HttpStatusCode.BadRequest;
+
             Report reportResult = new Report
             {
                 CreatedAt = report.CreatedAt,
                 Text = report.Text,
-                UserId = report.UserId
+                UserId = currUser.Id
             };
 
             var response = await AddReportObjectToDb(reportResult);
