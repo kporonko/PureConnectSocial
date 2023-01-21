@@ -8,6 +8,7 @@ import ModalHomeNavMenuMore from "./ModalHomeNavMenuMore";
 import LocalizedStrings from "react-localization";
 import person from '../assets/user.png'
 import {useNavigate} from "react-router";
+import ModalReport from "./ModalReport";
 
 export enum Page { Home, Search, Notifications, Profile, Chats = 4};
 
@@ -15,6 +16,8 @@ const NavMenu = (props: {page: Page, theme: string, setTheme: any, avatar: strin
 
     const [isModalHomeNavMenuMoreOpen, setIsModalHomeNavMenuMoreOpen] = useState(false);
     const changeModalHomeNavMenuMoreOpen = () => setIsModalHomeNavMenuMoreOpen(!isModalHomeNavMenuMoreOpen);
+
+    const [isModalReportOpen, setIsModalReportOpen] = useState(false);
 
     let strings = new LocalizedStrings({
         en:{
@@ -100,11 +103,13 @@ const NavMenu = (props: {page: Page, theme: string, setTheme: any, avatar: strin
                     </li>
                 </ul>
 
-                <ModalHomeNavMenuMore setTheme={props.setTheme} theme={props.theme} isOpen={isModalHomeNavMenuMoreOpen}/>
+                <ModalHomeNavMenuMore isModalReportOpen={isModalReportOpen} setIsModalReportOpen={setIsModalReportOpen} setTheme={props.setTheme} theme={props.theme} isOpen={isModalHomeNavMenuMoreOpen}/>
                 <div onClick={changeModalHomeNavMenuMoreOpen} className={isModalHomeNavMenuMoreOpen ? "nav-more nav-more-active" : "nav-more"}>
                     <FontAwesomeIcon className={'nav-icon'} icon={solid('bars')} />
                     <div className={"nav-menu-item-text"}>{strings.more}</div>
                 </div>
+                {isModalReportOpen &&
+                <ModalReport isModalReportOpen={isModalReportOpen} setIsModalReportOpen={setIsModalReportOpen}/>}
             </div>
         </div>
     );

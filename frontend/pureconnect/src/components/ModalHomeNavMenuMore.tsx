@@ -8,9 +8,11 @@ interface ModalHomeNavMenuMoreProps {
     isOpen: boolean;
     theme: string;
     setTheme: any;
+    setIsModalReportOpen: React.Dispatch<React.SetStateAction<boolean>>;
+    isModalReportOpen: boolean;
 }
 
-const ModalHomeNavMenuMore : React.FC<ModalHomeNavMenuMoreProps> = ({isOpen, theme, setTheme}) => {
+const ModalHomeNavMenuMore : React.FC<ModalHomeNavMenuMoreProps> = ({isOpen, theme, setTheme, isModalReportOpen, setIsModalReportOpen}) => {
     let strings = new LocalizedStrings({
         en:{
             settings:"Settings",
@@ -33,7 +35,8 @@ const ModalHomeNavMenuMore : React.FC<ModalHomeNavMenuMoreProps> = ({isOpen, the
     }
 
     const handleReport = () => {
-    //    Add modal window of report message.
+        console.log('report', isModalReportOpen);
+        setIsModalReportOpen(true);
     }
 
     const handleExit = () => {
