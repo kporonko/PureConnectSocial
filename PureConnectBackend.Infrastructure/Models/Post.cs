@@ -16,5 +16,6 @@ namespace PureConnectBackend.Infrastructure.Models
         public User User { get; set; }
         public List<PostLike> PostLikes { get; set; }
         public List<PostComment> PostComments { get; set; }
+        public List<PostReport> PostReports { get; set; }
     }
 }

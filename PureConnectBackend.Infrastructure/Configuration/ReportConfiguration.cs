@@ -9,12 +9,12 @@ using System.Threading.Tasks;
 
 namespace PureConnectBackend.Infrastructure.Configuration
 {
-    public class FollowConfiguration : IEntityTypeConfiguration<Follow>
+    public class ReportConfiguration : IEntityTypeConfiguration<Report>
     {
-        public void Configure(EntityTypeBuilder<Follow> builder)
-        { 
+        public void Configure(EntityTypeBuilder<Report> builder)
+        {
             builder
-                .ToTable(nameof(Follow))
+                .ToTable(nameof(Report))
                 .HasKey(t => t.Id);
             builder
                 .Property(t => t.Id)
@@ -23,10 +23,15 @@ namespace PureConnectBackend.Infrastructure.Configuration
                 .HasColumnType("int")
                 .ValueGeneratedOnAdd();
             builder
-                .Property(t => t.RequestDate)
+                .Property(t => t.CreatedAt)
                 .IsRequired()
-                .HasColumnName("RequestDate")
+                .HasColumnName("CreatedAt")
                 .HasColumnType("date");
+            builder
+                .Property(t => t.Text)
+                .IsRequired()
+                .HasColumnName("Text")
+                .HasColumnType("varchar(max)");  
         }
     }
 }

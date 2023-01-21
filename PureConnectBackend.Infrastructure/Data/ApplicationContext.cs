@@ -24,7 +24,9 @@ namespace PureConnectBackend.Infrastructure.Data
         public DbSet<PostLike> PostsLikes { get; set; }
         public DbSet<PostComment> PostsComments { get; set; }
         public DbSet<PostCommentLike> PostsCommentsLikes { get; set; }
-
+        public DbSet<Report> Reports { get; set; }
+        public DbSet<PostReport> PostsReports { get; set; }
+        
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.ApplyConfiguration(new UserConfiguration());
@@ -33,6 +35,8 @@ namespace PureConnectBackend.Infrastructure.Data
             modelBuilder.ApplyConfiguration(new PostLikeConfiguration());
             modelBuilder.ApplyConfiguration(new PostCommentConfiguration());
             modelBuilder.ApplyConfiguration(new PostCommentLikeConfiguration());
+            modelBuilder.ApplyConfiguration(new ReportConfiguration());
+            modelBuilder.ApplyConfiguration(new PostReportConfiguration());
 
             modelBuilder.Entity<Follow>()
                 .HasKey(k => k.Id);
@@ -93,6 +97,23 @@ namespace PureConnectBackend.Infrastructure.Data
                 .HasOne(u => u.PostComment)
                 .WithMany(u => u.PostCommentLikes)
                 .HasForeignKey(u => u.PostCommentId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<PostReport>()
+                .HasOne(u => u.User)
+                .WithMany(u => u.PostsReports)
+                .HasForeignKey(u => u.UserId)
+                .OnDelete(DeleteBehavior.Restrict);
+            modelBuilder.Entity<PostReport>()
+                .HasOne(u => u.Post)
+                .WithMany(u => u.PostReports)
+                .HasForeignKey(u => u.PostId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Report>()
+                .HasOne(u => u.User)
+                .WithMany(u => u.Reports)
+                .HasForeignKey(u => u.UserId)
                 .OnDelete(DeleteBehavior.Restrict);
         }
 

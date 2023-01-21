@@ -29,5 +29,7 @@ namespace PureConnectBackend.Infrastructure.Models
         public List<PostComment> PostsComments { get; set; }
         public List<PostCommentLike> PostsCommentsLikes { get; set; }
 
+        public List<Report> Reports { get; set; }
+        public List<PostReport> PostsReports { get; set; }
     }
 }
