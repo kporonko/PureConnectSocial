@@ -466,3 +466,24 @@ export const getUsersLikedPost = async (token: string|null, postId: number) => {
         return error;
     }
 }
+export const AddReport = async (token: string|null, text: string) => {
+    try {
+        const response = await fetch(`${BASE_URL}api/Report/report`, {
+            method: 'POST',
+            headers:{
+                'Content-Type': 'application/json',
+                'Accept-Language': getUsersLocale(),
+                'Authorization': 'Bearer ' + token,
+            },
+            body: JSON.stringify({
+                text: text,
+                createdAt: new Date().toISOString(),
+            })
+        });
+        return response;
+    }
+    catch (error: any) {
+        console.log(error);
+        return error;
+    }
+}

@@ -16,7 +16,7 @@ const ModalReportContent = (props:{
 
     return (
         <div>
-            <textarea className='modal-report-input' placeholder={strings.placeholder}/>
+            <textarea onChange={(e) => props.setReportText(e.target.value)} value={props.reportText} className='modal-report-input' placeholder={strings.placeholder}/>
         </div>
     );
 };

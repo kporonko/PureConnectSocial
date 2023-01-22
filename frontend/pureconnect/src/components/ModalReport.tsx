@@ -14,7 +14,7 @@ const ModalReport = (props: {
     return (
         <div onClick={closeModal} className={'modal-report-wrapper'}>
             <div onClick={(e) => e.stopPropagation()} className={'modal-report-content'}>
-                <ModalReportTopPanel setIsModalReportOpen={props.setIsModalReportOpen}/>
+                <ModalReportTopPanel reportText={reportText} setIsModalReportOpen={props.setIsModalReportOpen}/>
                 <ModalReportContent reportText={reportText} setReportText={setReportText}/>
             </div>
         </div>
