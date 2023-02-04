@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import {useNavigate} from "react-router";
 import {useParams} from "react-router-dom";
 import navMenu from "../components/NavMenu";
@@ -11,6 +11,7 @@ import Loader from "../components/Loader";
 import NavMenu from "../components/NavMenu";
 import ModalEditPost from "../components/ModalEditPost";
 import {IPostAddRequest} from "../interfaces/IPostAddRequest";
+import ModalReport from "../components/ModalReport";
 
 const PostPage = (props: {theme: string, setTheme: any}) => {
 
@@ -75,11 +76,13 @@ const PostPage = (props: {theme: string, setTheme: any}) => {
     }, [postId, isChangedPost])
 
     const [isActiveEditPost, setIsActiveEditPost] = React.useState<boolean>(false);
+
+    const [isOpenReportPostModal, setIsOpenReportPostModal] = useState(false);
     return (
         <div data-theme={props.theme}>
             <div className={isActiveEditPost ? `dark` : ''}>
                 <NavMenu page={-1} theme={props.theme} setTheme={props.setTheme} avatar={avatar}/>
-                <PostPageContent setIsActiveEditPost={setIsActiveEditPost} theme={props.theme} post={post} setPost={setPost}/>
+                <PostPageContent setIsOpenReportPostModal={setIsOpenReportPostModal} setIsActiveEditPost={setIsActiveEditPost} theme={props.theme} post={post} setPost={setPost}/>
             </div>
             <ToastContainer
                 position="top-right"
@@ -95,6 +98,9 @@ const PostPage = (props: {theme: string, setTheme: any}) => {
             />
             {isActiveEditPost &&
                 <ModalEditPost isChangedPosts={isChangedPost} setIsChangedPosts={setIsChangedPost} post={postEdit} setPost={setPostEdit} theme={props.theme} isActiveEditPost={isActiveEditPost} setIsActiveEditPost={setIsActiveEditPost}/>}
+            {isOpenReportPostModal && postId !== undefined &&
+                <ModalReport isPost={true} postId={+postId} isModalReportOpen={isOpenReportPostModal} setIsModalReportOpen={setIsOpenReportPostModal}/>}
+
         </div>
     );
 };

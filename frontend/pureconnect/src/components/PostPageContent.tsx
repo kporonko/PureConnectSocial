@@ -13,6 +13,7 @@ const PostPageContent = (props: {
     post: IPost|undefined,
     setPost: React.Dispatch<React.SetStateAction<IPost|undefined>>,
     setIsActiveEditPost: React.Dispatch<React.SetStateAction<boolean>>,
+    setIsOpenReportPostModal: React.Dispatch<React.SetStateAction<boolean>>,
 }) => {
 
     const strings = new LocalizedStrings({
@@ -41,7 +42,7 @@ const PostPageContent = (props: {
                         }}>
                             <FontAwesomeIcon className={'post-page-icon'} icon={solid('edit')}/>
                         </div> :
-                        <FontAwesomeIcon className={'post-page-icon'} icon={solid('circle-exclamation')}/>
+                        <FontAwesomeIcon onClick={() => props.setIsOpenReportPostModal(true)} className={'post-page-icon'} icon={solid('circle-exclamation')}/>
                     }
                 </div>
 
