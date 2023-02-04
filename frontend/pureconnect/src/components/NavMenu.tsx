@@ -109,7 +109,7 @@ const NavMenu = (props: {page: Page, theme: string, setTheme: any, avatar: strin
                     <div className={"nav-menu-item-text"}>{strings.more}</div>
                 </div>
                 {isModalReportOpen &&
-                <ModalReport isModalReportOpen={isModalReportOpen} setIsModalReportOpen={setIsModalReportOpen}/>}
+                <ModalReport isPost={false} isModalReportOpen={isModalReportOpen} setIsModalReportOpen={setIsModalReportOpen}/>}
             </div>
         </div>
     );

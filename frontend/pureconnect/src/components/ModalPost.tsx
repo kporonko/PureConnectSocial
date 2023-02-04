@@ -7,7 +7,14 @@ import {useNavigate} from "react-router";
 import {followUser, unfollowUser, unfollowUserByPost} from "../utils/FetchData";
 import {toast} from "react-toastify";
 
-const ModalPost = (props:{post: IPost, isOpen: boolean, theme: string, setIsOpen: React.Dispatch<SetStateAction<boolean>>}) => {
+const ModalPost = (props:{
+    post: IPost,
+    isOpen: boolean,
+    theme: string,
+    setIsOpen: React.Dispatch<SetStateAction<boolean>>,
+    setIsOpenReportPostModal: React.Dispatch<SetStateAction<boolean>>|undefined,
+    setCurrReportPostId: React.Dispatch<React.SetStateAction<number|undefined>>|undefined,
+}) => {
 
     let strings = new LocalizedStrings({
         en:{
@@ -30,7 +37,8 @@ const ModalPost = (props:{post: IPost, isOpen: boolean, theme: string, setIsOpen
     const nav = useNavigate();
 
     const handleReport = () => {
-
+        props.setCurrReportPostId && props.setCurrReportPostId(props.post.postId);
+        props.setIsOpenReportPostModal && props.setIsOpenReportPostModal(true);
     }
 
     const handleClose = () => {

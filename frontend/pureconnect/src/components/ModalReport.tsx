@@ -5,7 +5,9 @@ import ModalReportContent from "./ModalReportContent";
 
 const ModalReport = (props: {
     isModalReportOpen: boolean,
-    setIsModalReportOpen: React.Dispatch<React.SetStateAction<boolean>>
+    setIsModalReportOpen: React.Dispatch<React.SetStateAction<boolean>>,
+    postId?: number,
+    isPost: boolean,
 }) => {
     const closeModal = () => {
         props.setIsModalReportOpen(false)
@@ -14,7 +16,7 @@ const ModalReport = (props: {
     return (
         <div onClick={closeModal} className={'modal-report-wrapper'}>
             <div onClick={(e) => e.stopPropagation()} className={'modal-report-content'}>
-                <ModalReportTopPanel reportText={reportText} setIsModalReportOpen={props.setIsModalReportOpen}/>
+                <ModalReportTopPanel postId={props.postId} isPost={props.isPost} reportText={reportText} setIsModalReportOpen={props.setIsModalReportOpen}/>
                 <ModalReportContent reportText={reportText} setReportText={setReportText}/>
             </div>
         </div>

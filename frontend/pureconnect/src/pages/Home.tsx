@@ -9,6 +9,7 @@ import internal from "stream";
 import CommonFriendsModal from "../components/CommonFriendsModal";
 import {ICommonFriend} from "../interfaces/ICommonFriend";
 import {IMayKnowUser} from "../interfaces/IMayKnowUser";
+import ModalReport from "../components/ModalReport";
 
 const Home = (props: {theme: string, setTheme: any}) => {
 
@@ -44,12 +45,16 @@ const Home = (props: {theme: string, setTheme: any}) => {
     const [commonFriends, setCommonFriends] = useState<ICommonFriend[]>();
     const [currMayKnowUser, setCurrMayKnowUser] = useState<IMayKnowUser>();
 
+    const [isOpenReportPostModal, setIsOpenReportPostModal] = useState(false);
+    const [currReportPostId, setCurrReportPostId] = useState<number>();
     return (
         <div className={'home-wrapper'} data-theme={props.theme}>
             <NavMenu page={Page.Home} theme={props.theme} setTheme={props.setTheme} avatar={avatarImage}/>
-            <MainContentHome setIsOpenCommonFriendsModal={setIsOpenCommonFriendsModal} setCurrMayKnowUser={setCurrMayKnowUser} theme={props.theme}/>
+            <MainContentHome setCurrReportPostId={setCurrReportPostId} setIsOpenReportPostModal={setIsOpenReportPostModal} setIsOpenCommonFriendsModal={setIsOpenCommonFriendsModal} setCurrMayKnowUser={setCurrMayKnowUser} theme={props.theme}/>
             {isOpenCommonFriendsModal &&
                 <CommonFriendsModal currMayKnowUser={currMayKnowUser} commonFriends={commonFriends} setCommonFriends={setCommonFriends} isOpenCommonFriends={isOpenCommonFriendsModal} setIsOpenCommonFriends={setIsOpenCommonFriendsModal}/>}
+            {isOpenReportPostModal &&
+                <ModalReport isPost={true} postId={currReportPostId} isModalReportOpen={isOpenReportPostModal} setIsModalReportOpen={setIsOpenReportPostModal}/>}
 
             <ToastContainer
                 position="top-right"

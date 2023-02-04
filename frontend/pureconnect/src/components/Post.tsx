@@ -21,6 +21,8 @@ const Post = (props: {
     setIsOpenEdit?: React.Dispatch<SetStateAction<boolean>>,
     setIsOpenUsersLikedPost?: React.Dispatch<SetStateAction<boolean>>,
     setCurrPostIdUsersLiked?: React.Dispatch<SetStateAction<number|undefined>>,
+    setIsOpenReportPostModal?: React.Dispatch<SetStateAction<boolean>>,
+    setCurrReportPostId?: React.Dispatch<React.SetStateAction<number|undefined>>,
 }) => {
 
     const [isOpenReadMore, setIsOpenReadMore] = useState(false);
@@ -64,7 +66,7 @@ const Post = (props: {
             {props.isMy ?
                 <ModalPostMine isOpenEdit={props.isOpenEdit} setIsOpenEdit={props.setIsOpenEdit} postEdit={props.postEdit} setPostEdit={props.setPostEdit} isChangedPosts={props.isChangedPosts} setIsChangedPosts={props.setIsChangedPosts} post={props.post} isOpen={isOpenModal} setIsOpen={setIsOpenModal} theme={props.theme}/>
                 :
-                <ModalPost post={props.post} isOpen={isOpenModal} setIsOpen={setIsOpenModal} theme={props.theme}/>
+                <ModalPost setCurrReportPostId={props.setCurrReportPostId} setIsOpenReportPostModal={props.setIsOpenReportPostModal} post={props.post} isOpen={isOpenModal} setIsOpen={setIsOpenModal} theme={props.theme}/>
             }
         </div>
     );

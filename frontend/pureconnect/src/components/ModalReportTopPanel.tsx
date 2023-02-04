@@ -1,12 +1,14 @@
 import React from 'react';
 import LocalizedStrings from "react-localization";
-import {AddReport, editPost} from "../utils/FetchData";
+import {AddPostReport, AddReport, editPost} from "../utils/FetchData";
 import {IPostPutRequest} from "../interfaces/IPostPutRequest";
 import {toast, ToastContainer} from "react-toastify";
 
 const ModalReportTopPanel = (props:{
     setIsModalReportOpen: React.Dispatch<React.SetStateAction<boolean>>,
-    reportText: string
+    reportText: string,
+    isPost: boolean,
+    postId?: number,
 }) => {
 
     const strings = new LocalizedStrings({
@@ -29,11 +31,12 @@ const ModalReportTopPanel = (props:{
     const handleClose = () => {
         props.setIsModalReportOpen(false)
     }
-
     const handleSendReport = async () => {
         const token = localStorage.getItem('access_token')
         if (token) {
-            const res = await AddReport(token, props.reportText);
+            console.log(props.postId)
+            console.log(props.isPost)
+            const res = !props.isPost ? await AddReport(token, props.reportText) : props.postId ? await AddPostReport(token, props.postId, props.reportText) : null;
             if (res.status === 200) {
                 props.setIsModalReportOpen!(false)
                 const notify = () => toast.success(strings.sent);

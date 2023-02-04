@@ -4,7 +4,11 @@ import {getRecommendedPosts} from "../utils/FetchData";
 import Post from "./Post";
 import AOS from "aos";
 
-const RecommendedPostsList = (props:{theme: string}) => {
+const RecommendedPostsList = (props:{
+    theme: string,
+    setIsOpenReportPostModal: React.Dispatch<React.SetStateAction<boolean>>,
+    setCurrReportPostId: React.Dispatch<React.SetStateAction<number|undefined>>,
+}) => {
 
     const [recommendedPosts, setRecommendedPosts] = React.useState<IPost[]>();
 
@@ -30,7 +34,7 @@ const RecommendedPostsList = (props:{theme: string}) => {
         <div>
             {recommendedPosts !== undefined ? recommendedPosts.map((post, index) => (
                 <div data-aos={'fade-up'}>
-                    <Post post={post} key={index} theme={props.theme} isMy={false}/>
+                    <Post setCurrReportPostId={props.setCurrReportPostId} setIsOpenReportPostModal={props.setIsOpenReportPostModal} post={post} key={index} theme={props.theme} isMy={false}/>
                 </div>
                     )) : "No recommendations"}
         </div>

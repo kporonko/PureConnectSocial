@@ -487,3 +487,26 @@ export const AddReport = async (token: string|null, text: string) => {
         return error;
     }
 }
+
+export const AddPostReport = async (token: string|null, postId:number, text: string) => {
+    try {
+        const response = await fetch(`${BASE_URL}api/Report/post-report`, {
+            method: 'POST',
+            headers:{
+                'Content-Type': 'application/json',
+                'Accept-Language': getUsersLocale(),
+                'Authorization': 'Bearer ' + token,
+            },
+            body: JSON.stringify({
+                text: text,
+                createdAt: new Date().toISOString(),
+                postId: postId,
+            })
+        });
+        return response;
+    }
+    catch (error: any) {
+        console.log(error);
+        return error;
+    }
+}
