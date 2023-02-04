@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import NavMenu, {Page} from "../components/NavMenu";
 import {getAvatar} from "../utils/FetchData";
 import MainContentHome from "../components/MainContentHome";
@@ -6,6 +6,9 @@ import {useNavigate} from "react-router";
 import {toast, ToastContainer} from "react-toastify";
 import LocalizedStrings from "react-localization";
 import internal from "stream";
+import CommonFriendsModal from "../components/CommonFriendsModal";
+import {ICommonFriend} from "../interfaces/ICommonFriend";
+import {IMayKnowUser} from "../interfaces/IMayKnowUser";
 
 const Home = (props: {theme: string, setTheme: any}) => {
 
@@ -37,10 +40,16 @@ const Home = (props: {theme: string, setTheme: any}) => {
         avatar();
     }, []);
 
+    const [isOpenCommonFriendsModal, setIsOpenCommonFriendsModal] = useState(false);
+    const [commonFriends, setCommonFriends] = useState<ICommonFriend[]>();
+    const [currMayKnowUser, setCurrMayKnowUser] = useState<IMayKnowUser>();
+
     return (
         <div className={'home-wrapper'} data-theme={props.theme}>
             <NavMenu page={Page.Home} theme={props.theme} setTheme={props.setTheme} avatar={avatarImage}/>
-            <MainContentHome theme={props.theme}/>
+            <MainContentHome setIsOpenCommonFriendsModal={setIsOpenCommonFriendsModal} setCurrMayKnowUser={setCurrMayKnowUser} theme={props.theme}/>
+            {isOpenCommonFriendsModal &&
+                <CommonFriendsModal currMayKnowUser={currMayKnowUser} commonFriends={commonFriends} setCommonFriends={setCommonFriends} isOpenCommonFriends={isOpenCommonFriendsModal} setIsOpenCommonFriends={setIsOpenCommonFriendsModal}/>}
 
             <ToastContainer
                 position="top-right"

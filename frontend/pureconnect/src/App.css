@@ -300,7 +300,7 @@ html, body{
   background: var(--background-imagelogin);
   box-shadow: var(--box-shadow-main);
   height: 100vh;
-  z-index: 1000;
+  /*z-index: 1000;*/
 }
 .nav-menu-image-wrapper{
   display: flex;
