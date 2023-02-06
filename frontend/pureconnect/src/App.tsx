@@ -8,6 +8,7 @@ import useLocalStorage from 'use-local-storage'
 import Register from "./pages/Register";
 import MyProfile from "./pages/MyProfile";
 import PostPage from "./pages/PostPage";
+import AdminPostReports from "./pages/AdminPostReports";
 
 function App() {
 
@@ -35,8 +36,8 @@ function App() {
 
 
             {/*Admin*/}
-            <Route path="/admin-home" element={<AdminHome/>}/>
-
+            <Route path="/admin-home" element={<AdminHome theme={theme} setTheme={setTheme}/>}/>
+            <Route path="/admin-post-reports" element={<AdminPostReports theme={theme} setTheme={setTheme}/>}/>
         </Routes>
 
       </BrowserRouter>
