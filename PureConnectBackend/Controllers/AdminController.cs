@@ -17,56 +17,56 @@ namespace PureConnectBackend.Controllers
             _adminService = adminService;
         }
 
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "admin")]
         [HttpGet("reports")]
-        public IActionResult GetReports()
+        public async Task<IActionResult> GetReports()
         {
-            var reports = _adminService.GetReports();
+            var reports = await _adminService.GetReports();
             if (reports is null)
                 return NotFound();
             
             return Ok(reports);
         }
 
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "admin")]
         [HttpGet("post-reports")]
-        public IActionResult GetPostReports()
+        public async Task<IActionResult> GetPostReports()
         {
-            var postReports = _adminService.GetPostReports();
+            var postReports = await _adminService.GetPostReports();
             if (postReports is null)
                 return NotFound();
 
             return Ok(postReports);
         }
 
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "admin")]
         [HttpGet("report/{reportId}")]
-        public IActionResult GetReport([FromRoute]int reportId)
+        public async Task<IActionResult> GetReport([FromRoute]int reportId)
         {
-            var report = _adminService.GetReport(reportId);
+            var report = await _adminService.GetReport(reportId);
             if (report is null)
                 return NotFound();
 
             return Ok(report);
         }
 
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "admin")]
         [HttpGet("post-report/{postReportId}")]
-        public IActionResult GetPostReport([FromRoute] int postReportId)
+        public async Task<IActionResult> GetPostReport([FromRoute] int postReportId)
         {
-            var postReport = _adminService.GetPostReport(postReportId);
+            var postReport = await  _adminService.GetPostReport(postReportId);
             if (postReport is null)
                 return NotFound();
 
             return Ok(postReport);
         }
 
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "admin")]
         [HttpDelete("report")]
-        public IActionResult DeleteReport([FromRoute] int reportId)
+        public async Task<IActionResult> DeleteReport([FromRoute] int reportId)
         {
-            var result = _adminService.DeleteReport(reportId);
-            if (result is null)
+            var result = await _adminService.DeleteReport(reportId);
+            if (result is System.Net.HttpStatusCode.NotFound)
                 return NotFound();
 
             return Ok(result);
