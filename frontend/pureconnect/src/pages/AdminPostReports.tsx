@@ -1,5 +1,6 @@
 import React from 'react';
 import AdminNav, {AdminPage} from "../components/AdminNav";
+import AdminContentPostReports from "../components/AdminContentPostReports";
 
 const AdminPostReports = (props:
   {
@@ -9,7 +10,7 @@ const AdminPostReports = (props:
     return (
         <div className={'home-wrapper'} data-theme={props.theme}>
             <AdminNav theme={props.theme} setTheme={props.setTheme} page={AdminPage.PostReports}/>
-            {/*<AdminContentPostReports/>*/}
+            <AdminContentPostReports/>
         </div>
     );
 };

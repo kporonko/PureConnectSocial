@@ -510,3 +510,21 @@ export const AddPostReport = async (token: string|null, postId:number, text: str
         return error;
     }
 }
+
+export const GetReports = async (token: string) => {
+    try {
+        const response = await fetch(`${BASE_URL}api/Admin/reports`, {
+            method: 'GET',
+            headers:{
+                'Content-Type': 'application/json',
+                'Accept-Language': getUsersLocale(),
+                'Authorization': 'Bearer ' + token,
+            }
+        });
+        return response;
+    }
+    catch (error: any) {
+        console.log(error);
+        return error;
+    }
+}
