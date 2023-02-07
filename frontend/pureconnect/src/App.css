@@ -1582,6 +1582,8 @@ html, body{
   border-radius: 20px;
   cursor: pointer;
   transition: 0.5s all ease;
+  width: 200px;
+  text-align: center;
 }
 .delete-report-button:hover{
   background: #e77c7c;
@@ -1591,5 +1593,48 @@ html, body{
 .go-to-post-button:hover{
   color: #c3c3c3;
   transform: scale(1.1);
+  transition: 0.5s all ease;
+}
+.go-to-post-page-button-wrapper{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.go-to-post-page-button{
+  background: #77e806;
+  color: var(--text-primary);
+  font-family: "Montserrat", sans-serif;
+  font-size: 1.2rem;
+  padding: 1rem 3rem;
+  border: none;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: 0.5s all ease;
+  width: 200px;
+  text-align: center;
+}
+.post-report-buttons-wrapper{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2rem;
+}
+.post-report-header{
+  font-size: 2rem;
+  font-weight: 100;
+  text-align: center;
+  font-family: "Montserrat", sans-serif ;
+  color: var(--text-primary);
+  box-shadow: 0 0 10px 0 var(--text-primary);
+  margin: 0 100px;
+  width: 700px;
+  border-radius: 20px;
+}
+.post-report-header h1{
+  margin: 5%;
+}
+.go-to-post-page-button:hover{
+  background: #a2f97a;
+  color: var(--background-third);
   transition: 0.5s all ease;
 }

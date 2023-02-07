@@ -10,6 +10,8 @@ import MyProfile from "./pages/MyProfile";
 import PostPage from "./pages/PostPage";
 import AdminPostReports from "./pages/AdminPostReports";
 import ReportPage from "./pages/ReportPage";
+import PostReportPage from "./pages/PostReportPage";
+import AdminPostPage from "./pages/AdminPostPage";
 
 function App() {
 
@@ -40,7 +42,8 @@ function App() {
             <Route path="/admin-home" element={<AdminHome theme={theme} setTheme={setTheme}/>}/>
             <Route path="/admin-post-reports" element={<AdminPostReports theme={theme} setTheme={setTheme}/>}/>
             <Route path="/report/:reportId" element={<ReportPage theme={theme} setTheme={setTheme}/>}/>
-            {/*<Route path="/post-report/:reportId" element={<PostReportPage theme={theme} setTheme={setTheme}/>}/>*/}
+            <Route path="/post-report/:postReportId" element={<PostReportPage theme={theme} setTheme={setTheme}/>}/>
+            <Route path="/admin-post/:postId" element={<AdminPostPage theme={theme} setTheme={setTheme}/>}/>
 
         </Routes>
 
