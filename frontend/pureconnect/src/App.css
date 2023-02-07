@@ -1545,7 +1545,6 @@ html, body{
   color: var(--text-primary);
   font-family: "Montserrat", sans-serif;
   min-height: 30vh;
-  min-width: 50vw;
 }
 .report-text{
   max-width: 70%;
