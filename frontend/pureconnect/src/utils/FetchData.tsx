@@ -528,3 +528,21 @@ export const GetReports = async (token: string) => {
         return error;
     }
 }
+
+export const GetReport = async (token: string, reportId: number) => {
+    try {
+        const response = await fetch(`${BASE_URL}api/Admin/report/${reportId}`, {
+            method: 'GET',
+            headers:{
+                'Content-Type': 'application/json',
+                'Accept-Language': getUsersLocale(),
+                'Authorization': 'Bearer ' + token,
+            }
+        });
+        return response;
+    }
+    catch (error: any) {
+        console.log(error);
+        return error;
+    }
+}

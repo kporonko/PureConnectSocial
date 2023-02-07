@@ -1533,3 +1533,35 @@ html, body{
   white-space: nowrap;
   max-height: 1000px;
 }
+.report-wrapper{
+  margin: 5%;
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2rem;
+  padding: 10%;
+  background: var(--background-third);
+  color: var(--text-primary);
+  font-family: "Montserrat", sans-serif;
+  min-height: 30vh;
+  min-width: 50vw;
+}
+.report-text{
+  max-width: 70%;
+}
+.center{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.report-header{
+  font-size: 2rem;
+  font-weight: 100;
+  text-align: center;
+  font-family: "Montserrat", sans-serif ;
+  color: var(--text-primary);
+  box-shadow: 0 0 10px 0 var(--text-primary);
+  margin: 0 100px;
+  border-radius: 20px;
+}
