@@ -546,3 +546,24 @@ export const GetReport = async (token: string, reportId: number) => {
         return error;
     }
 }
+
+export const DeleteReport = async (token: string|null, reportId: number) => {
+    try {
+        const response = await fetch(`${BASE_URL}api/Admin/Report`, {
+            method: 'DELETE',
+            headers:{
+                'Content-Type': 'application/json',
+                'Accept-Language': getUsersLocale(),
+                'Authorization': 'Bearer ' + token,
+            },
+            body: JSON.stringify({
+                reportId: reportId
+            })
+        });
+        return response;
+    }
+    catch (error: any) {
+        console.log(error);
+        return error;
+    }
+}

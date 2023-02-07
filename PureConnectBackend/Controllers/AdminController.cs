@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Localization;
 using PureConnectBackend.Core.Interfaces;
+using PureConnectBackend.Core.Models.Requests;
 using PureConnectBackend.Infrastructure.Models;
 
 namespace PureConnectBackend.Controllers
@@ -63,9 +64,9 @@ namespace PureConnectBackend.Controllers
 
         [Authorize(Roles = "admin")]
         [HttpDelete("report")]
-        public async Task<IActionResult> DeleteReport([FromRoute] int reportId)
+        public async Task<IActionResult> DeleteReport(DeleteReportRequest deleteReport)
         {
-            var result = await _adminService.DeleteReport(reportId);
+            var result = await _adminService.DeleteReport(deleteReport.ReportId);
             if (result is System.Net.HttpStatusCode.NotFound)
                 return NotFound();
 
