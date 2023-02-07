@@ -72,5 +72,16 @@ namespace PureConnectBackend.Controllers
 
             return Ok(result);
         }
+
+        [Authorize(Roles = "admin")]
+        [HttpDelete("post-report")]
+        public async Task<IActionResult> DeletePostReport(DeleteReportRequest deleteReport)
+        {
+            var result = await _adminService.DeletePostReport(deleteReport.ReportId);
+            if (result is System.Net.HttpStatusCode.NotFound)
+                return NotFound();
+
+            return Ok(result);
+        }
     }
 }

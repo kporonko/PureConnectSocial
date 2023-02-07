@@ -603,3 +603,24 @@ export const GetPostReport = async (token: string, postReportId: number) => {
         return error;
     }
 }
+
+export const DeletePostReport = async (token: string|null, postReportId: number) => {
+    try {
+        const response = await fetch(`${BASE_URL}api/Admin/post-report`, {
+            method: 'DELETE',
+            headers:{
+                'Content-Type': 'application/json',
+                'Accept-Language': getUsersLocale(),
+                'Authorization': 'Bearer ' + token,
+            },
+            body: JSON.stringify({
+                reportId: postReportId
+            })
+        });
+        return response;
+    }
+    catch (error: any) {
+        console.log(error);
+        return error;
+    }
+}
