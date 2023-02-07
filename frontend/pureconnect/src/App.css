@@ -1534,7 +1534,7 @@ html, body{
   max-height: 1000px;
 }
 .report-wrapper{
-  margin: 5%;
+  margin: 2% 5%;
   border-radius: 20px;
   display: flex;
   align-items: center;
@@ -1564,4 +1564,28 @@ html, body{
   box-shadow: 0 0 10px 0 var(--text-primary);
   margin: 0 100px;
   border-radius: 20px;
+}
+.report-header h1{
+  margin: 2%;
+}
+.delete-report-button-wrapper{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.delete-report-button{
+  background: #c63a3a;
+  color: var(--text-primary);
+  font-family: "Montserrat", sans-serif;
+  font-size: 1.2rem;
+  padding: 1rem 3rem;
+  border: none;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: 0.5s all ease;
+}
+.delete-report-button:hover{
+  background: #e77c7c;
+  color: var(--background-third);
+  transition: 0.5s all ease;
 }

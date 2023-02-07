@@ -5,6 +5,7 @@ import {toast, ToastContainer} from "react-toastify";
 import {GetReport} from "../utils/FetchData";
 import {useNavigate} from "react-router";
 import AdminNav, {AdminPage} from "../components/AdminNav";
+import LocalizedStrings from "react-localization";
 
 const ReportPage = (props:{
     theme: string,
@@ -15,6 +16,17 @@ const ReportPage = (props:{
     const [report, setReport] = React.useState<IReport>();
 
     const nav = useNavigate();
+
+    const strings = new LocalizedStrings({
+        en:{
+            report: "Report",
+            deleteReport: "Delete Report",
+        },
+        ua: {
+            report: "Скарга",
+            deleteReport: "Видалити скаргу",
+        }
+    })
 
     useEffect(() => {
         const getReport = async () => {
@@ -42,11 +54,17 @@ const ReportPage = (props:{
     return (
         <div className={'home-wrapper'} data-theme={props.theme}>
             <AdminNav theme={props.theme} setTheme={props.setTheme} page={AdminPage.Post}/>
+
             {report === undefined ? '' :
             <div className={'admin-content-wrapper center'}>
                 <div className='report'>
                     <div className='report-header'>
-                        <h1>Report №{report.id}</h1>
+                        <h1>{strings.report} №{report.id}</h1>
+                    </div>
+                    <div className='delete-report-button-wrapper'>
+                        <div className="delete-report-button">
+                            {strings.deleteReport}
+                        </div>
                     </div>
                     <div className='report-wrapper'>
                         <div className='report-text'>
