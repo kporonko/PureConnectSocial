@@ -9,6 +9,7 @@ import Register from "./pages/Register";
 import MyProfile from "./pages/MyProfile";
 import PostPage from "./pages/PostPage";
 import AdminPostReports from "./pages/AdminPostReports";
+import ReportPage from "./pages/ReportPage";
 
 function App() {
 
@@ -38,6 +39,8 @@ function App() {
             {/*Admin*/}
             <Route path="/admin-home" element={<AdminHome theme={theme} setTheme={setTheme}/>}/>
             <Route path="/admin-post-reports" element={<AdminPostReports theme={theme} setTheme={setTheme}/>}/>
+            <Route path="/report/:reportId" element={<ReportPage theme={theme} setTheme={setTheme}/>}/>
+
         </Routes>
 
       </BrowserRouter>

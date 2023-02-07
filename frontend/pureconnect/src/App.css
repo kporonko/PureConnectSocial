@@ -1507,3 +1507,29 @@ html, body{
   width: calc(100% - 17vw);
   overflow: hidden;
 }
+.report-card-wrapper{
+  margin: 2% 15%;
+}
+.report-card-content{
+  padding: 5%;
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--background-third);
+  color: var(--text-primary);
+  font-family: "Montserrat", sans-serif;
+  font-size: 1.2rem;
+}
+.report-card-content:hover{
+  background: var(--background-secondary);
+  transition: 0.5s all ease;
+  cursor: pointer;
+}
+.report-card-text{
+  max-width: 500px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-height: 1000px;
+}
