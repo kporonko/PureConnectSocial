@@ -351,6 +351,9 @@ namespace PureConnectBackend.Core.Services
         /// <returns>Null if validation is ok. Otherwise empty ProfileResponse with response message.</returns>
         public async Task<PostResponse?> CheckForValidationGeProfile(User? currUser, User? requestedUser)
         {
+            if (currUser.Role == "admin")
+                return null;
+
             if (currUser is null || requestedUser is null)
                 return new PostResponse() { Response = MyResponses.BadRequest };
 

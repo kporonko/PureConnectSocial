@@ -108,7 +108,7 @@ namespace PureConnectBackend.Infrastructure.Data
                 .HasOne(u => u.Post)
                 .WithMany(u => u.PostReports)
                 .HasForeignKey(u => u.PostId)
-                .OnDelete(DeleteBehavior.Restrict);
+                .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<Report>()
                 .HasOne(u => u.User)
