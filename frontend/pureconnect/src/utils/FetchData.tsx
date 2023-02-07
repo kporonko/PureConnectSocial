@@ -567,3 +567,21 @@ export const DeleteReport = async (token: string|null, reportId: number) => {
         return error;
     }
 }
+
+export const GetPostReports = async (token: string) => {
+    try {
+        const response = await fetch(`${BASE_URL}api/Admin/post-reports`, {
+            method: 'GET',
+            headers:{
+                'Content-Type': 'application/json',
+                'Accept-Language': getUsersLocale(),
+                'Authorization': 'Bearer ' + token,
+            }
+        });
+        return response;
+    }
+    catch (error: any) {
+        console.log(error);
+        return error;
+    }
+}

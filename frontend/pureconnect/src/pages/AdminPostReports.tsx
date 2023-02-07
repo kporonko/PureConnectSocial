@@ -11,7 +11,7 @@ const AdminPostReports = (props:
     return (
         <div className={'home-wrapper'} data-theme={props.theme}>
             <AdminNav theme={props.theme} setTheme={props.setTheme} page={AdminPage.PostReports}/>
-            <AdminContentPostReports/>
+            <AdminContentPostReports theme={props.theme}/>
             <ToastContainer
                 position="top-right"
                 autoClose={5000}

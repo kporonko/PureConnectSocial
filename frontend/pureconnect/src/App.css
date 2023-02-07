@@ -1588,3 +1588,8 @@ html, body{
   color: var(--background-third);
   transition: 0.5s all ease;
 }
+.go-to-post-button:hover{
+  color: #c3c3c3;
+  transform: scale(1.1);
+  transition: 0.5s all ease;
+}

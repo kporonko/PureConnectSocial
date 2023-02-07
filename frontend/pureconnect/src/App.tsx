@@ -40,6 +40,7 @@ function App() {
             <Route path="/admin-home" element={<AdminHome theme={theme} setTheme={setTheme}/>}/>
             <Route path="/admin-post-reports" element={<AdminPostReports theme={theme} setTheme={setTheme}/>}/>
             <Route path="/report/:reportId" element={<ReportPage theme={theme} setTheme={setTheme}/>}/>
+            {/*<Route path="/post-report/:reportId" element={<PostReportPage theme={theme} setTheme={setTheme}/>}/>*/}
 
         </Routes>
 
