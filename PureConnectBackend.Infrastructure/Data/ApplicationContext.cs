@@ -70,13 +70,13 @@ namespace PureConnectBackend.Infrastructure.Data
                 .HasOne(u => u.Post)
                 .WithMany(u => u.PostLikes)
                 .HasForeignKey(u => u.PostId)
-                .OnDelete(DeleteBehavior.Restrict);
+                .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<PostComment>()
                 .HasOne(u => u.ParentComment)
                 .WithMany(u => u.CommentReplies)
                 .HasForeignKey(u => u.ParentCommentId)
-                .OnDelete(DeleteBehavior.Restrict);
+                .OnDelete(DeleteBehavior.Cascade);
             modelBuilder.Entity<PostComment>()
                 .HasOne(u => u.User)
                 .WithMany(u => u.PostsComments)

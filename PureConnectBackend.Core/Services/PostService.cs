@@ -278,7 +278,24 @@ namespace PureConnectBackend.Core.Services
         private async Task DeletePostFromContext(Post post)
         {
             _context.Posts.Remove(post);
-            await _context.SaveChangesAsync();
+            var postLikes = _context.PostsLikes.Where(x => x.PostId == post.Id);
+            var postComments = _context.PostsComments.Where(x => x.PostId == post.Id);
+
+            if (postLikes.Any())
+                _context.PostsLikes.RemoveRange(postLikes);
+
+            if (postComments.Any())
+                _context.PostsComments.RemoveRange(postComments);
+            
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
         }
 
 
