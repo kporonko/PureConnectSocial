@@ -1,0 +1,1640 @@
+html, body{
+  margin: 0;
+  padding: 0;
+  background: var(--background);
+}
+
+@media screen and (max-width: 1200px) {
+  .login-main-logo-wrapper {
+    display: none!important;
+  }
+}
+
+:root {
+  --background: white;
+  --background-secondary: #b8b8b8;
+  --background-third: #e2e2e2;
+  --text-primary: black;
+  --background-imagelogin: white;
+  --input: white;
+  --button-yellow: rgb(158, 142, 4);
+  --box-shadow-main: rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(255, 255, 255, 0.17) 0px 12px 13px, rgba(255, 255, 255, 0.09) 0px -3px 5px;
+  --button-blue: #8D97F2;
+  --button-blue-hover: #5f6def
+}
+[data-theme='dark'] {
+  --background: #494949;
+  --background-secondary: #313131;
+  --background-third: #212121;
+  --text-primary: white;
+  --background-imagelogin: #313131;
+  --input: #494949;
+  --button-yellow: rgba(255, 199, 0, 1);
+  --box-shadow-main: rgba(255, 255, 255, 0.25) 0px 54px 55px, rgba(255, 255, 255, 0.12) 0px -12px 30px, rgba(255, 255, 255, 0.12) 0px 4px 6px, rgba(255, 255, 255, 0.17) 0px 12px 13px, rgba(255, 255, 255, 0.09) 0px -3px 5px;
+  --button-blue: #8D97F2;
+  --button-blue-hover: #5f6def;
+}
+
+.login-wrapper{
+  background: var(--background);
+}
+.login-main-logo-wrapper{
+  background: var(--background-imagelogin);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 5%;
+  border: 1px solid var(--text-primary);
+  box-shadow: var(--box-shadow-main);
+  border-radius: 50px;
+}
+
+.login-main-logo-img{
+  width: 25rem;
+  height: 20rem;
+}
+.login-main-logo-text{
+  font-size: 1.1rem;
+  font-family: "Montserrat", sans-serif;
+  color: var(--text-primary);
+}
+
+.login-change-theme-wrapper{
+  display: flex;
+  justify-content: flex-end;
+  padding: 0.5% 0.5% 0 0;
+}
+
+.login-change-theme{
+  text-align: right;
+  font-size: 1.3rem;
+  background: none;
+  border: none;
+  color: var(--text-primary);
+  cursor: pointer;
+}
+.login-change-theme:hover{
+  transform: scale(1.1);
+  transition: 0.7s all ease;
+}
+.login-main-content-wrapper{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  gap: 10%;
+}
+.login-form-wrapper{
+  padding: 5% 3%;
+  border: 1px solid var(--text-primary);
+  border-radius: 50px;
+  background: var(--background-imagelogin);
+  box-shadow: var(--box-shadow-main);
+}
+
+.login-form-text{
+  font-size: 1.7rem;
+  font-family: "Montserrat", sans-serif;
+  color: var(--text-primary);
+  margin-bottom: 15%;
+  font-weight: 600;
+  text-align: center;
+}
+.login-form-input{
+  width: 90%;
+  height: 3rem;
+  border: 1px solid var(--text-primary);
+  border-radius: 5px;
+  padding: 0 5%;
+  margin-bottom: 7%;
+  font-weight: 400;
+  font-size: 1.1rem;
+  font-family: "Montserrat", sans-serif;
+  background: var(--input);
+  color: var(--text-primary);
+}
+.login-form-input::placeholder{
+  color: var(--text-primary);
+  opacity: 0.5;
+}
+.login-form-input:focus::placeholder {
+  color: gray;
+}
+.login-form-additional-func{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8%;
+  font-size: 0.8rem;
+}
+.login-form-links{
+  text-decoration: underline;
+  color: var(--text-primary);
+  font-family: "Montserrat", sans-serif;
+  font-size: 0.8rem;
+}
+.login-form-buttons-wrapper{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-direction: column;
+}
+.login-form-button-div{
+  width: 100%;
+  height: 3rem;
+  border: 1px solid var(--text-primary);
+  border-radius: 5px;
+  margin-bottom: 1rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  background: #494949;
+  color: white;
+  border: none;
+}
+.login-form-button{
+  width: 100%;
+  height: 100%;
+  background: none;
+  font-size: 1rem;
+  font-family: "Montserrat", sans-serif;
+  font-weight: 600;
+  color: black;
+  border: none;
+  cursor: pointer;
+}
+.login-form-button-div:hover{
+  background: #494949;
+  transition: 0.7s ease;
+}
+.login-form-button:disabled{
+  cursor: no-drop;
+}
+.login-form-button:active:hover{
+  color: white;
+  transition: 0.7s ease;
+}
+.active-button-div{
+  background: var(--button-yellow);
+}
+.active-button{
+  color: white;
+  color: black;
+}
+
+
+/*Register page*/
+.register-wrapper{
+  background: var(--background);
+  min-height: 100vh;
+
+}
+.register-form-wrapper{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 95vh;
+  max-height: 90vh;
+}
+.register-form{
+  position: relative;
+  background: var(--background-imagelogin);
+  border: 1px solid var(--text-primary);
+  padding: 3% 5% 1% 5%;
+  border: 1px solid var(--text-primary);
+  box-shadow: var(--box-shadow-main);
+  border-radius: 50px;
+  min-width: 65vw;
+}
+.register-header{
+  font-size: 1.7rem;
+  font-family: "Montserrat", sans-serif;
+  color: var(--text-primary);
+  margin: 0 0 5% 0;
+  font-weight: 600;
+  text-align: center;
+}
+.register-inputs-wrapper{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  min-width: 18rem;
+}
+.register-input-additional{
+  max-width: 15vw;
+}
+.register-single-input-wrapper{
+  display: flex;
+  justify-content: center;
+}
+
+.register-form-avatar-image{
+  width: 15rem;
+  height: 15rem;
+  margin-bottom: 2rem;
+  object-fit: cover;
+}
+.register-form-grid-wrapper{
+  display: grid;
+  grid-template-columns: 2fr 1.5fr 2fr;
+  grid-template-rows: 1fr 1fr 1fr 1fr;
+  justify-content: space-between;
+  justify-items: center;
+}
+.register-avatar{
+  grid-area: 1/2/4;
+}
+.register-email-grid{
+  justify-self: left;
+  width: 100%;
+}
+.register-password-grid{
+  justify-self: right;
+  width: 100%;
+}
+.register-last-name-grid{
+  justify-self: left;
+  width: 100%;
+}
+.register-first-name-grid{
+  justify-self: right;
+  width: 100%;
+}
+.register-birth-date-grid{
+  justify-self: right;
+  width: 100%;
+}
+.register-location-grid{
+  justify-self: left;
+  width: 100%;
+}
+.register-username-grid{
+  grid-area: 4/2/4/2;
+}
+
+.button-already-have-acc{
+  display: flex;
+  justify-content: center;
+}
+.button-already-have-acc .link{
+  border: none;
+  background: none;
+  color: var(--text-primary);
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+
+/*//Home page//*/
+
+.home-wrapper{
+  background: var(--background);
+  min-height: 100vh;
+}
+
+.nav-menu-wrapper{
+  position: fixed;
+  max-width: 17vw;
+  background: var(--background-imagelogin);
+  box-shadow: var(--box-shadow-main);
+  height: 100vh;
+  /*z-index: 1000;*/
+}
+.nav-menu-image-wrapper{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: var(--background-imagelogin);
+  border-bottom: 1px solid var(--text-primary);
+}
+.nav-menu-image{
+  width: 50%;
+  padding: 1rem;
+  height: 50%;
+}
+
+.nav-icon{
+  display: flex;
+  color: var(--text-primary);
+  font-size: 1.1rem;
+}
+.nav-menu-items{
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 1rem 1rem 1rem 1rem;
+  margin: 0;
+}
+.nav-menu-item{
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  gap: 1rem;
+  text-align: center;
+}
+.active-page{
+  background: var(--background-third);
+  color: var(--button-yellow);
+  border-radius: 50px;
+  padding: 0rem 0rem 0rem 0rem;
+}
+.active-page>div, .active-page>div>svg{
+    color: var(--button-yellow);
+}
+
+.nav-menu-avatar-profile-image{
+  width: 3rem;
+  height: 3rem;
+  border-radius: 50%;
+  object-fit: cover;
+}
+.nav-menu-item-text{
+  font-size: 1rem;
+  min-width: 10.5vw;
+  text-align: left;
+  font-family: "Montserrat", sans-serif;
+  color: var(--text-primary);
+}
+
+.nav-menu-item-icon-wrapper{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 50px;
+  height: 50px;
+}
+
+.nav-content{
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-start;
+  height: 79vh;
+  overflow: auto;
+}
+.nav-more{
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 1rem 1rem 2rem;
+  color: var(--text-primary);
+  gap: 1.5rem;
+}
+
+.nav-more:hover{
+  transition: 0.5s ease;
+  background: var(--background-third);
+  border-radius: 30px;
+}
+.main-content-home{
+  margin-left: 17vw; /* same as width of #left-nav */
+  width: calc(100% - 17vw);
+}
+
+.main-content-home-block{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.nav-menu-item:hover{
+  transition: 0.5s ease;
+  background: var(--background-third);
+  color: var(--button-yellow);
+  border-radius: 30px;
+}
+/* Modal home nav menu more */
+
+.modal-home-nav-manu-more-wrapper{
+  border: 1px solid var(--text-primary);
+  background: var(--background);
+  border-radius: 30px;
+  position: absolute;
+  bottom: 4rem;
+  left: 1rem;
+}
+.modal-home-nav-menu-more-item-first{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem 0;
+  cursor: pointer;
+  gap: 1rem;
+  text-align: center;
+  border-bottom: 1px solid var(--text-primary);
+}
+.modal-home-nav-menu-more-item{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem 0;
+  cursor: pointer;
+  gap: 1rem;
+  text-align: center;
+  border-bottom: 1px solid var(--text-primary);
+}
+.modal-home-nav-menu-more-item-last{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem 0;
+  cursor: pointer;
+  gap: 1rem;
+  text-align: center;
+}
+.modal-home-nav-menu-more-item-text{
+  font-size: 1rem;
+  max-width: 8vw;
+  text-align: left;
+  font-family: "Montserrat", sans-serif;
+  color: var(--text-primary);
+  margin: 0.3rem 1rem 0.3rem 1.5rem;
+}
+
+.modal-home-nav-menu-more-item-icon{
+  font-size: 1rem;
+  text-align: left;
+  font-family: "Montserrat", sans-serif;
+  color: var(--text-primary);
+  margin: 0.3rem 1.5rem 0.3rem 0.3rem;
+}
+.modal-home-nav-menu-more-item:hover{
+  transition: 0.5s background-color ease;
+  background: var(--background-third);
+}
+.modal-home-nav-menu-more-item-first:hover{
+  transition: 0.5s background-color ease;
+  background: var(--background-third);
+  border-radius: 30px 30px 0 0;
+}
+.modal-home-nav-menu-more-item-last:hover{
+  transition: 0.5s background-color ease;
+  background: var(--background-third);
+  border-radius: 0 0 30px 30px;
+}
+
+.modal-home-nav-menu-more-item-first:hover>div, .modal-home-nav-menu-more-item:hover>div, .modal-home-nav-menu-more-item-last:hover>div{
+  transition: 0.5s color ease;
+  color: var(--button-yellow);
+}
+
+.nav-more-active{
+  background: var(--background-third);
+  border-radius: 30px;
+}
+.nav-more-active>div, .nav-more-active>svg{
+    color: var(--button-yellow);
+}
+
+/* May Know Them */
+
+.may-know-them-wrapper{
+  margin-top: 1rem;
+  padding:2rem;
+  background: var(--background-third);
+  border-radius: 30px;
+}
+.may-know-them-bar{
+  display: flex;
+  gap: 40vw;
+  justify-content: space-between;
+  color: var(--text-primary);
+  font-size: 2rem;
+  font-family: "Montserrat", sans-serif;
+  margin-bottom: 1rem;
+}
+.may-know-them-content{
+  display: flex;
+  gap: 1rem;
+  color: var(--text-primary);
+  justify-content: center;
+  max-width:65vw;
+  overflow: hidden; /* HERE IS THE HIDDEN OVERFLOW */
+}
+
+.may-know-user{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 6px;
+  align-items: center;
+  padding: 0.8rem 1.5rem;
+  background: var(--background);
+  border-radius: 15px;
+}
+.may-know-user-no-hover:hover{
+  background: var(--background) !important;
+}
+.may-know-user:hover{
+  transition: 0.5s background-color ease;
+  background: var(--background-secondary);
+  cursor: pointer;
+}
+.may-know-user-image{
+  width: 6rem;
+  height: 6rem;
+  border-radius: 15px;
+  object-fit: cover;
+  border: 1px var(--text-primary) solid;
+}
+
+.may-know-user-name{
+  font-size: 1.1rem;
+  font-family: "Montserrat", sans-serif;
+  color: var(--text-primary);
+  text-align: center;
+}
+
+.may-know-user-friends-count{
+  font-size: 0.6rem;
+  font-family: "Montserrat", sans-serif;
+  color: var(--button-yellow);
+  text-align: center;
+  cursor: pointer;
+}
+
+.may-know-user-button{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.8rem;
+  color: var(--background-third);
+  background: var(--button-blue);
+
+  padding: 0.2rem 1.5rem;
+  font-size: 0.65rem;
+  font-family: "Montserrat", sans-serif;
+  border-radius: 2px;
+  cursor: pointer;
+}
+/*.may-know-user-button:hover{*/
+/*  transition: 0.3s background-color ease;*/
+/*  background: var(--button-blue-hover);*/
+/*}*/
+
+.may-know-user-button-followed{
+  background: var(--text-primary);
+}
+
+.may-know-close-btn:hover{
+  transform: rotate(360deg);
+  cursor: pointer;
+  transition: 0.3s color ease;
+  transition: 3s transform ease;
+  color: #fa5b5b;
+}
+
+
+/* Post */
+
+.post-wrapper{
+  position: relative;
+  margin-top: 2rem;
+  width: 50rem;
+  /*padding: 1rem;*/
+  background: var(--background-secondary);
+  border-radius: 10px;
+  box-shadow: var(--box-shadow-main);
+  margin-bottom: 3rem;
+}
+.post-bar{
+  padding: 0.8rem 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.post-user-wrapper{
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+.post-user-avatar{
+  width: 4rem;
+  height: 4rem;
+  object-fit: cover;
+  border-radius: 50%;
+}
+.post-user-name{
+  font-size: 1.5rem;
+  font-family: "Montserrat", sans-serif;
+  color: var(--button-yellow);
+  margin-bottom: 5px;
+}
+.post-user-username{
+  font-size: 0.8rem;
+  font-family: "Montserrat", sans-serif;
+  color: var(--text-primary);
+}
+.post-menu{
+  font-size: 1.5rem;
+  font-family: "Montserrat", sans-serif;
+  color: var(--text-primary);
+  cursor: pointer;
+  margin-bottom: 30px; /* ? */
+}
+.post-image-wrapper{
+  background: var(--background-third);
+  width: 50rem;
+  height: 50rem;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+}
+.post-image{
+  width: 100%;
+  object-fit: cover;
+}
+.post-desc{
+  margin: 1rem 3rem;
+  line-height: 2.2rem;
+  /*max-height: 6rem;*/
+  /*overflow: hidden;*/
+  text-overflow: ellipsis;
+  display: flex;
+  justify-content: center;
+  color: var(--text-primary);
+  font-size: 1.2rem;
+  font-family: "Montserrat", sans-serif;
+}
+.read-more-span{
+  color: var(--button-yellow);
+  margin-left: 10px;
+  cursor: pointer;
+}
+.post-actions-wrapper{
+  padding: 1rem 3rem;
+  border-top: 1px solid var(--text-primary);
+  border-bottom: 1px solid var(--text-primary);
+
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+}
+.post-action{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: start;
+  cursor: pointer;
+}
+.post-action-icon{
+  margin-top: 10px;
+  color: var(--text-primary);
+  font-size: 2rem;
+}
+.post-action-desc{
+  font-size: 0.8rem;
+  font-family: "Montserrat", sans-serif;
+  font-weight: 100;
+  color: var(--text-primary);
+  margin-bottom: 10px;
+}
+.heart-fill{
+  color: #f45252;
+  cursor: pointer;
+}
+.post-date-wrapper{
+  padding: 1rem 3rem;
+  display: flex;
+  justify-content: space-between;
+}
+.post-date-wrapper>div{
+  font-size: 1.2rem;
+  font-family: "Montserrat", sans-serif;
+  color: var(--text-primary);
+}
+
+.modal-post-wrapper{
+  border: 1px solid var(--text-primary);
+  background: var(--background);
+  border-radius: 30px;
+  position: absolute;
+  top: -11rem;
+  right: -12rem;
+}
+
+.modal-post-item-last{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0.5rem 0;
+  cursor: pointer;
+  gap: 1rem;
+  text-align: center;
+}
+
+.modal-post-item-last:hover{
+  transition: 0.5s background-color ease;
+  background: var(--background-third);
+  border-radius: 0 0 30px 30px;
+}
+
+.modal-post-item-last:hover>div{
+  transition: 0.5s color ease;
+  color: var(--button-yellow);
+}
+
+
+/* Profile */
+
+.profile-wrapper{
+  background: var(--background);
+  min-height: 100vh;
+}
+
+.main-content-profile{
+  margin-left: 17vw; /* same as width of #left-nav */
+  width: calc(100% - 17vw);
+}
+
+.main-content-profile-block{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.my-profile-user-grid{
+  margin-top: 1rem;
+  background: var(--background-third);
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 5vw;
+  border-radius: 20px;
+  padding: 1.5rem;
+}
+
+.my-profile-user-avatar{
+  width: 20rem;
+  height: 20rem;
+  object-fit: cover;
+  border-radius: 10px;
+  border: 1px solid var(--text-primary);
+}
+.my-profile-user-left-bot{
+  /*max-width: 19rem;*/
+
+  margin-top: 0.6rem;
+  background: var(--background-secondary);
+  border-radius: 10px;
+  padding: 0.4rem 0.5rem;
+}
+.my-profile-user-label{
+  color: var(--button-yellow);
+  font-size: 0.7rem;
+  font-family: "Montserrat", sans-serif;
+  font-weight: 100;
+  margin: 0 0 0.4rem 0;
+}
+.my-profile-user-text{
+  color: var(--text-primary);
+  font-size: 1rem;
+  font-family: "Montserrat", sans-serif;
+  font-weight: 100;
+  overflow: auto;
+}
+.ma-bot-05{
+  margin-bottom: 0.5rem;
+}
+.my-profile-user-info-flex{
+  max-width: 19rem;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+
+.profile-user-name-edit-wrapper{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 1rem;
+  color: var(--text-primary);
+}
+
+.my-profile-user-right{
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+.profile-user-name{
+  max-width: 27rem;
+  font-size: 2rem;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  color: var(--button-yellow);
+  font-family: "Montserrat", sans-serif;
+  font-weight: 500;
+}
+
+.profile-user-edit{
+  display: flex;
+  justify-content: space-between;
+  gap: 0.5rem;
+  cursor: pointer;
+  font-family: "Montserrat", sans-serif;
+  font-weight: 500;
+  font-size: 1rem;
+  color: var(--text-primary);
+}
+.profile-user-edit:hover{
+  transition: 0.5s color ease;
+  color: var(--button-yellow);
+}
+.profile-user-status{
+  border-radius: 10px;
+  min-height: 8.5rem;
+  padding: 0.5rem 1rem;
+  background: var(--background-secondary);
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  justify-content: start;
+}
+
+.no-status{
+  color: var(--text-primary);
+  font-size: 1rem;
+  font-family: "Montserrat", sans-serif;
+  font-weight: 100;
+  margin: 0 0 0.4rem 0;
+  opacity: 0.5;
+}
+.status-text{
+  max-width: 38rem;
+  max-height: 9rem;
+  overflow: auto;
+  color: var(--text-primary);
+  font-size: 1.1rem;
+  font-family: "Montserrat", sans-serif;
+  font-weight: 100;
+  margin: 0 0 0.4rem 0;
+}
+
+.profile-user-stats{
+  margin-top: 2rem;
+  border-radius: 10px;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  background: var(--background-secondary);
+}
+.profile-user-stat{
+  border: 1px solid var(--text-primary);
+  padding: 0.7rem 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-primary);
+  font-family: "Montserrat", sans-serif;
+  font-size: 0.9rem;
+  font-weight: 400;
+  cursor: pointer;
+}
+.profile-user-stat:hover{
+  transition: 0.5s color ease;
+  color: var(--button-yellow);
+  background: var(--background-third);
+}
+.profile-user-stats>div:nth-child(1){
+  border-radius: 10px 0px 0px 10px;
+}
+
+.profile-user-stats>div:nth-child(3){
+  border-radius: 0 10px 10px 0;
+}
+
+.profile-user-additional-wrapper{
+  margin-top: 1.3rem;
+  padding: 0.7rem 0.7rem;
+  border-radius: 10px;
+  background: var(--background-secondary);
+}
+
+.profile-user-additional-location{
+  padding: 0 0 0.3rem 0;
+  margin-top: 0.7rem;
+  display: flex;
+  gap: 1rem;
+  color: var(--text-primary);
+  font-size: 1rem;
+  font-weight: 100;
+  font-family: "Montserrat", sans-serif;
+  max-width: 38rem;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+
+.profile-user-additional-birth-date{
+  margin-top: 0.3rem;
+  display: flex;
+  gap: 1rem;
+  color: var(--text-primary);
+  font-size: 1rem;
+  font-weight: 100;
+  font-family: "Montserrat", sans-serif;
+}
+
+.no-location{
+  color: var(--text-primary);
+  font-size: 1rem;
+  font-family: "Montserrat", sans-serif;
+  font-weight: 100;
+  margin: 0;
+  opacity: 0.5;
+}
+
+
+.location-wrapper{
+  position: relative;
+  justify-self: left;
+  width: 100%;
+}
+.register-location-options{
+  position: absolute;
+  top: 2.2rem;
+  left: 0;
+  background: var(--background-third);
+  color: var(--text-primary);
+  max-height: 40vh;
+  max-width: 18vw ;
+  overflow: auto;
+  padding: 0;
+}
+.register-location-option{
+  padding: 1rem 0.5rem;
+  border: 1px solid var(--text-primary);
+  border-radius: 10px;
+}
+
+
+.profile-posts-actions-panel-wrapper{
+  margin: 0;
+  display: flex;
+  justify-content: space-between;
+  padding: 1rem 10rem;
+  border-bottom: 1px solid var(--text-primary);
+  color: var(--text-primary);
+  font-size: 1.3rem;
+  width: 40rem;
+}
+
+.profile-posts-actions-panel-wrapper>div{
+  padding: 0.5rem;
+  border-radius: 100%;
+}
+.px-size-25{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 25px;
+  height: 25px;
+  cursor: pointer;
+}
+.px-size-25:hover{
+  transition: 0.5s all ease;
+  background: var(--background-third);
+}
+
+.active-profile-display-action{
+  color: var(--button-yellow);
+  background: var(--background-third);
+}
+.posts-images-wrapper{
+  background: var(--background-secondary);
+
+}
+.my-posts-images-wrapper{
+  width: 60vw;
+  display: flex;
+  gap: 20px!important;
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+}
+.post-image-image{
+  width: 18rem;
+  height: 18rem;
+  cursor: pointer;
+  object-fit: contain;
+}
+.post-image-image:hover{
+  opacity: 1.5;
+  filter: brightness(50%);
+  transition: 0.5s all ease;
+}
+
+.modal-add-post-wrapper{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+  height: 100%;
+}
+.modal-add-post-content-with-panel{
+  width: 1150px;
+  height: 600px;
+  background: var(--background);
+  border: 1px solid var(--text-primary);
+  border-radius: 20px;
+  background: var(--background-secondary);
+}
+.content-while-active-modal{
+  opacity: 0.2;
+}
+
+.modal-add-post-top-panel-wrapper{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--text-primary);
+  background: var(--background);
+  border-radius: 20px 20px 0 0;
+}
+.modal-add-post-top-panel-text{
+  font-size: 1rem;
+  color: var(--text-primary);
+  padding: 0.5rem 0.8rem;
+  font-family: "Montserrat", sans-serif;
+}
+.modal-add-post-top-panel-header{
+  color: var(--button-yellow);
+  font-size: 1.3rem;
+  font-family: "Montserrat", sans-serif;
+}
+
+.modal-add-post-top-panel-text:first-child:hover{
+  cursor: pointer;
+  color: var(--button-yellow);
+  background: var(--background-third);
+  border-radius: 20px 0 0 0;
+  transition: 0.5s background-color ease;
+}
+.modal-add-post-top-panel-text:last-child:hover{
+  cursor: pointer;
+  color: var(--button-yellow);
+  background: var(--background-third);
+  border-radius: 0 20px 0 0;
+  transition: 0.5s background-color ease;
+}
+
+.modal-add-post-content{
+  position: relative;
+  display: flex;
+  align-items: center;
+  padding: 1rem;
+  border-radius: 20px;
+  gap: 2rem;
+}
+.modal-add-post-image-part-wrapper{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+}
+.modal-add-post-image-wrapper{
+  width: 42rem;
+  height: 30rem;
+  border-radius: 5px;
+  border: 1px solid var(--text-primary);
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--background-third);
+}
+.modal-add-post-image{
+  width: 100%;
+  height: 100%;
+  border-radius: 20px;
+  object-fit: contain;
+}
+
+.modal-add-post-desc-part-wrapper{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+}
+.modal-add-post-textarea{
+  border-radius: 5px;
+  background: var(--background-third);
+  color: var(--text-primary);
+  font-family: "Montserrat", sans-serif;
+  font-size: 1rem;
+}
+.modal-add-post-desc-text{
+  margin-bottom: 1rem;
+  color: var(--text-primary);
+  font-family: "Montserrat", sans-serif;
+  font-size: 1rem;
+  font-weight: 400;
+}
+
+.loader-wrapper{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5rem;
+  border-radius: 20px;
+  background: var(--background-third);
+  padding: 8rem 10rem;
+}
+.loader-image{
+  font-size: 5rem;
+  object-fit: contain;
+}
+
+.loader-text{
+  font-size: 5rem;
+  font-family: "Montserrat", sans-serif;
+  color: var(--text-primary);
+}
+
+.emoji-open-block-wrapper{
+  display: flex;
+  gap: 2rem;
+  font-size: 1rem;
+  font-family: "Montserrat", sans-serif;
+  color: var(--button-yellow);
+  cursor: pointer;
+  padding: 0.2rem 3rem;
+  border-radius: 20px;
+}
+.emoji-open-block-wrapper:hover{
+  background: var(--background-third);
+  transition: all 1s ease;
+}
+
+.post-page-content-wrapper{
+  background: var(--background);
+  min-height: 100vh;
+  margin-left: 17vw; /* same as width of #left-nav */
+  width: calc(100% - 17vw);
+  overflow: hidden;
+}
+.post-page-content{
+  padding: 0.2% 2%;
+}
+.post-page-top-panel-wrapper{
+  display: flex;
+  align-items: start;
+  justify-content: space-between;
+}
+.post-page-author-block-wrapper{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+.post-page-author-block{
+  display: flex;
+  background: var(--background-third);
+  padding: 1% 5%;
+  border-radius: 5px;
+  gap: 5%;
+  width: 60%;
+  justify-content: space-between;
+}
+.post-page-author-data{
+  display: flex;
+  justify-content: start;
+  gap: 5%;
+  width: 70%;
+  align-items: center;
+  margin-left: 1rem;
+}
+.post-page-author-image{
+  width: 5rem;
+  height: 5rem;
+  object-fit: cover;
+  border-radius: 100%;
+  border: 3px solid var(--text-primary);
+}
+.post-page-date-time-wrapper{
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+}
+.post-page-date{
+  color: var(--text-primary);
+  font-size: 1.4rem;
+  font-family: "Montserrat", sans-serif;
+  text-align: right;
+}
+.post-page-time{
+  color: var(--text-primary);
+  font-size: 1.2rem;
+  font-family: "Montserrat", sans-serif;
+  text-align: right;
+}
+.post-page-label{
+  color: var(--button-yellow);
+  font-size: 0.9rem;
+  font-family: "Montserrat", sans-serif;
+}
+.post-page-icon{
+  margin-top: 1%;
+  font-size: 2rem;
+  color: var(--text-primary);
+  cursor: pointer;
+}
+.post-page-content-grid{
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 1rem;
+}
+
+.post-page-image{
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+.post-page-image-wrapper{
+  display: flex;
+  align-items: center;
+  background: var(--background-third);
+  width: 100%;
+  height: 550px;
+  border-radius: 5px;
+}
+.post-page-image-block{
+  margin-top: 1%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.post-page-right-grid-block{
+  display: flex;
+  flex-direction: column;
+  margin-top: 1%;
+  justify-content: center;
+}
+.post-page-description-wrapper{
+  margin-left: 2%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 45%;
+  width: 95%;
+}
+.post-page-description{
+  height: 100%;
+  width: 90%;
+  background: var(--background-third);
+  border-radius: 5px;
+  padding: 5%;
+  color: var(--text-primary);
+  font-family: "Montserrat", sans-serif;
+  font-size: 1rem;
+  overflow-y: auto;
+  word-wrap: break-word;
+}
+
+.post-page-stats-wrapper{
+  margin-top: 2%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.post-page-stats{
+  padding: 1rem;
+  height: 100%;
+  width: 90%;
+  display: flex;
+  align-items: start;
+  justify-content: space-between;
+  flex-direction: column;
+  background: var(--background-third);
+  border-radius: 5px;
+}
+.post-page-stat{
+  display: flex;
+  width: 95%;
+  align-items: center;
+  justify-content: start;
+  gap: 2rem;
+  padding-left: 5%;
+}
+.post-page-stat:nth-child(1){
+  border-bottom: 1px solid var(--text-primary);
+  padding-bottom: 1rem;
+}
+.post-page-stat:nth-child(2){
+  border-bottom: 1px solid var(--text-primary);
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+}
+.post-page-stat:nth-child(3){
+  padding-top: 1rem;
+}
+.post-page-stat>div{
+  color: var(--text-primary);
+  font-family: "Montserrat", sans-serif;
+  font-size: 1.1rem;
+}
+.post-page-stat>svg{
+  font-size: 2rem;
+}
+.post-page-icon-stat{
+  font-size: 2rem;
+  color: var(--text-primary);
+  cursor: pointer;
+}
+.ma-top-2{
+    margin-top: 2%;
+}
+.flex-column{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.relative{
+  position: relative;
+}
+
+.modal-followers-friends-wrapper{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.7);
+}
+.modal-followers-friends-content::-webkit-scrollbar {
+  display: none;
+}
+.modal-followers-friends-content{
+  position: absolute;
+  width: 400px;
+  height: 400px;
+  overflow: auto;
+  background: var(--background);
+  border: 1px solid var(--text-primary);
+  border-radius: 20px;
+  background: var(--background-secondary);
+}
+
+.follower-wrapper{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2rem;
+  padding: 0.5rem 1rem;
+  border-bottom: 1px solid var(--text-primary);
+}
+.follower-wrapper:hover{
+  background: var(--background-third);
+  transition: 0.5s all ease;
+  cursor: pointer;
+}
+.no-hover:hover{
+  background: var(--background-secondary);
+}
+.follower-data-avatar{
+  display: flex;
+  gap: 1rem;
+}
+.follower-avatar{
+  width: 4rem;
+  height: 4rem;
+  border: 1px solid var(--text-primary);
+  object-fit: cover;
+  border-radius: 100%;
+}
+.follower-names{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.follower-name{
+  color: var(--button-yellow);
+  font-family: "Montserrat", sans-serif;
+  font-size: 1.2rem;
+}
+.follower-username{
+  color: var(--text-primary);
+  font-family: "Montserrat", sans-serif;
+  font-size: 0.8rem;
+  font-weight: 100;
+}
+.follower-date-button{
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+.follower-date-wrapper{
+  color: var(--text-primary);
+  font-family: "Montserrat", sans-serif;
+  font-size: 0.8rem;
+}
+
+.friend-follower-top-panel{
+  text-align: center;
+  padding: 1rem;
+  color: var(--text-primary);
+  font-weight: 100;
+  font-family: "Montserrat", sans-serif;
+  font-size: 1.4rem;
+  border-bottom: 3px solid var(--text-primary);
+}
+.pink{
+  background: #f45252;
+}
+.dark{
+  filter: brightness(30%);
+}
+.modal-report-content{
+  position: fixed;
+  width: 900px;
+  height: 500px;
+  overflow: auto;
+  background: var(--background-third);
+  border: 1px solid var(--text-primary);
+  border-radius: 20px;
+  background: var(--background-secondary);
+  z-index: 10000;
+}
+
+.modal-report-wrapper{
+  display: flex;
+  position: absolute;
+  align-items: center;
+  justify-content: center;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.85);
+}
+.modal-report-content::-webkit-scrollbar {
+  display: none;
+}
+
+.modal-report-input{
+  width: calc(900px - 4rem);
+  height: 430px;
+  background: var(--background-third);
+  border: none;
+  color: var(--text-primary);
+  font-family: "Montserrat", sans-serif;
+  font-size: 1.2rem;
+  padding: 2rem;
+  resize: none;
+  overflow: auto;
+  outline: none;
+  text-align: start;
+  text-wrap: normal;
+  white-space:pre-wrap;
+}
+
+.admin-content-wrapper{
+  background: var(--background);
+  min-height: 100vh;
+  margin-left: 17vw; /* same as width of #left-nav */
+  width: calc(100% - 17vw);
+  overflow: hidden;
+}
+.report-card-wrapper{
+  margin: 2% 15%;
+}
+.report-card-content{
+  padding: 5%;
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--background-third);
+  color: var(--text-primary);
+  font-family: "Montserrat", sans-serif;
+  font-size: 1.2rem;
+}
+.report-card-content:hover{
+  background: var(--background-secondary);
+  transition: 0.5s all ease;
+  cursor: pointer;
+}
+.report-card-text{
+  max-width: 500px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-height: 1000px;
+}
+.report-wrapper{
+  margin: 2% 5%;
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2rem;
+  padding: 10%;
+  background: var(--background-third);
+  color: var(--text-primary);
+  font-family: "Montserrat", sans-serif;
+  min-height: 30vh;
+}
+.report-text{
+  max-width: 70%;
+}
+.center{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.report-header{
+  font-size: 2rem;
+  font-weight: 100;
+  text-align: center;
+  font-family: "Montserrat", sans-serif ;
+  color: var(--text-primary);
+  box-shadow: 0 0 10px 0 var(--text-primary);
+  margin: 0 100px;
+  border-radius: 20px;
+}
+.report-header h1{
+  margin: 2%;
+}
+.delete-report-button-wrapper{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.delete-report-button{
+  background: #c63a3a;
+  color: var(--text-primary);
+  font-family: "Montserrat", sans-serif;
+  font-size: 1.2rem;
+  padding: 1rem 3rem;
+  border: none;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: 0.5s all ease;
+  width: 200px;
+  text-align: center;
+}
+.delete-report-button:hover{
+  background: #e77c7c;
+  color: var(--background-third);
+  transition: 0.5s all ease;
+}
+.go-to-post-button:hover{
+  color: #c3c3c3;
+  transform: scale(1.1);
+  transition: 0.5s all ease;
+}
+.go-to-post-page-button-wrapper{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.go-to-post-page-button{
+  background: #77e806;
+  color: var(--text-primary);
+  font-family: "Montserrat", sans-serif;
+  font-size: 1.2rem;
+  padding: 1rem 3rem;
+  border: none;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: 0.5s all ease;
+  width: 200px;
+  text-align: center;
+}
+.post-report-buttons-wrapper{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2rem;
+}
+.post-report-header{
+  font-size: 2rem;
+  font-weight: 100;
+  text-align: center;
+  font-family: "Montserrat", sans-serif ;
+  color: var(--text-primary);
+  box-shadow: 0 0 10px 0 var(--text-primary);
+  margin: 0 100px;
+  width: 700px;
+  border-radius: 20px;
+}
+.post-report-header h1{
+  margin: 5%;
+}
+.go-to-post-page-button:hover{
+  background: #a2f97a;
+  color: var(--background-third);
+  transition: 0.5s all ease;
+}
