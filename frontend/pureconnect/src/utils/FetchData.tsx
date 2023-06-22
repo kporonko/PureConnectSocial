@@ -624,3 +624,21 @@ export const DeletePostReport = async (token: string|null, postReportId: number)
         return error;
     }
 }
+
+export const GetUserById = async (token: string|null, profileId: number) => {
+    try {
+        const response = await fetch(`${BASE_URL}api/User/profile/${profileId}`, {
+            method: 'GET',
+            headers:{
+                'Content-Type': 'application/json',
+                'Accept-Language': getUsersLocale(),
+                'Authorization': 'Bearer ' + token,
+            },
+        });
+        return response;
+    }
+    catch (error: any) {
+        console.log(error);
+        return error;
+    }
+}

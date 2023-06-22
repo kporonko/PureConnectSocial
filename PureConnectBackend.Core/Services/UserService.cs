@@ -89,16 +89,56 @@ namespace PureConnectBackend.Core.Services
         /// <param name="currUserJwt">Current user`s credentials from jwt token.</param>
         /// <param name="requestedUserProfileId">Requested profile id.</param>
         /// <returns>ProfileResponse with data about user or empty object with error MyResponses enum value.</returns>
-        public async Task<ProfileResponse> GetProfileById(User currUserJwt, int requestedUserProfileId)
+        public async Task<ProfilePageResponse> GetProfileById(User currUserJwt, int requestedUserProfileId)
         {
             var currUser = await _context.Users.Include(x => x.Follower).Include(x => x.Followee).FirstOrDefaultAsync(x => x.Id == currUserJwt.Id);
             var requestedUser = await _context.Users.Include(x => x.Follower).Include(x => x.Followee).Include(x => x.Posts).FirstOrDefaultAsync(x => x.Id == requestedUserProfileId);
 
-            var responseValidator = await CheckForValidationGeProfile(currUser, requestedUser);
+            var responseValidator = await CheckForValidationGeProfilePage(currUser, requestedUser);
             if (responseValidator is not null)
                 return responseValidator;
 
-            return ConvertUserToProfileResponse(requestedUser!);
+            return ConvertUserToProfilePageResponse(requestedUser!, currUser!);
+        }
+
+        private ProfilePageResponse ConvertUserToProfilePageResponse(User user, User currUser)
+        {
+            var profilePageResponse = new ProfilePageResponse()
+            {
+                Email = user.Email,
+                Status = user.Status,
+                Avatar = user.Avatar,
+                LastName = user.LastName,
+                FirstName = user.FirstName,
+                UserName = user.UserName,
+                BirthDate = user.BirthDate,
+                UserId = user.Id,
+                Location = user.Location,
+            };
+
+            profilePageResponse.PostsCount = user.Posts.Count;
+            profilePageResponse.FriendsCount = GetUsersFriendsCount(user);
+            profilePageResponse.FollowersCount = GetUsersFollowersCount(user);
+            profilePageResponse.Response = MyResponses.Ok;
+            profilePageResponse.IsFollowed = _context.Follows.Any(x => x.FollowerId == currUser.Id && x.FolloweeId == user.Id);
+            
+            return profilePageResponse;
+        }
+
+        private async Task<ProfilePageResponse?> CheckForValidationGeProfilePage(User? currUser, User? requestedUser)
+        {
+            if (currUser is null || requestedUser is null)
+                return new ProfilePageResponse() { Response = MyResponses.BadRequest };
+
+            if (!requestedUser.IsOpenAcc)
+            {
+                if (!await AreFriends(currUser, requestedUser))
+                {
+                    return new ProfilePageResponse() { Response = MyResponses.ClosedAcc };
+                }
+            }
+
+            return null;
         }
 
         /// <summary>

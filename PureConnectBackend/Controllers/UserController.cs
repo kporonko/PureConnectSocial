@@ -114,7 +114,7 @@ namespace PureConnectBackend.Controllers
         /// <returns>Response model with Ok(200) status. Forbidden(403) if acc is closed and user is not a friend of requested user. Bad Request(404) if culdnt find a user.</returns>
         [HttpGet("profile/{profileId}")]
         [Authorize]
-        public async Task<ActionResult<List<RecommendedUserResponse>>> GetProfileById([FromRoute] int profileId)
+        public async Task<ActionResult<ProfilePageResponse>> GetProfileById([FromRoute] int profileId)
         {
             var currUser = GetCurrentUser();
             var response = await _userService.GetProfileById(currUser, profileId);

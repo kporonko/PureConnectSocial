@@ -12,6 +12,7 @@ import AdminPostReports from "./pages/AdminPostReports";
 import ReportPage from "./pages/ReportPage";
 import PostReportPage from "./pages/PostReportPage";
 import AdminPostPage from "./pages/AdminPostPage";
+import UserPage from "./pages/UserPage";
 
 function App() {
 
@@ -24,7 +25,7 @@ function App() {
             <Route path="/" element={<Login theme={theme} setTheme={setTheme}/>}/>
             <Route path="/register" element={<Register theme={theme} setTheme={setTheme}/>}/>
             <Route path="/post/:postId" element={<PostPage theme={theme} setTheme={setTheme}/>}/>
-            <Route path="/user/:userId" element={<div>User</div>}/>
+            <Route path="/user/:userId" element={<UserPage theme={theme} setTheme={setTheme}/>}/>
 
             {/* User*/}
             <Route path="/home" element={<Home theme={theme} setTheme={setTheme}/>}/>
