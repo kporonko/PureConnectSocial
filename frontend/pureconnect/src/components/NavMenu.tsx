@@ -57,6 +57,10 @@ const NavMenu = (props: {page: Page, theme: string, setTheme: any, avatar: strin
         nav('/my-profile')
     }
 
+    const handleNotif = () => {
+        nav('/notifications')
+    }
+
     React.useEffect(() => {
         const image = new Image();
         image.src = props.avatar;
@@ -89,7 +93,7 @@ const NavMenu = (props: {page: Page, theme: string, setTheme: any, avatar: strin
                         </div>
                         <div className={"nav-menu-item-text"}>{strings.chats}</div>
                     </li>
-                    <li className={props.page == Page.Notifications ? "nav-menu-item active-page" : "nav-menu-item"}>
+                    <li onClick={handleNotif} className={props.page == Page.Notifications ? "nav-menu-item active-page" : "nav-menu-item"}>
                         <div className={"nav-menu-item-icon-wrapper"}>
                             <FontAwesomeIcon className={'nav-icon'} icon={solid('bell')} />
                         </div>

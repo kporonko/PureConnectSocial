@@ -13,6 +13,7 @@ import ReportPage from "./pages/ReportPage";
 import PostReportPage from "./pages/PostReportPage";
 import AdminPostPage from "./pages/AdminPostPage";
 import UserPage from "./pages/UserPage";
+import Notifications from "./pages/Notifications";
 
 function App() {
 
@@ -45,6 +46,11 @@ function App() {
             <Route path="/report/:reportId" element={<ReportPage theme={theme} setTheme={setTheme}/>}/>
             <Route path="/post-report/:postReportId" element={<PostReportPage theme={theme} setTheme={setTheme}/>}/>
             <Route path="/admin-post/:postId" element={<AdminPostPage theme={theme} setTheme={setTheme}/>}/>
+
+
+
+            {/*  Notification  */}
+            <Route path="/notifications" element={<Notifications theme={theme} setTheme={setTheme}/>}/>
 
         </Routes>
 

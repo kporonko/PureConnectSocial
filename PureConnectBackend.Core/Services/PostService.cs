@@ -1,5 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.SignalR;
+using Microsoft.EntityFrameworkCore;
 using PureConnectBackend.Core.Extentions;
+using PureConnectBackend.Core.Hubs;
 using PureConnectBackend.Core.Interfaces;
 using PureConnectBackend.Core.Models;
 using PureConnectBackend.Core.Models.Requests;
@@ -21,10 +23,13 @@ namespace PureConnectBackend.Core.Services
         /// Entity Framework DbContext.
         /// </summary>
         private readonly ApplicationContext _context;
+        
+        private readonly IHubContext<NotificationHub> _hubContext;
 
-        public PostService(ApplicationContext context)
+        public PostService(ApplicationContext context, IHubContext<NotificationHub> hubContext)
         {
             _context = context;
+            _hubContext = hubContext;
         }
 
 
@@ -182,6 +187,10 @@ namespace PureConnectBackend.Core.Services
             var post = await _context.Posts.Include(x => x.PostLikes).FirstOrDefaultAsync(x => x.Id == likeInfo.PostId);
             var postLike = new PostLike() { CreatedAt = likeInfo.CreatedAt, PostId = post.Id, UserId = user.Id };
             await AddPostLikeToContext(postLike);
+            
+            string notificationMessage = $"Your post with ID {post.Id} was liked by user {user.UserName}.";
+            await _hubContext.Clients.All.SendAsync("ReceiveNotification", notificationMessage);
+
             return HttpStatusCode.OK;
         }
 

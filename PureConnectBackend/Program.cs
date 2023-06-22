@@ -8,6 +8,7 @@ using System.Text;
 using PureConnectBackend.Core.Interfaces;
 using PureConnectBackend.Core.Services;
 using Microsoft.Extensions.Options;
+using PureConnectBackend.Core.Hubs;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -22,6 +23,7 @@ builder.Services.AddTransient<IPostService, PostService>();
 builder.Services.AddTransient<IUserService, UserService>();
 builder.Services.AddTransient<IReportService, ReportService>();
 builder.Services.AddTransient<IAdminService, AdminService>();
+builder.Services.AddSignalR();
 
 var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 
@@ -30,7 +32,10 @@ builder.Services.AddCors(options =>
     options.AddPolicy(name: MyAllowSpecificOrigins,
                       builder =>
                       {
-                          builder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod();
+                          builder.WithOrigins("http://localhost:3000", "http://localhost:3001") // Replace with your frontend application URL
+                                 .AllowAnyHeader()
+                                 .AllowAnyMethod()
+                                 .AllowCredentials();
                       });
 });
 
@@ -86,9 +91,15 @@ var localizationOptions =
 
 app.UseRequestLocalization(localizationOptions);
 #endregion
-
 app.UseHttpsRedirection();
+app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
-app.MapControllers();
+
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapControllers();
+    endpoints.MapHub<NotificationHub>("/notificationHub"); // Map the SignalR hub endpoint
+});
+
 app.Run();
