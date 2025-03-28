@@ -14,4 +14,8 @@
     <ProjectReference Include="..\PureConnectBackend.Infrastructure\PureConnectBackend.Infrastructure.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="DTOs\" />
+  </ItemGroup>
+
 </Project>

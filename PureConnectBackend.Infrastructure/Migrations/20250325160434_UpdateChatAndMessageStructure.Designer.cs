@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PureConnectBackend.Infrastructure.Data;
 
@@ -11,9 +12,11 @@ using PureConnectBackend.Infrastructure.Data;
 namespace PureConnectBackend.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    partial class ApplicationContextModelSnapshot : ModelSnapshot
+    [Migration("20250325160434_UpdateChatAndMessageStructure")]
+    partial class UpdateChatAndMessageStructure
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -41,7 +44,7 @@ namespace PureConnectBackend.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Chats", (string)null);
+                    b.ToTable("Chats");
                 });
 
             modelBuilder.Entity("PureConnectBackend.Infrastructure.Models.ChatParticipant", b =>
@@ -68,7 +71,7 @@ namespace PureConnectBackend.Infrastructure.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("ChatParticipants", (string)null);
+                    b.ToTable("ChatParticipants");
                 });
 
             modelBuilder.Entity("PureConnectBackend.Infrastructure.Models.Follow", b =>
@@ -122,7 +125,7 @@ namespace PureConnectBackend.Infrastructure.Migrations
 
                     b.HasIndex("ChatParticipantId");
 
-                    b.ToTable("Messages", (string)null);
+                    b.ToTable("Messages");
                 });
 
             modelBuilder.Entity("PureConnectBackend.Infrastructure.Models.Post", b =>

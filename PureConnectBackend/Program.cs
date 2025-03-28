@@ -9,6 +9,7 @@ using PureConnectBackend.Core.Interfaces;
 using PureConnectBackend.Core.Services;
 using Microsoft.Extensions.Options;
 using PureConnectBackend.Core.Hubs;
+using Microsoft.AspNetCore.SignalR;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -23,6 +24,8 @@ builder.Services.AddTransient<IPostService, PostService>();
 builder.Services.AddTransient<IUserService, UserService>();
 builder.Services.AddTransient<IReportService, ReportService>();
 builder.Services.AddTransient<IAdminService, AdminService>();
+builder.Services.AddTransient<IChatService, ChatService>();
+
 builder.Services.AddSignalR();
 
 var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
@@ -100,6 +103,7 @@ app.UseEndpoints(endpoints =>
 {
     endpoints.MapControllers();
     endpoints.MapHub<NotificationHub>("/notificationHub"); // Map the SignalR hub endpoint
+    endpoints.MapHub<ChatHub>("/chatHub"); // Map the SignalR hub endpoint
 });
 
 app.Run();
