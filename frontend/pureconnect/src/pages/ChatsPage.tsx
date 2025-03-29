@@ -62,17 +62,17 @@ const ChatsPage = (props: {
                     .build();
 
                 // Настройка обработчиков событий
-                newConnection.on("SendMessage", (chatId, signalRMessage) => {
-                    console.log(`Получено сообщение в чат ${chatId}:`, signalRMessage);
-
-                    // Если сообщение пришло в текущий открытый чат, обновляем историю
-                    if (selectedChatId === chatId) {
-                        // Компонент ChatComponent сам обновит свое состояние
-                    }
-
-                    // В любом случае обновляем список чатов, чтобы отобразить последнее сообщение
-                    fetchChatsData();
-                });
+                // newConnection.on("SendMessage", (chatId, signalRMessage) => {
+                //     console.log(`Получено сообщение в чат ${chatId}:`, signalRMessage);
+                //
+                //     // Если сообщение пришло в текущий открытый чат, обновляем историю
+                //     if (selectedChatId === chatId) {
+                //         // Компонент ChatComponent сам обновит свое состояние
+                //     }
+                //
+                //     // В любом случае обновляем список чатов, чтобы отобразить последнее сообщение
+                //     fetchChatsData();
+                // });
 
                 newConnection.on("OnUserJoined", (chatId, userId) => {
                     console.log(`Пользователь ${userId} присоединился к чату ${chatId}`);

@@ -76,27 +76,49 @@ const ChatComponent: React.FC<ChatComponentProps> = ({
             connection.on("SendMessage", (receivedChatId: number, signalRMessage: IMessageSignalRModel) => {
                 console.log("Received message via SignalR:", receivedChatId, signalRMessage);
 
-                // Проверяем, что сообщение для текущего чата
+                // Verify message is for the current chat
                 if (receivedChatId === chatId) {
-                    // Преобразуем модель SignalR в формат модели для UI
+                    // Convert SignalR model to UI format
                     const messageForUI: IMessageInChatResponse = {
                         messageId: signalRMessage.messageId,
                         messageText: signalRMessage.messageText,
                         messageDate: new Date(signalRMessage.messageDate).toISOString(),
                         senderId: signalRMessage.senderId.toString(),
-                        email: '' // Email может отсутствовать в SignalR модели
+                        email: '' // Email may be missing in SignalR model
                     };
 
                     setChat(prevChat => {
                         if (!prevChat) return prevChat;
 
-                        // Проверяем, не дублируется ли сообщение
-                        const messageExists = prevChat.messages.some(m =>
-                            m.messageId === messageForUI.messageId);
+                        // Check for duplicates: including both exact messageId matches
+                        // AND optimistic messages with same content but negative IDs
+                        const isDuplicate = prevChat.messages.some(m =>
+                            // Case 1: Same messageId (exact duplicate)
+                            m.messageId === messageForUI.messageId ||
+                            // Case 2: Optimistic message with same text/sender (replace optimistic)
+                            (m.messageId < 0 &&
+                                m.messageText === messageForUI.messageText &&
+                                m.senderId === messageForUI.senderId)
+                        );
 
-                        if (messageExists) return prevChat;
+                        if (isDuplicate) {
+                            // Replace any optimistic message with real message
+                            return {
+                                ...prevChat,
+                                messages: prevChat.messages.map(m => {
+                                    // If this is the optimistic message that matches our real one, replace it
+                                    if (m.messageId < 0 &&
+                                        m.messageText === messageForUI.messageText &&
+                                        m.senderId === messageForUI.senderId) {
+                                        return messageForUI;
+                                    }
+                                    // Otherwise keep the message as is
+                                    return m;
+                                })
+                            };
+                        }
 
-                        // Добавляем новое сообщение в список
+                        // Add new message if not a duplicate
                         return {
                             ...prevChat,
                             messages: [...prevChat.messages, messageForUI]
