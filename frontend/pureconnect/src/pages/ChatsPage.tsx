@@ -62,11 +62,12 @@ const ChatsPage = (props: {
                     .build();
 
                 // Настройка обработчиков событий
-                newConnection.on("SendMessage", (chatId, content) => {
-                    console.log(`Получено сообщение в чат ${chatId}: ${content}`);
+                newConnection.on("SendMessage", (chatId, signalRMessage) => {
+                    console.log(`Получено сообщение в чат ${chatId}:`, signalRMessage);
+
                     // Если сообщение пришло в текущий открытый чат, обновляем историю
                     if (selectedChatId === chatId) {
-                        // TODO: Реализовать обновление только последнего сообщения без перезагрузки всей истории
+                        // Компонент ChatComponent сам обновит свое состояние
                     }
 
                     // В любом случае обновляем список чатов, чтобы отобразить последнее сообщение
@@ -144,6 +145,7 @@ const ChatsPage = (props: {
                             chatId={selectedChatId}
                             theme={props.theme}
                             connection={connection}
+                            onMessageSent={fetchChatsData}
                         />
                     ) : (
                         <EmptyChat />

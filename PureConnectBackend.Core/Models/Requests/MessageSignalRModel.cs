@@ -4,16 +4,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PureConnectBackend.Core.Models.Responses
+namespace PureConnectBackend.Core.Models.Requests
 {
-    public class MessageResponse
+    public class MessageSignalRModel
     {
         public int MessageId { get; set; }
-
-        public int SenderId { get; set; }
-
         public string MessageText { get; set; }
-        public DateTime Timestamp { get; set; }
+        public DateTime MessageDate { get; set; }
+        public int SenderId { get; set; }
 
     }
 }

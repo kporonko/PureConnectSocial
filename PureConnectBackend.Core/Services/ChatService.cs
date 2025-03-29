@@ -64,7 +64,8 @@ namespace PureConnectBackend.Core.Services
             {
                 MessageId = message.Id,
                 MessageText = message.Content,
-                SenderId = senderId
+                SenderId = senderId,
+                Timestamp = message.Timestamp
             };
         }
         

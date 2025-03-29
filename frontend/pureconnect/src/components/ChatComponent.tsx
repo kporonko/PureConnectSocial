@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { IChatResponse, IMessageInChatResponse } from '../interfaces/IChat';
+import { IMessageSignalRModel } from '../interfaces/IMessageSignalRModel';
 import LocalizedStrings from "react-localization";
 import { BASE_URL } from "../utils/FetchData";
 import { toast } from "react-toastify";
@@ -9,9 +10,15 @@ interface ChatComponentProps {
     chatId: number;
     theme: string;
     connection: any;
+    onMessageSent?: () => void; // Add this optional callback prop
 }
 
-const ChatComponent: React.FC<ChatComponentProps> = ({ chatId, theme, connection }) => {
+const ChatComponent: React.FC<ChatComponentProps> = ({
+                                                         chatId,
+                                                         theme,
+                                                         connection,
+                                                         onMessageSent
+                                                     }) => {
     const [chat, setChat] = useState<IChatResponse | null>(null);
     const [loading, setLoading] = useState<boolean>(true);
     const [message, setMessage] = useState<string>('');
@@ -44,18 +51,79 @@ const ChatComponent: React.FC<ChatComponentProps> = ({ chatId, theme, connection
         }
     });
 
+    // Загрузка истории чата при изменении chatId
     useEffect(() => {
         if (chatId) {
             fetchChatHistory();
         }
     }, [chatId]);
 
+    // Настройка обработчиков SignalR
     useEffect(() => {
-        // Прокрутка к последнему сообщению при обновлении чата
+        if (connection && chatId && chat) {
+            // Отписываемся от предыдущих событий для предотвращения дублирования
+            connection.off("SendMessage");
+
+            // Присоединяемся к группе чата (если Hub имеет метод JoinChat)
+            try {
+                connection.invoke("JoinChat", chatId)
+                    .catch((err:any) => console.error("Error joining chat:", err));
+            } catch (error) {
+                console.log("JoinChat method not available:", error);
+            }
+
+            // Подписываемся на получение новых сообщений
+            connection.on("SendMessage", (receivedChatId: number, signalRMessage: IMessageSignalRModel) => {
+                console.log("Received message via SignalR:", receivedChatId, signalRMessage);
+
+                // Проверяем, что сообщение для текущего чата
+                if (receivedChatId === chatId) {
+                    // Преобразуем модель SignalR в формат модели для UI
+                    const messageForUI: IMessageInChatResponse = {
+                        messageId: signalRMessage.messageId,
+                        messageText: signalRMessage.messageText,
+                        messageDate: new Date(signalRMessage.messageDate).toISOString(),
+                        senderId: signalRMessage.senderId.toString(),
+                        email: '' // Email может отсутствовать в SignalR модели
+                    };
+
+                    setChat(prevChat => {
+                        if (!prevChat) return prevChat;
+
+                        // Проверяем, не дублируется ли сообщение
+                        const messageExists = prevChat.messages.some(m =>
+                            m.messageId === messageForUI.messageId);
+
+                        if (messageExists) return prevChat;
+
+                        // Добавляем новое сообщение в список
+                        return {
+                            ...prevChat,
+                            messages: [...prevChat.messages, messageForUI]
+                        };
+                    });
+                }
+            });
+
+            // При размонтировании компонента или изменении чата
+            return () => {
+                connection.off("SendMessage");
+                try {
+                    connection.invoke("LeaveChat", chatId)
+                        .catch((err: any) => console.error("Error leaving chat:", err));
+                } catch (error) {
+                    console.log("LeaveChat method not available:", error);
+                }
+            };
+        }
+    }, [connection, chatId, chat]);
+
+    // Прокрутка к последнему сообщению при обновлении чата
+    useEffect(() => {
         if (messageContainerRef.current) {
             messageContainerRef.current.scrollTop = messageContainerRef.current.scrollHeight;
         }
-    }, [chat]);
+    }, [chat?.messages]);
 
     const fetchChatHistory = async () => {
         setLoading(true);
@@ -93,6 +161,29 @@ const ChatComponent: React.FC<ChatComponentProps> = ({ chatId, theme, connection
     const sendMessage = async () => {
         if (!message.trim() || !chatId) return;
 
+        // Сохраняем текст сообщения для оптимистичного обновления
+        const messageText = message.trim();
+        setMessage(''); // Очищаем поле ввода сразу
+
+        // Добавляем сообщение локально для мгновенного отображения (оптимистичное обновление)
+        if (chat) {
+            const optimisticMessage: IMessageInChatResponse = {
+                messageId: -new Date().getTime(), // Временный отрицательный ID, чтобы не конфликтовать с реальными
+                messageText: messageText,
+                messageDate: new Date().toISOString(),
+                senderId: chat.userId.toString(),
+                email: '' // Можно получить из локального хранилища, если нужно
+            };
+
+            setChat(prevChat => {
+                if (!prevChat) return prevChat;
+                return {
+                    ...prevChat,
+                    messages: [...prevChat.messages, optimisticMessage]
+                };
+            });
+        }
+
         try {
             const token = localStorage.getItem('access_token');
             const response = await fetch(`${BASE_URL}api/Chat/${chatId}/messages`, {
@@ -101,7 +192,7 @@ const ChatComponent: React.FC<ChatComponentProps> = ({ chatId, theme, connection
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${token}`,
                 },
-                body: JSON.stringify({ content: message }),
+                body: JSON.stringify({ content: messageText }),
             });
 
             if (response.status === 401) {
@@ -112,13 +203,17 @@ const ChatComponent: React.FC<ChatComponentProps> = ({ chatId, theme, connection
 
             if (!response.ok) {
                 toast.error(strings.error);
+                // Можно добавить код для удаления оптимистично добавленного сообщения
                 return;
             }
 
-            // Успешная отправка сообщения
-            setMessage('');
-            // Обновляем историю чата
-            fetchChatHistory();
+            // Call the callback to update the chat list if provided
+            if (onMessageSent) {
+                onMessageSent();
+            }
+
+            // НЕ обновляем историю чата - сообщение придет через SignalR
+            // fetchChatHistory();
         } catch (error) {
             console.error('Error sending message:', error);
             toast.error(strings.error);
@@ -286,11 +381,13 @@ const ChatComponent: React.FC<ChatComponentProps> = ({ chatId, theme, connection
                                     </div>
 
                                     {messages.map(message => {
+                                        // Если ID отрицательный, это временное сообщение для оптимистичного обновления
+                                        const isOptimisticMessage = message.messageId < 0;
                                         const isCurrentUser = parseInt(message.senderId) === chat.userId;
                                         return (
                                             <div
                                                 key={message.messageId}
-                                                className={`message-item ${isCurrentUser ? 'current-user' : 'other-user'}`}
+                                                className={`message-item ${isCurrentUser ? 'current-user' : 'other-user'} ${isOptimisticMessage ? 'optimistic-message' : ''}`}
                                             >
                                                 <div className="message-avatar">
                                                     <img
@@ -304,7 +401,11 @@ const ChatComponent: React.FC<ChatComponentProps> = ({ chatId, theme, connection
                                                     )}
                                                     <div className="message-bubble">
                                                         <div className="message-text">{message.messageText}</div>
-                                                        <div className="message-time">{getTimeMessage(message.messageDate)}</div>
+                                                        <div className="message-time">
+                                                            {isOptimisticMessage
+                                                                ? (strings.justNow || 'just now')
+                                                                : getTimeMessage(message.messageDate)}
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>

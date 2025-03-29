@@ -57,19 +57,37 @@ namespace PureConnectBackend.Controllers
 
             return Ok(chat);
         }
-        
+
         [HttpPost("{chatId}/messages")]
         public async Task<ActionResult<MessageResponse>> SendMessage(int chatId, [FromBody] SendMessageDto dto)
         {
+            Console.WriteLine($"SendMessage called for chat {chatId}, content: {dto.Content}");
+
             var user = GetCurrentUser();
             if (user == null)
+            {
+                Console.WriteLine("User not found");
                 return BadRequest(_stringLocalizer.GetString("UserNotFound"));
+            }
+
+            Console.WriteLine($"User {user.Id} sending message to chat {chatId}");
 
             // Сохраняем сообщение через сервис
             var message = await _chatService.SendMessageAsync(chatId, user.Id, dto.Content);
+            Console.WriteLine($"Message saved to database with ID {message.MessageId}");
 
             // Отправляем сообщение через SignalR
-            await _chatHubContext.Clients.Group(chatId.ToString()).SendMessage(chatId, message.MessageText);
+            var signalMessageModel = new MessageSignalRModel
+            {
+                MessageId = message.MessageId,
+                SenderId = user.Id,
+                MessageText = message.MessageText,
+                MessageDate = message.Timestamp
+            };
+
+            Console.WriteLine($"Sending message to chat {chatId} via SignalR: {message.MessageText}");
+            await _chatHubContext.Clients.Group(chatId.ToString()).SendMessage(chatId, signalMessageModel);
+            Console.WriteLine($"Message sent to chat {chatId} via SignalR");
 
             return Ok(message);
         }
