@@ -6,7 +6,7 @@ import ChatComponent from "../components/ChatComponent";
 import { HubConnectionBuilder } from '@microsoft/signalr';
 import { IChatShortResponse } from '../interfaces/IChat';
 import LocalizedStrings from "react-localization";
-import { BASE_URL, fetchChats } from "../utils/FetchData";
+import {BASE_URL, fetchChats, getAvatar} from "../utils/FetchData";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router";
 
@@ -17,6 +17,7 @@ const ChatsPage = (props: {
     const [chats, setChats] = useState<IChatShortResponse>({ chats: [] });
     const [selectedChatId, setSelectedChatId] = useState<number | null>(null);
     const [connection, setConnection] = useState<any>(null);
+    const [avatarImage, setAvatarImage] = React.useState("");
 
     const nav = useNavigate();
 
@@ -30,6 +31,23 @@ const ChatsPage = (props: {
             expired:"Ваша сесія закінчилася. Будь-ласка, залогіньтеся заново"
         }
     });
+
+    useEffect( () => {
+        const avatar = async() => {
+            const token = localStorage.getItem('access_token');
+            if (token !== null) {
+                const response = await getAvatar(token);
+                if (response.status === 401) {
+                    setTimeout(() => nav('/'), 2000);
+                    const notify = () => toast.error(strings.expired);
+                    notify();
+                }
+                const body = await response.json();
+                setAvatarImage(body.avatar);
+            }
+        };
+        avatar();
+    }, []);
 
     useEffect(() => {
         const initializeChat = async () => {
@@ -113,7 +131,7 @@ const ChatsPage = (props: {
 
     return (
         <div className="chats-page" data-theme={props.theme}>
-            <NavMenu page={4} theme={props.theme} setTheme={props.setTheme} avatar={""} />
+            <NavMenu page={4} theme={props.theme} setTheme={props.setTheme}  avatar={avatarImage} />
             <div className="chats-content">
                 <ChatList
                     chats={chats}

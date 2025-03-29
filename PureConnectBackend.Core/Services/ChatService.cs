@@ -43,7 +43,7 @@ namespace PureConnectBackend.Core.Services
             return chat;
         }
 
-        public async Task<Message> SendMessageAsync(int chatId, int senderId, string content)
+        public async Task<MessageResponse> SendMessageAsync(int chatId, int senderId, string content)
         {
             var chatParticipant = await _context.ChatParticipants
                 .FirstOrDefaultAsync(cp => cp.ChatId == chatId && cp.UserId == senderId);
@@ -60,10 +60,15 @@ namespace PureConnectBackend.Core.Services
 
             _context.Messages.Add(message);
             await _context.SaveChangesAsync();
-            return message;
+            return new MessageResponse 
+            {
+                MessageId = message.Id,
+                MessageText = message.Content,
+                SenderId = senderId
+            };
         }
-
-        public async Task<ChatResponse> GetChatHistoryAsync(int chatId)
+        
+        public async Task<ChatResponse> GetChatHistoryAsync(int chatId, int userId)
         {
             var chat = await GetChatWithParticipantsAsync(chatId);
             if (chat == null)
@@ -76,6 +81,7 @@ namespace PureConnectBackend.Core.Services
             return new ChatResponse
             {
                 ChatId = chat.Id,
+                UserId = userId,
                 Participants = participants,
                 Messages = messageResponses
             };

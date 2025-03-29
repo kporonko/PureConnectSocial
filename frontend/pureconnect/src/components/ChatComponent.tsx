@@ -28,7 +28,8 @@ const ChatComponent: React.FC<ChatComponentProps> = ({ chatId, theme, connection
             expired: "Your session is expired. Please login again",
             empty: "No messages yet. Start a conversation!",
             today: "Today",
-            yesterday: "Yesterday"
+            yesterday: "Yesterday",
+            justNow: "just now"
         },
         ua: {
             loading: "Завантаження повідомлень...",
@@ -38,7 +39,8 @@ const ChatComponent: React.FC<ChatComponentProps> = ({ chatId, theme, connection
             expired: "Ваша сесія закінчилася. Будь-ласка, залогіньтеся заново",
             empty: "Ще немає повідомлень. Почніть розмову!",
             today: "Сьогодні",
-            yesterday: "Вчора"
+            yesterday: "Вчора",
+            justNow: "щойно"
         }
     });
 
@@ -137,17 +139,36 @@ const ChatComponent: React.FC<ChatComponentProps> = ({ chatId, theme, connection
         const messageDate = new Date(date);
         const now = new Date();
 
+        // Разница в миллисекундах
+        const diffMs = now.getTime() - messageDate.getTime();
+
+        // Конвертация в различные единицы времени
+        const diffSeconds = Math.floor(diffMs / 1000);
+        const diffMinutes = Math.floor(diffSeconds / 60);
+        const diffHours = Math.floor(diffMinutes / 60);
+        const diffDays = Math.floor(diffHours / 24);
+
         // Форматирование даты для сообщений
         const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
         const yesterday = new Date(today);
         yesterday.setDate(yesterday.getDate() - 1);
 
-        if (messageDate >= today) {
-            return `${strings.today}, ${messageDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`;
+        // Получаем только время (часы:минуты)
+        const timeOnly = messageDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+        if (diffMinutes < 1) {
+            return strings.justNow || 'just now';
+        } else if (diffMinutes < 60) {
+            return `${diffMinutes} ${diffMinutes === 1 ? 'min' : 'mins'} ago`;
+        } else if (messageDate >= today) {
+            return timeOnly;
         } else if (messageDate >= yesterday) {
-            return `${strings.yesterday}, ${messageDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`;
+            return `${strings.yesterday}, ${timeOnly}`;
+        } else if (diffDays < 7) {
+            const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+            return `${days[messageDate.getDay()]}, ${timeOnly}`;
         } else {
-            return messageDate.toLocaleDateString() + ', ' + messageDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+            return messageDate.toLocaleDateString() + ', ' + timeOnly;
         }
     };
 
@@ -158,9 +179,11 @@ const ChatComponent: React.FC<ChatComponentProps> = ({ chatId, theme, connection
         return participant ? (participant.fullName || participant.username) : senderId;
     };
 
-    const getCurrentUserId = () => {
-        const user = JSON.parse(localStorage.getItem('user') || '{}');
-        return user.id?.toString() || '';
+    const getParticipantAvatar = (senderId: string) => {
+        if (!chat) return '';
+
+        const participant = chat.participants.find(p => p.participantId.toString() === senderId);
+        return participant?.avatar || '';
     };
 
     const groupMessagesByDate = (messages: IMessageInChatResponse[]) => {
@@ -198,6 +221,13 @@ const ChatComponent: React.FC<ChatComponentProps> = ({ chatId, theme, connection
         }
     };
 
+    // Функция для получения собеседника (для личного чата)
+    const getInterlocutor = () => {
+        if (!chat || !chat.participants) return null;
+
+        return chat.participants.find(p => p.participantId !== chat.userId);
+    };
+
     if (loading) {
         return <div className="chat-loading">{strings.loading}</div>;
     }
@@ -207,12 +237,42 @@ const ChatComponent: React.FC<ChatComponentProps> = ({ chatId, theme, connection
             {chat ? (
                 <>
                     <div className="chat-header">
-                        {/* Если групповой чат - показать название, если личный - имя собеседника */}
-                        <h2>{chat.participants.length > 2
-                            ? chat.participants.map(p => p.fullName || p.username).join(', ')
-                            : chat.participants.find(p => p.participantId.toString() !== getCurrentUserId())?.fullName ||
-                            chat.participants.find(p => p.participantId.toString() !== getCurrentUserId())?.username}
-                        </h2>
+                        <div className="chat-header-info">
+                            {chat.participants.length > 2 ? (
+                                <div className="chat-header-group">
+                                    <div className="chat-group-avatars">
+                                        {chat.participants.slice(0, 3).map(participant => (
+                                            <div
+                                                className="chat-header-avatar"
+                                                key={participant.participantId}
+                                            >
+                                                <img
+                                                    src={participant.avatar}
+                                                    alt={participant.fullName || participant.username}
+                                                />
+                                            </div>
+                                        ))}
+                                    </div>
+                                    <h2>{chat.participants.map(p => p.fullName || p.username).join(', ')}</h2>
+                                </div>
+                            ) : (
+                                <>
+                                    {getInterlocutor() && (
+                                        <>
+                                            <div className="chat-header-avatar">
+                                                <img
+                                                    src={getInterlocutor()?.avatar}
+                                                    alt="User avatar"
+                                                />
+                                            </div>
+                                            <h2>
+                                                {getInterlocutor()?.fullName || getInterlocutor()?.username}
+                                            </h2>
+                                        </>
+                                    )}
+                                </>
+                            )}
+                        </div>
                     </div>
 
                     <div className="chat-messages-container" ref={messageContainerRef}>
@@ -226,18 +286,26 @@ const ChatComponent: React.FC<ChatComponentProps> = ({ chatId, theme, connection
                                     </div>
 
                                     {messages.map(message => {
-                                        const isCurrentUser = message.senderId === getCurrentUserId();
+                                        const isCurrentUser = parseInt(message.senderId) === chat.userId;
                                         return (
                                             <div
                                                 key={message.messageId}
                                                 className={`message-item ${isCurrentUser ? 'current-user' : 'other-user'}`}
                                             >
-                                                {!isCurrentUser && (
-                                                    <div className="message-sender">{getDisplayName(message.senderId)}</div>
-                                                )}
-                                                <div className="message-bubble">
-                                                    <div className="message-text">{message.messageText}</div>
-                                                    <div className="message-time">{getTimeMessage(message.messageDate)}</div>
+                                                <div className="message-avatar">
+                                                    <img
+                                                        src={getParticipantAvatar(message.senderId)}
+                                                        alt={isCurrentUser ? "You" : getDisplayName(message.senderId)}
+                                                    />
+                                                </div>
+                                                <div className="message-content">
+                                                    {!isCurrentUser && (
+                                                        <div className="message-sender">{getDisplayName(message.senderId)}</div>
+                                                    )}
+                                                    <div className="message-bubble">
+                                                        <div className="message-text">{message.messageText}</div>
+                                                        <div className="message-time">{getTimeMessage(message.messageDate)}</div>
+                                                    </div>
                                                 </div>
                                             </div>
                                         );

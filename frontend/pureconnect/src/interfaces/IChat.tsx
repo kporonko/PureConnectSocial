@@ -26,6 +26,7 @@ export interface ILastMessage {
 
 export interface IChatResponse {
     chatId: number;
+    userId: number;
     participants: IParticipant[];
     messages: IMessageInChatResponse[];
 }

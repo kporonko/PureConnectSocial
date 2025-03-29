@@ -59,7 +59,7 @@ namespace PureConnectBackend.Controllers
         }
         
         [HttpPost("{chatId}/messages")]
-        public async Task<ActionResult<Message>> SendMessage(int chatId, [FromBody] SendMessageDto dto)
+        public async Task<ActionResult<MessageResponse>> SendMessage(int chatId, [FromBody] SendMessageDto dto)
         {
             var user = GetCurrentUser();
             if (user == null)
@@ -69,7 +69,7 @@ namespace PureConnectBackend.Controllers
             var message = await _chatService.SendMessageAsync(chatId, user.Id, dto.Content);
 
             // Отправляем сообщение через SignalR
-            await _chatHubContext.Clients.Group(chatId.ToString()).SendMessage(chatId, message.Content);
+            await _chatHubContext.Clients.Group(chatId.ToString()).SendMessage(chatId, message.MessageText);
 
             return Ok(message);
         }
@@ -87,10 +87,13 @@ namespace PureConnectBackend.Controllers
         }
 
         [HttpGet("{chatId}/messages")]
-
-        public async Task<ActionResult<IEnumerable<ChatResponse>>> GetChatHistory(int chatId)
+        public async Task<ActionResult<ChatResponse>> GetChatHistory(int chatId)
         {
-            var messages = await _chatService.GetChatHistoryAsync(chatId);
+            var user = GetCurrentUser();
+            if (user == null)
+                return BadRequest(_stringLocalizer.GetString("UserNotFound"));
+
+            var messages = await _chatService.GetChatHistoryAsync(chatId, user.Id);
 
             if (messages is null)
                 return BadRequest(_stringLocalizer.GetString("ChatNotFound"));

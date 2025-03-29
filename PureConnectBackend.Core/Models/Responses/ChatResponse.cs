@@ -9,6 +9,7 @@ namespace PureConnectBackend.Core.Models.Responses
     public class ChatResponse
     {
         public int ChatId { get; set; }
+        public int UserId { get; set; }
         public List<Participant> Participants { get; set; }
         public List<MessageInChatResponse> Messages { get; set; }
     }
