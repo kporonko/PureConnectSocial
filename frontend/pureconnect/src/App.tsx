@@ -14,6 +14,7 @@ import PostReportPage from "./pages/PostReportPage";
 import AdminPostPage from "./pages/AdminPostPage";
 import UserPage from "./pages/UserPage";
 import Notifications from "./pages/Notifications";
+import ChatsPage from "./pages/ChatsPage";
 
 function App() {
 
@@ -51,6 +52,9 @@ function App() {
 
             {/*  Notification  */}
             <Route path="/notifications" element={<Notifications theme={theme} setTheme={setTheme}/>}/>
+
+
+            <Route path="/chats" element={<ChatsPage theme={theme} setTheme={setTheme}/>}/>
 
         </Routes>
 

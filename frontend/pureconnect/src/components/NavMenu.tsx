@@ -53,6 +53,11 @@ const NavMenu = (props: {page: Page, theme: string, setTheme: any, avatar: strin
     const handleHome = () => {
         nav('/home')
     }
+
+    const handleChats = () => {
+        nav('/chats')
+    }
+
     const handleProfile = () => {
         nav('/my-profile')
     }
@@ -87,7 +92,7 @@ const NavMenu = (props: {page: Page, theme: string, setTheme: any, avatar: strin
                         </div>
                         <div className={"nav-menu-item-text"}>{strings.search}</div>
                     </li>
-                    <li className={props.page == Page.Chats ? "nav-menu-item active-page" : "nav-menu-item"}>
+                    <li onClick={handleChats}  className={props.page == Page.Chats ? "nav-menu-item active-page" : "nav-menu-item"}>
                         <div className={"nav-menu-item-icon-wrapper"}>
                             <FontAwesomeIcon className={'nav-icon'} icon={solid('comments')} />
                         </div>
