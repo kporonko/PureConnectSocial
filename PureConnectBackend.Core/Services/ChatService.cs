@@ -97,6 +97,7 @@ namespace PureConnectBackend.Core.Services
                 .ToListAsync();
 
             var chatResponse = new ChatShortResponse();
+            chatResponse.Chats = new List<ChatShort>();
 
             foreach (var chat in chats)
             {
@@ -120,10 +121,7 @@ namespace PureConnectBackend.Core.Services
                     } : new LastMessage()
                 };
 
-                chatResponse = new ChatShortResponse
-                {
-                    Chats = new List<ChatShort> { chatShort }
-                };
+                chatResponse.Chats.Add(chatShort);
             }
 
             return chatResponse;
