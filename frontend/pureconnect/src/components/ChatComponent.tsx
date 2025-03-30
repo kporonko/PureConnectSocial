@@ -59,86 +59,88 @@ const ChatComponent: React.FC<ChatComponentProps> = ({
     }, [chatId]);
 
     // Настройка обработчиков SignalR
+    // В ChatComponent.tsx - модифицируем useEffect для обработки SignalR
+
+// Настройка обработчиков SignalR
     useEffect(() => {
         if (connection && chatId && chat) {
-            // Отписываемся от предыдущих событий для предотвращения дублирования
-            connection.off("SendMessage");
+            // НЕ отписываемся от предыдущих событий
+            // connection.off("SendMessage");
 
-            // Присоединяемся к группе чата (если Hub имеет метод JoinChat)
-            try {
-                connection.invoke("JoinChat", chatId)
-                    .catch((err:any) => console.error("Error joining chat:", err));
-            } catch (error) {
-                console.log("JoinChat method not available:", error);
-            }
+            // Вместо этого создаем обработчик с уникальным именем для текущего чата
+            const handlerName = `SendMessage.Chat${chatId}`;
 
-            // Подписываемся на получение новых сообщений
+            // Сначала отписываемся от предыдущего обработчика для этого чата, если он был
+            connection.off(handlerName);
+
+            // Также обрабатываем стандартное событие SendMessage
             connection.on("SendMessage", (receivedChatId: number, signalRMessage: IMessageSignalRModel) => {
-                console.log("Received message via SignalR:", receivedChatId, signalRMessage);
+                console.log(`ChatComponent standard SendMessage: Received message:`, receivedChatId, signalRMessage);
 
-                // Verify message is for the current chat
+                // Обрабатываем только сообщения для текущего чата
                 if (receivedChatId === chatId) {
-                    // Convert SignalR model to UI format
-                    const messageForUI: IMessageInChatResponse = {
-                        messageId: signalRMessage.messageId,
-                        messageText: signalRMessage.messageText,
-                        messageDate: new Date(signalRMessage.messageDate).toISOString(),
-                        senderId: signalRMessage.senderId.toString(),
-                        email: '' // Email may be missing in SignalR model
-                    };
-
-                    setChat(prevChat => {
-                        if (!prevChat) return prevChat;
-
-                        // Check for duplicates: including both exact messageId matches
-                        // AND optimistic messages with same content but negative IDs
-                        const isDuplicate = prevChat.messages.some(m =>
-                            // Case 1: Same messageId (exact duplicate)
-                            m.messageId === messageForUI.messageId ||
-                            // Case 2: Optimistic message with same text/sender (replace optimistic)
-                            (m.messageId < 0 &&
-                                m.messageText === messageForUI.messageText &&
-                                m.senderId === messageForUI.senderId)
-                        );
-
-                        if (isDuplicate) {
-                            // Replace any optimistic message with real message
-                            return {
-                                ...prevChat,
-                                messages: prevChat.messages.map(m => {
-                                    // If this is the optimistic message that matches our real one, replace it
-                                    if (m.messageId < 0 &&
-                                        m.messageText === messageForUI.messageText &&
-                                        m.senderId === messageForUI.senderId) {
-                                        return messageForUI;
-                                    }
-                                    // Otherwise keep the message as is
-                                    return m;
-                                })
-                            };
-                        }
-
-                        // Add new message if not a duplicate
-                        return {
-                            ...prevChat,
-                            messages: [...prevChat.messages, messageForUI]
-                        };
-                    });
+                    // Аналогичный код обработки сообщения...
+                    // Или вызываем функцию обработки
+                    handleReceivedMessage(receivedChatId, signalRMessage);
                 }
             });
 
             // При размонтировании компонента или изменении чата
             return () => {
-                connection.off("SendMessage");
-                try {
-                    connection.invoke("LeaveChat", chatId)
-                        .catch((err: any) => console.error("Error leaving chat:", err));
-                } catch (error) {
-                    console.log("LeaveChat method not available:", error);
-                }
+                connection.off(handlerName);
+                // НЕ отписываемся от "SendMessage", так как его использует ChatsPage
+                // connection.off("SendMessage");
             };
         }
     }, [connection, chatId, chat]);
+
+// Функция для обработки полученного сообщения
+    const handleReceivedMessage = (receivedChatId: number, signalRMessage: IMessageSignalRModel) => {
+        // Проверяем, что сообщение для текущего чата
+        if (receivedChatId !== chatId) return;
+
+        // Преобразуем модель SignalR в формат UI
+        const messageForUI: IMessageInChatResponse = {
+            messageId: signalRMessage.messageId,
+            messageText: signalRMessage.messageText,
+            messageDate: new Date(signalRMessage.messageDate).toISOString(),
+            senderId: signalRMessage.senderId.toString(),
+            email: '' // Email may be missing in SignalR model
+        };
+
+        setChat(prevChat => {
+            if (!prevChat) return prevChat;
+
+            // Проверяем на дубликаты
+            const isDuplicate = prevChat.messages.some(m =>
+                m.messageId === messageForUI.messageId ||
+                (m.messageId < 0 &&
+                    m.messageText === messageForUI.messageText &&
+                    m.senderId === messageForUI.senderId)
+            );
+
+            if (isDuplicate) {
+                // Заменяем оптимистичное сообщение на реальное
+                return {
+                    ...prevChat,
+                    messages: prevChat.messages.map(m => {
+                        if (m.messageId < 0 &&
+                            m.messageText === messageForUI.messageText &&
+                            m.senderId === messageForUI.senderId) {
+                            return messageForUI;
+                        }
+                        return m;
+                    })
+                };
+            }
+
+            // Добавляем новое сообщение, если это не дубликат
+            return {
+                ...prevChat,
+                messages: [...prevChat.messages, messageForUI]
+            };
+        });
+    };
 
     // Прокрутка к последнему сообщению при обновлении чата
     useEffect(() => {

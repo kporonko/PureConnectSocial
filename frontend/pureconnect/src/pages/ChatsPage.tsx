@@ -62,17 +62,21 @@ const ChatsPage = (props: {
                     .build();
 
                 // Настройка обработчиков событий
-                // newConnection.on("SendMessage", (chatId, signalRMessage) => {
-                //     console.log(`Получено сообщение в чат ${chatId}:`, signalRMessage);
-                //
-                //     // Если сообщение пришло в текущий открытый чат, обновляем историю
-                //     if (selectedChatId === chatId) {
-                //         // Компонент ChatComponent сам обновит свое состояние
-                //     }
-                //
-                //     // В любом случае обновляем список чатов, чтобы отобразить последнее сообщение
-                //     fetchChatsData();
-                // });
+                // Используем ДРУГОЕ ИМЯ для обработчика в ChatsPage
+                newConnection.on("SendMessage.ChatsPage", (chatId, signalRMessage) => {
+                    console.log(`ChatsPage: Получено сообщение в чат ${chatId}:`, signalRMessage);
+
+                    // В любом случае обновляем список чатов, чтобы отобразить последнее сообщение
+                    fetchChatsData();
+                });
+
+                // Это оригинальный обработчик, который будет использоваться в ChatComponent
+                newConnection.on("SendMessage", (chatId, signalRMessage) => {
+                    console.log(`ChatsPage: Получено оригинальное сообщение в чат ${chatId}:`, signalRMessage);
+
+                    // Также обновляем список чатов при любом сообщении
+                    fetchChatsData();
+                });
 
                 newConnection.on("OnUserJoined", (chatId, userId) => {
                     console.log(`Пользователь ${userId} присоединился к чату ${chatId}`);
@@ -85,7 +89,34 @@ const ChatsPage = (props: {
                 setConnection(newConnection);
 
                 // Загрузка списка чатов
-                await fetchChatsData();
+                const chatsResponse = await fetchChats(token);
+
+                if (chatsResponse.status === 401) {
+                    setTimeout(() => nav('/'), 2000);
+                    toast.error(strings.expired);
+                    return;
+                }
+
+                if (!chatsResponse.ok) {
+                    toast.error('Failed to load chats');
+                    return;
+                }
+
+                const responseModel = await chatsResponse.json() as IChatShortResponse;
+                console.log('Fetched chats:', responseModel);
+                setChats(responseModel);
+
+                // После получения списка чатов, присоединяемся к каждому чату
+                if (responseModel && responseModel.chats) {
+                    for (const chat of responseModel.chats) {
+                        try {
+                            console.log(`Joining chat ${chat.chatId}`);
+                            await newConnection.invoke("JoinChat", chat.chatId);
+                        } catch (error) {
+                            console.error(`Error joining chat ${chat.chatId}:`, error);
+                        }
+                    }
+                }
             } catch (err) {
                 console.error('Error initializing chat:', err);
                 toast.error('Failed to connect to chat service');
@@ -120,6 +151,9 @@ const ChatsPage = (props: {
             const responseModel = await response.json() as IChatShortResponse;
             console.log('Fetched chats:', responseModel);
             setChats(responseModel);
+
+            // Не присоединяемся к чатам здесь, чтобы не дублировать присоединение
+            // Мы уже присоединились при инициализации
         } catch (error) {
             console.error('Error fetching chats:', error);
             toast.error('Failed to load chats');
