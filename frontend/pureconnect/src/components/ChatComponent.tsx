@@ -58,15 +58,9 @@ const ChatComponent: React.FC<ChatComponentProps> = ({
         }
     }, [chatId]);
 
-    // Настройка обработчиков SignalR
-    // В ChatComponent.tsx - модифицируем useEffect для обработки SignalR
 
-// Настройка обработчиков SignalR
     useEffect(() => {
         if (connection && chatId && chat) {
-            // НЕ отписываемся от предыдущих событий
-            // connection.off("SendMessage");
-
             // Вместо этого создаем обработчик с уникальным именем для текущего чата
             const handlerName = `SendMessage.Chat${chatId}`;
 
@@ -94,10 +88,8 @@ const ChatComponent: React.FC<ChatComponentProps> = ({
         }
     }, [connection, chatId, chat]);
 
-// Функция для обработки полученного сообщения
+    // Функция для обработки полученного сообщения
     const handleReceivedMessage = (receivedChatId: number, signalRMessage: IMessageSignalRModel) => {
-        // Проверяем, что сообщение для текущего чата
-        if (receivedChatId !== chatId) return;
 
         // Преобразуем модель SignalR в формат UI
         const messageForUI: IMessageInChatResponse = {

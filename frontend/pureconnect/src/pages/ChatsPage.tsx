@@ -61,15 +61,6 @@ const ChatsPage = (props: {
                     .withAutomaticReconnect()
                     .build();
 
-                // Настройка обработчиков событий
-                // Используем ДРУГОЕ ИМЯ для обработчика в ChatsPage
-                newConnection.on("SendMessage.ChatsPage", (chatId, signalRMessage) => {
-                    console.log(`ChatsPage: Получено сообщение в чат ${chatId}:`, signalRMessage);
-
-                    // В любом случае обновляем список чатов, чтобы отобразить последнее сообщение
-                    fetchChatsData();
-                });
-
                 // Это оригинальный обработчик, который будет использоваться в ChatComponent
                 newConnection.on("SendMessage", (chatId, signalRMessage) => {
                     console.log(`ChatsPage: Получено оригинальное сообщение в чат ${chatId}:`, signalRMessage);
@@ -88,23 +79,7 @@ const ChatsPage = (props: {
                 console.log('SignalR Connected');
                 setConnection(newConnection);
 
-                // Загрузка списка чатов
-                const chatsResponse = await fetchChats(token);
-
-                if (chatsResponse.status === 401) {
-                    setTimeout(() => nav('/'), 2000);
-                    toast.error(strings.expired);
-                    return;
-                }
-
-                if (!chatsResponse.ok) {
-                    toast.error('Failed to load chats');
-                    return;
-                }
-
-                const responseModel = await chatsResponse.json() as IChatShortResponse;
-                console.log('Fetched chats:', responseModel);
-                setChats(responseModel);
+                const responseModel = await fetchChatsData()
 
                 // После получения списка чатов, присоединяемся к каждому чату
                 if (responseModel && responseModel.chats) {
@@ -151,7 +126,7 @@ const ChatsPage = (props: {
             const responseModel = await response.json() as IChatShortResponse;
             console.log('Fetched chats:', responseModel);
             setChats(responseModel);
-
+            return responseModel;
             // Не присоединяемся к чатам здесь, чтобы не дублировать присоединение
             // Мы уже присоединились при инициализации
         } catch (error) {
