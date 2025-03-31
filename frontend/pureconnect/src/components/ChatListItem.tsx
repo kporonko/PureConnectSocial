@@ -95,7 +95,7 @@ const ChatListItem: React.FC<ChatListItemProps> = ({ chat, isSelected, onSelect 
 
             <div className={'small-chat-text-wrapper'}>
                 <div>
-                    <div className={'small-chat-msg-text small-chat-name'}>
+                    <div className={'small-chat-msg-username small-chat-name'}>
                         {chat.name}
                     </div>
                 </div>

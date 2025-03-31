@@ -1734,21 +1734,32 @@ html, body{
   gap: 1vh;
   font-family: "Montserrat", sans-serif ;
   text-align: left;
+  width: 100%;
 }
 .small-chat-msg-wrapper{
   display: flex;
   align-items: center;
-  justify-content: center;
-  gap: 7vh;
+  justify-content: space-between;
   font-family: "Montserrat", sans-serif ;
-
+  width: 100%;
 }
 .small-chat-msg-time{
   font-size: 1.5vh;
+  text-align: right;
 }
+
+.small-chat-msg-username{
+  font-family: "Montserrat", sans-serif ;
+  font-size: 2.1vh;
+}
+
 .small-chat-msg-text{
   font-family: "Montserrat", sans-serif ;
   font-size: 2.1vh;
+  white-space: nowrap;  /* Запрещает перенос текста */
+  overflow: hidden;     /* Скрывает выходящий за границы текст */
+  text-overflow: ellipsis; /* Добавляет "..." в конце */
+  padding: 0 2vh 0 0;
 }
 .small-chat-name{
   color: var(--button-yellow);
