@@ -298,13 +298,14 @@ html, body{
   min-height: 100vh;
 }
 
-.nav-menu-wrapper{
-  position: fixed;
-  max-width: 17vw;
+.nav-menu-wrapper {
+  width: 17vw; /* Fixed width instead of max-width: 17vw */
   background: var(--background-imagelogin);
   box-shadow: var(--box-shadow-main);
-  height: 100vh;
-  /*z-index: 1000;*/
+  z-index: 1000;
+  transition: all 0.3s ease;
+  overflow-x: hidden;
+  height: 100vh; /* Keep full height */
 }
 .nav-menu-image-wrapper{
   display: flex;
@@ -314,9 +315,10 @@ html, body{
   border-bottom: 1px solid var(--text-primary);
 }
 .nav-menu-image{
-  width: 50%;
+  width: 40%;
   padding: 1rem;
-  height: 50%;
+  height: 30%;
+  object-fit: cover;
 }
 
 .nav-icon{
@@ -330,6 +332,8 @@ html, body{
   gap: 1rem;
   padding: 1rem 1rem 1rem 1rem;
   margin: 0;
+  width: calc(100% - 1rem);
+  height: calc(100% - 1rem);
 }
 .nav-menu-item{
   display: flex;
@@ -342,7 +346,8 @@ html, body{
   background: var(--background-third);
   color: var(--button-yellow);
   border-radius: 50px;
-  padding: 0rem 0rem 0rem 0rem;
+  padding: 1vh 2vh;
+  margin-right: 3vh;
 }
 .active-page>div, .active-page>div>svg{
     color: var(--button-yellow);
@@ -374,18 +379,25 @@ html, body{
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  align-items: flex-start;
-  height: 79vh;
-  overflow: auto;
+  /*align-items: center;*/
+
+  /*gap: 5vw;*/
+  /*height: 79vh;*/
+  /*overflow: auto;*/
 }
 .nav-more{
-  cursor: pointer;
+  /*cursor: pointer;*/
+  /*display: flex;*/
+  /*justify-content: space-around;*/
+  /*align-items: center;*/
+  padding: 2vh 2vh 2vh 2vh;
+  /*color: var(--text-primary);*/
+  gap: 1vh;
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  padding: 1rem 1rem 1rem 2rem;
-  color: var(--text-primary);
-  gap: 1.5rem;
+  cursor: pointer;
+  gap: 1rem;
+  text-align: center;
 }
 
 .nav-more:hover{
@@ -393,10 +405,10 @@ html, body{
   background: var(--background-third);
   border-radius: 30px;
 }
-.main-content-home{
-  margin-left: 17vw; /* same as width of #left-nav */
-  width: calc(100% - 17vw);
-}
+/*.main-content-home{*/
+/*  margin-left: 17vw; !* same as width of #left-nav *!*/
+/*  width: calc(100% - 17vw);*/
+/*}*/
 
 .main-content-home-block{
   display: flex;
@@ -746,11 +758,26 @@ html, body{
 .profile-wrapper{
   background: var(--background);
   min-height: 100vh;
+  display: flex;
+}
+
+.profile-page-wrapper{
+  display: flex;
+  /*align-items: center;*/
+  width: 100%;
 }
 
 .main-content-profile{
-  margin-left: 17vw; /* same as width of #left-nav */
-  width: calc(100% - 17vw);
+  width: 100%;
+  height: 100%;
+}
+
+.my-profile-content-wrapper{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
 }
 
 .main-content-profile-block{
@@ -1179,8 +1206,8 @@ html, body{
 .post-page-content-wrapper{
   background: var(--background);
   min-height: 100vh;
-  margin-left: 17vw; /* same as width of #left-nav */
-  width: calc(100% - 17vw);
+  /*margin-left: 17vw; !* same as width of #left-nav *!*/
+  /*width: calc(100% - 17vw);*/
   overflow: hidden;
 }
 .post-page-content{
@@ -1507,8 +1534,8 @@ html, body{
 .admin-content-wrapper{
   background: var(--background);
   min-height: 100vh;
-  margin-left: 17vw; /* same as width of #left-nav */
-  width: calc(100% - 17vw);
+  /*margin-left: 17vw; !* same as width of #left-nav *!*/
+  /*width: calc(100% - 17vw);*/
   overflow: hidden;
 }
 .report-card-wrapper{
@@ -1648,14 +1675,15 @@ html, body{
 .chats-page {
   display: flex;
   height: 100vh;
+
 }
 
 .chats-content {
   display: flex;
   flex: 1;
-  margin-left: 200px;
-  margin-left: 17vw;
-  width: calc(100% - 17vw);
+  /*margin-left: 200px;*/
+  /*margin-left: 17vw;*/
+  /*width: calc(100% - 17vw);*/
 }
 
 .chat-area {
@@ -1760,6 +1788,7 @@ html, body{
   overflow: hidden;     /* Скрывает выходящий за границы текст */
   text-overflow: ellipsis; /* Добавляет "..." в конце */
   padding: 0 2vh 0 0;
+  width: 18vh;
 }
 .small-chat-name{
   color: var(--button-yellow);
@@ -2057,4 +2086,8 @@ html, body{
   height: 6px;
   border-radius: 50%;
   background-color: rgba(128, 128, 128, 0.5); /* Серый индикатор - в процессе отправки */
+}
+
+.chat-list-header{
+  font-size: 2vh;
 }

@@ -67,9 +67,11 @@ const MyProfile = (props:{theme: string, setTheme: any}) => {
 
     return (
         <div className={`profile-wrapper`} data-theme={props.theme}>
-            <div className={`${(isActiveAddPost || isOpenEdit || isOpenEditProfile || isOpenFollowers || isOpenFriends) && 'content-while-active-modal'}`}>
+            <div className={`profile-page-wrapper ${(isActiveAddPost || isOpenEdit || isOpenEditProfile || isOpenFollowers || isOpenFriends) && 'content-while-active-modal'}`}>
                 <NavMenu page={3} theme={props.theme} setTheme={props.setTheme} avatar={avatarImage}/>
-                {<MainContentMyProfile setCurrPostIdUsersLiked={setCurrPostIdUsersLiked} setIsOpenUsersLikedPost={setIsOpenUsersLikedPost} user={user} setUser={setUser} isOpenFollowers={isOpenFollowers} setIsOpenFollowers={setIsOpenFollowers} isOpenFriends={isOpenFriends} setIsOpenFriends={setIsOpenFriends} isToggleProfile={isToggleProfile} setIsToggleProfile={setIsToggleProfile} isOpenEditProfile={isOpenEditProfile} setIsOpenEditProfile={setIsOpenEditProfile} isOpenEdit={isOpenEdit} setIsOpenEdit={setIsOpenEdit} postEdit={post} setPostEdit={setPost} isChangedPosts={isChangedPosts} setIsChangedPosts={setIsChangedPosts} theme={props.theme} posts={posts} postsImage={postsImage} setIsActiveAddPost={setIsActiveAddPost} setPosts={setPosts} setImages={setPostsImage}/>}
+                <div className={'my-profile-content-wrapper'}>
+                    {<MainContentMyProfile setCurrPostIdUsersLiked={setCurrPostIdUsersLiked} setIsOpenUsersLikedPost={setIsOpenUsersLikedPost} user={user} setUser={setUser} isOpenFollowers={isOpenFollowers} setIsOpenFollowers={setIsOpenFollowers} isOpenFriends={isOpenFriends} setIsOpenFriends={setIsOpenFriends} isToggleProfile={isToggleProfile} setIsToggleProfile={setIsToggleProfile} isOpenEditProfile={isOpenEditProfile} setIsOpenEditProfile={setIsOpenEditProfile} isOpenEdit={isOpenEdit} setIsOpenEdit={setIsOpenEdit} postEdit={post} setPostEdit={setPost} isChangedPosts={isChangedPosts} setIsChangedPosts={setIsChangedPosts} theme={props.theme} posts={posts} postsImage={postsImage} setIsActiveAddPost={setIsActiveAddPost} setPosts={setPosts} setImages={setPostsImage}/>}
+                </div>
             </div>
             {isActiveAddPost &&
                 <ModalAddPost setIsChangedPosts={setIsChangedPosts} isChangedPosts={isChangedPosts} posts={posts} postsImage={postsImage} setPosts={setPosts} setImages={setPostsImage} theme={props.theme} isActiveAddPost={isActiveAddPost} setIsActiveAddPost={setIsActiveAddPost}/>}
