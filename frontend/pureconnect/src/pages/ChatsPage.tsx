@@ -127,8 +127,7 @@ const ChatsPage = (props: {
             console.log('Fetched chats:', responseModel);
             setChats(responseModel);
             return responseModel;
-            // Не присоединяемся к чатам здесь, чтобы не дублировать присоединение
-            // Мы уже присоединились при инициализации
+
         } catch (error) {
             console.error('Error fetching chats:', error);
             toast.error('Failed to load chats');

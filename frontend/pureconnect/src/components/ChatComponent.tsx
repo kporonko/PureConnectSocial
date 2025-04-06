@@ -247,39 +247,36 @@ const ChatComponent: React.FC<ChatComponentProps> = ({
         if (date === undefined)
             return '';
 
-        const messageDate = new Date(date);
+        const utcDate = new Date(date.endsWith('Z') ? date : date + 'Z');
+
         const now = new Date();
 
-        // Разница в миллисекундах
-        const diffMs = now.getTime() - messageDate.getTime();
+        const diffMs = now.getTime() - utcDate.getTime();
 
-        // Конвертация в различные единицы времени
         const diffSeconds = Math.floor(diffMs / 1000);
         const diffMinutes = Math.floor(diffSeconds / 60);
         const diffHours = Math.floor(diffMinutes / 60);
         const diffDays = Math.floor(diffHours / 24);
 
-        // Форматирование даты для сообщений
         const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
         const yesterday = new Date(today);
         yesterday.setDate(yesterday.getDate() - 1);
 
-        // Получаем только время (часы:минуты)
-        const timeOnly = messageDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        const timeOnly = utcDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 
         if (diffMinutes < 1) {
             return strings.justNow || 'just now';
         } else if (diffMinutes < 60) {
             return `${diffMinutes} ${diffMinutes === 1 ? 'min' : 'mins'} ago`;
-        } else if (messageDate >= today) {
+        } else if (utcDate >= today) {
             return timeOnly;
-        } else if (messageDate >= yesterday) {
+        } else if (utcDate >= yesterday) {
             return `${strings.yesterday}, ${timeOnly}`;
         } else if (diffDays < 7) {
             const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-            return `${days[messageDate.getDay()]}, ${timeOnly}`;
+            return `${days[utcDate.getDay()]}, ${timeOnly}`;
         } else {
-            return messageDate.toLocaleDateString() + ', ' + timeOnly;
+            return utcDate.toLocaleDateString() + ', ' + timeOnly;
         }
     };
 
@@ -332,7 +329,6 @@ const ChatComponent: React.FC<ChatComponentProps> = ({
         }
     };
 
-    // Функция для получения собеседника (для личного чата)
     const getInterlocutor = () => {
         if (!chat || !chat.participants) return null;
 

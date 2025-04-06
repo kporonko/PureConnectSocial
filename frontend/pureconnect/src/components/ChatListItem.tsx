@@ -10,13 +10,14 @@ interface ChatListItemProps {
 
     const getTimeMessage = (date: string|undefined, language: string = 'en') => {
 
-        const messageDate = new Date(date!);
+        if (date === undefined)
+            return '';
+
+        const messageDate = new Date(date.endsWith('Z') ? date : date + 'Z');
         const now = new Date();
 
-        // Разница в миллисекундах
         const diffMs = now.getTime() - messageDate.getTime();
 
-        // Конвертация в различные единицы времени
         const diffSeconds = Math.floor(diffMs / 1000);
         const diffMinutes = Math.floor(diffSeconds / 60);
         const diffHours = Math.floor(diffMinutes / 60);
@@ -25,7 +26,6 @@ interface ChatListItemProps {
         const diffMonths = Math.floor(diffDays / 30.44);
         const diffYears = Math.floor(diffDays / 365.25);
 
-        // Строки для локализации
         const timeStrings = new LocalizedStrings({
             en: {
                 justNow: "just now",
@@ -61,7 +61,6 @@ interface ChatListItemProps {
 
         timeStrings.setLanguage(language);
 
-        // Возвращаем соответствующее значение согласно условиям
         if (diffMinutes < 1) {
             return timeStrings.justNow;
         } else if (diffMinutes < 60) {
