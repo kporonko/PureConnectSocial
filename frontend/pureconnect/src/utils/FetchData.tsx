@@ -667,3 +667,21 @@ export const fetchChats = async (token: string | null) => {
         return error;
     }
 }
+
+export const getSearchRecommendedPosts = async (token: string) => {
+    try {
+        const response = await fetch(`${BASE_URL}api/Search/recommended`, {
+            method: 'GET',
+            headers:{
+                'Authorization': 'Bearer ' + token,
+                'Content-Type': 'application/x-www-form-urlencoded'
+            }
+        });
+
+        return response;
+    }
+    catch (error: any) {
+        console.log(error);
+        return error;
+    }
+}

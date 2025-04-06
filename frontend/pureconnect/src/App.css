@@ -295,9 +295,13 @@ html, body{
 
 .home-wrapper{
   background: var(--background);
+  display: flex;
   min-height: 100vh;
 }
-
+.home-wrapper-2{
+  display: flex;
+  width: 100%;
+}
 .nav-menu-wrapper {
   width: 17vw; /* Fixed width instead of max-width: 17vw */
   background: var(--background-imagelogin);
@@ -405,15 +409,23 @@ html, body{
   background: var(--background-third);
   border-radius: 30px;
 }
-/*.main-content-home{*/
-/*  margin-left: 17vw; !* same as width of #left-nav *!*/
-/*  width: calc(100% - 17vw);*/
-/*}*/
+.main-content-home{
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+}
+.main-content-home-wrapper{
+  display: flex;
+  /*align-items: center;*/
+  width: 100%;
+  height: 100%;
+}
 
 .main-content-home-block{
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  /*justify-content: center;*/
   align-items: center;
 }
 .nav-menu-item:hover{
@@ -772,14 +784,6 @@ html, body{
   height: 100%;
 }
 
-.my-profile-content-wrapper{
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-  height: 100%;
-}
-
 .main-content-profile-block{
   display: flex;
   flex-direction: column;
@@ -1069,8 +1073,8 @@ html, body{
   height: 100%;
 }
 .modal-add-post-content-with-panel{
-  width: 1150px;
-  height: 600px;
+  width: 60%;
+  height: 60%;
   background: var(--background);
   border: 1px solid var(--text-primary);
   border-radius: 20px;
@@ -2090,4 +2094,25 @@ html, body{
 
 .chat-list-header{
   font-size: 2vh;
+}
+
+/*Search page*/
+
+.main-content-search{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+}
+
+
+.post-recommended-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 50vh;
+  height: 50vh;
+  max-height: 200px;
 }

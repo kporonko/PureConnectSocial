@@ -25,6 +25,7 @@ builder.Services.AddTransient<IUserService, UserService>();
 builder.Services.AddTransient<IReportService, ReportService>();
 builder.Services.AddTransient<IAdminService, AdminService>();
 builder.Services.AddTransient<IChatService, ChatService>();
+builder.Services.AddTransient<ISearchService, SearchService>();
 
 builder.Services.AddSignalR();
 

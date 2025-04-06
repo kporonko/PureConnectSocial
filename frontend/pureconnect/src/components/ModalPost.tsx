@@ -23,7 +23,10 @@ const ModalPost = (props:{
             goToPost:'Go to post',
             cancel:'Cancel',
             error: "Error. Try again later",
-            successUnfollow: 'Unfollowed successfully.'
+            successUnfollow: 'Unfollowed successfully.',
+            follow: 'Follow',
+            successFollow: 'Unfollowed successfully.'
+
         },
         ua: {
             report:"Поскаржитися",
@@ -31,7 +34,9 @@ const ModalPost = (props:{
             goToPost: 'Перейти до посту',
             cancel:'Відмінити',
             error:'Сталася помилка. Спробуйте пізніше',
-            successUnfollow: 'Ви відписалися від користувача.'
+            successUnfollow: 'Ви відписалися від користувача.',
+            follow: 'Підписатися',
+            successFollow: 'Ви підписалися на користувача.'
         }
     });
     const nav = useNavigate();
@@ -44,18 +49,33 @@ const ModalPost = (props:{
     const handleClose = () => {
         props.setIsOpen(false)
     }
+    console.log(props.post)
 
-    const handleUnfollow = async () => {
+    const handleToggleFollow = async () => {
         const token = localStorage.getItem('access_token')
 
-        const res = await unfollowUserByPost(token, props.post.postId);
-        if (res instanceof Error){
-            const notify = () => toast.error(strings.error);
-            notify();
+        console.log(props.post)
+        if (props.post.isFollowedUser){
+            const res = await unfollowUserByPost(token, props.post.postId);
+            if (res instanceof Error){
+                const notify = () => toast.error(strings.error);
+                notify();
+            }
+            else{
+                const notify = () => toast.success(strings.successUnfollow);
+                notify();
+            }
         }
         else{
-            const notify = () => toast.success(strings.successUnfollow);
-            notify();
+            const res = await followUser(token, props.post.userId);
+            if (res instanceof Error){
+                const notify = () => toast.error(strings.error);
+                notify();
+            }
+            else{
+                const notify = () => toast.success(strings.successFollow);
+                notify();
+            }
         }
     }
 
@@ -72,9 +92,9 @@ const ModalPost = (props:{
                             <FontAwesomeIcon icon={solid('exclamation-circle')}/>
                         </div>
                     </div>
-                    <div onClick={handleUnfollow} className="modal-home-nav-menu-more-item">
+                    <div onClick={handleToggleFollow} className="modal-home-nav-menu-more-item">
                         <div className='modal-home-nav-menu-more-item-text'>
-                            {strings.unfollow}
+                            {props.post.isFollowedUser ? strings.unfollow : strings.follow}
                         </div>
 
                         <div className='modal-home-nav-menu-more-item-icon'>

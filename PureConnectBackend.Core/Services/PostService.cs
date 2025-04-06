@@ -332,7 +332,8 @@ namespace PureConnectBackend.Core.Services
                 Description = post.Description,
                 Image = post.Image,
                 CreatedAt = post.CreatedAt,
-                Response = MyResponses.Ok
+                Response = MyResponses.Ok,
+                UserId = post.UserId
             };
             try
             {
@@ -348,6 +349,9 @@ namespace PureConnectBackend.Core.Services
 
             postResponse.IsLike = post.PostLikes.Any(x => x.UserId == myId);
             postResponse.IsMine = post.User.Id== myId;
+            postResponse.IsFollowedUser = _context.Follows.Any(f =>
+                f.FollowerId == myId && f.FolloweeId == post.User.Id);
+            
             return postResponse;
         }
 

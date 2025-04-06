@@ -66,6 +66,10 @@ const NavMenu = (props: {page: Page, theme: string, setTheme: any, avatar: strin
         nav('/notifications')
     }
 
+    const handleSearch = () => {
+        nav('/search')
+    }
+
     React.useEffect(() => {
         const image = new Image();
         image.src = props.avatar;
@@ -86,7 +90,7 @@ const NavMenu = (props: {page: Page, theme: string, setTheme: any, avatar: strin
                         </div>
                         <div className={"nav-menu-item-text"}>{strings.main}</div>
                     </li>
-                    <li className={props.page == Page.Search ? "nav-menu-item active-page" : "nav-menu-item"}>
+                    <li onClick={handleSearch} className={props.page == Page.Search ? "nav-menu-item active-page" : "nav-menu-item"}>
                         <div className={"nav-menu-item-icon-wrapper"}>
                             <FontAwesomeIcon className={'nav-icon'} icon={solid('search')} />
                         </div>

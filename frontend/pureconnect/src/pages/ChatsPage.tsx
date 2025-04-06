@@ -7,7 +7,7 @@ import { HubConnectionBuilder } from '@microsoft/signalr';
 import { IChatShortResponse } from '../interfaces/IChat';
 import LocalizedStrings from "react-localization";
 import {BASE_URL, fetchChats, getAvatar} from "../utils/FetchData";
-import { toast } from "react-toastify";
+import {toast, ToastContainer} from "react-toastify";
 import { useNavigate } from "react-router";
 
 const ChatsPage = (props: {
@@ -160,6 +160,18 @@ const ChatsPage = (props: {
                     )}
                 </div>
             </div>
+            <ToastContainer
+                position="top-right"
+                autoClose={5000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss={false}
+                draggable
+                pauseOnHover
+                theme={props.theme === 'dark' ? 'dark' : 'light'}
+            />
         </div>
     );
 };
