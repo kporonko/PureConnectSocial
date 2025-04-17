@@ -14,6 +14,8 @@ import PostReportPage from "./pages/PostReportPage";
 import AdminPostPage from "./pages/AdminPostPage";
 import UserPage from "./pages/UserPage";
 import Notifications from "./pages/Notifications";
+import ChatsPage from "./pages/ChatsPage";
+import SearchPage from "./pages/SearchPage";
 
 function App() {
 
@@ -31,6 +33,7 @@ function App() {
             {/* User*/}
             <Route path="/home" element={<Home theme={theme} setTheme={setTheme}/>}/>
             <Route path="/my-profile" element={<MyProfile theme={theme} setTheme={setTheme}/>}/>
+            <Route path="/search" element={<SearchPage theme={theme} setTheme={setTheme}/>}/>
 
 
 
@@ -51,6 +54,9 @@ function App() {
 
             {/*  Notification  */}
             <Route path="/notifications" element={<Notifications theme={theme} setTheme={setTheme}/>}/>
+
+
+            <Route path="/chats" element={<ChatsPage theme={theme} setTheme={setTheme}/>}/>
 
         </Routes>
 

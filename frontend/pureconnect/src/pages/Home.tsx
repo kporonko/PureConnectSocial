@@ -49,8 +49,10 @@ const Home = (props: {theme: string, setTheme: any}) => {
     const [currReportPostId, setCurrReportPostId] = useState<number>();
     return (
         <div className={'home-wrapper'} data-theme={props.theme}>
-            <NavMenu page={Page.Home} theme={props.theme} setTheme={props.setTheme} avatar={avatarImage}/>
-            <MainContentHome setCurrReportPostId={setCurrReportPostId} setIsOpenReportPostModal={setIsOpenReportPostModal} setIsOpenCommonFriendsModal={setIsOpenCommonFriendsModal} setCurrMayKnowUser={setCurrMayKnowUser} theme={props.theme}/>
+            <div className={'home-wrapper-2'}>
+                <NavMenu page={Page.Home} theme={props.theme} setTheme={props.setTheme} avatar={avatarImage}/>
+                <MainContentHome setCurrReportPostId={setCurrReportPostId} setIsOpenReportPostModal={setIsOpenReportPostModal} setIsOpenCommonFriendsModal={setIsOpenCommonFriendsModal} setCurrMayKnowUser={setCurrMayKnowUser} theme={props.theme}/>
+            </div>
             {isOpenCommonFriendsModal &&
                 <CommonFriendsModal currMayKnowUser={currMayKnowUser} commonFriends={commonFriends} setCommonFriends={setCommonFriends} isOpenCommonFriends={isOpenCommonFriendsModal} setIsOpenCommonFriends={setIsOpenCommonFriendsModal}/>}
             {isOpenReportPostModal &&

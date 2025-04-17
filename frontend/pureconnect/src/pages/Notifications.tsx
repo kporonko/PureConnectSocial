@@ -8,6 +8,8 @@ const Notifications = (props: {
     setTheme: any
 }) => {
 
+    // TODO
+
     useEffect(() => {
         // Create a connection to the SignalR hub
         const connection = new HubConnectionBuilder()
@@ -40,7 +42,7 @@ const Notifications = (props: {
 
     return (
         <div>
-             <NavMenu page={3} theme={props.theme} setTheme={props.setTheme} avatar={""}/>
+             <NavMenu page={2} theme={props.theme} setTheme={props.setTheme} avatar={""}/>
         </div>
     );
 };
