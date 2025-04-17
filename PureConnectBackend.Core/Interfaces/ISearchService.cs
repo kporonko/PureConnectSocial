@@ -1,4 +1,6 @@
-﻿using PureConnectBackend.Core.Models.Responses;
+﻿using PureConnectBackend.Core.Models;
+using PureConnectBackend.Core.Models.Responses;
+using PureConnectBackend.Infrastructure.Models;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -27,5 +29,7 @@ namespace PureConnectBackend.Core.Interfaces
         /// <param name="count">Number of posts to return</param>
         /// <returns>List of post images for display in feed</returns>
         Task<List<PostImageResponse>> GetPostsFromPopularUsers(int count = 20);
+
+        Task<List<SearchedUserResponse>> GetSearchedUsers(User user, string userName);
     }
 }

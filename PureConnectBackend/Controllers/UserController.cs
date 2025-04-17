@@ -74,7 +74,7 @@ namespace PureConnectBackend.Controllers
 
             return Ok(response.Take(5));
         }
-
+        
         /// <summary>
         /// Gets a list of current user`s friends.
         /// </summary>

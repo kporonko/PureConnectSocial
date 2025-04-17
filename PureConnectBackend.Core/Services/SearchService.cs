@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using PureConnectBackend.Core.Interfaces;
+using PureConnectBackend.Core.Models;
 using PureConnectBackend.Core.Models.Responses;
 using PureConnectBackend.Infrastructure.Data;
 using PureConnectBackend.Infrastructure.Models;
@@ -14,10 +15,13 @@ namespace PureConnectBackend.Core.Services
     public class SearchService : ISearchService
     {
         private readonly ApplicationContext _context;
+        private readonly ICacheService _cacheService;
+        private readonly TimeSpan _userSearchCacheTime = TimeSpan.FromMinutes(10);
 
-        public SearchService(ApplicationContext context)
+        public SearchService(ApplicationContext context, ICacheService cacheService)
         {
             _context = context;
+            _cacheService = cacheService;
         }
 
         /// <summary>
@@ -96,6 +100,96 @@ namespace PureConnectBackend.Core.Services
                 PostId = p.Id,
                 Image = p.Image
             }).ToList();
+        }
+
+        public async Task<List<SearchedUserResponse>> GetSearchedUsers(User user, string userName)
+        {
+            // Формируем ключ кеша на основе ID пользователя и поискового запроса
+            string cacheKey = $"user_search_{user.Id}_{userName.ToLower()}";
+
+            // Получаем данные из кеша или создаем новые
+            return await _cacheService.GetOrCreateAsync(cacheKey, async () =>
+            {
+                return await PerformUserSearch(user, userName);
+            }, _userSearchCacheTime);
+        }
+
+        // Выделяем логику поиска в отдельный метод
+        private async Task<List<SearchedUserResponse>> PerformUserSearch(User user, string userName)
+        {
+            var searchTerm = userName.ToLower();
+
+            var currentUser = await _context.Users
+                .Include(u => u.Followee)
+                .Include(u => u.Follower)
+                .FirstOrDefaultAsync(u => u.Id == user.Id);
+
+            if (currentUser == null)
+                return new List<SearchedUserResponse>();
+
+            var currentUserFriends = await GetUserFriends(currentUser);
+
+            var matchedUsers = await _context.Users
+                .Where(u => u.Id != user.Id)
+                .Where(u => u.UserName.ToLower().Contains(searchTerm) || u.FirstName.ToLower().Contains(searchTerm) || u.LastName.ToLower().Contains(searchTerm))
+                .Include(u => u.Follower)
+                .Include(u => u.Followee)
+                .ToListAsync();
+
+            var result = new List<SearchedUserResponse>();
+
+            foreach (var matchedUser in matchedUsers)
+            {
+                var matchedUserFriends = await GetUserFriends(matchedUser);
+
+                var commonFriendsCount = currentUserFriends
+                    .Intersect(matchedUserFriends, new UserComparer())
+                    .Count();
+
+                result.Add(new SearchedUserResponse
+                {
+                    Avatar = matchedUser.Avatar,
+                    FirstName = matchedUser.FirstName,
+                    LastName = matchedUser.LastName,
+                    UserId = matchedUser.Id,
+                    CommonFriendsCount = commonFriendsCount,
+                    Username = matchedUser.UserName
+                });
+            }
+
+            return result.OrderByDescending(x => x.CommonFriendsCount).ToList();
+        }
+
+        private async Task<List<User>> GetUserFriends(User user)
+        {
+            var followingIds = await _context.Follows
+                .Where(f => f.FollowerId == user.Id)
+                .Select(f => f.FolloweeId)
+                .Distinct() // Добавляем Distinct для исключения дубликатов
+                .ToListAsync();
+
+            // Затем получаем ID пользователей, которые подписаны на текущего пользователя
+            var followerIds = await _context.Follows
+                .Where(f => f.FolloweeId == user.Id)
+                .Select(f => f.FollowerId)
+                .Distinct() // Добавляем Distinct для исключения дубликатов
+                .ToListAsync();
+
+            // Находим пересечение - это ID взаимных друзей
+            var mutualFriendIds = followingIds.Intersect(followerIds).ToList();
+
+            // Получаем полную информацию о пользователях
+            var mutualFriends = await _context.Users
+                .Where(u => mutualFriendIds.Contains(u.Id))
+                .ToListAsync();
+
+            return mutualFriends;
+        }
+
+        private class UserComparer : IEqualityComparer<User>
+        {
+            public bool Equals(User x, User y) => x?.Id == y?.Id;
+            public int GetHashCode(User obj) => obj.Id.GetHashCode();
         }
     }
 }

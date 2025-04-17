@@ -685,3 +685,27 @@ export const getSearchRecommendedPosts = async (token: string) => {
         return error;
     }
 }
+
+export const getSearchedUsers = async (token: string|null, userName: string) => {
+    try {
+        const response = await fetch(`${BASE_URL}api/Search/searched-users?userName=${encodeURIComponent(userName)}`, {
+            method: 'GET',
+            headers:{
+                'Content-Type': 'application/json',
+                'Accept-Language': getUsersLocale(),
+                'Authorization': 'Bearer ' + token,
+            }
+        });
+
+        if (!response.ok) {
+            throw new Error(`Error ${response.status}: ${response.statusText}`);
+        }
+
+        const data = await response.json();
+        return data;
+    }
+    catch (error: any) {
+        console.log('Error searching users:', error);
+        return [];
+    }
+}
