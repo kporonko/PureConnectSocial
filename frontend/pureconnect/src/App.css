@@ -1210,6 +1210,7 @@ html, body{
 .post-page-content-wrapper{
   background: var(--background);
   min-height: 100vh;
+  width: 100%;
   /*margin-left: 17vw; !* same as width of #left-nav *!*/
   /*width: calc(100% - 17vw);*/
   overflow: hidden;

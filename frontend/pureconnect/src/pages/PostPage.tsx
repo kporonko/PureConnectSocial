@@ -79,8 +79,8 @@ const PostPage = (props: {theme: string, setTheme: any}) => {
 
     const [isOpenReportPostModal, setIsOpenReportPostModal] = useState(false);
     return (
-        <div data-theme={props.theme}>
-            <div className={isActiveEditPost ? `dark` : ''}>
+        <div className={''} data-theme={props.theme}>
+            <div className={isActiveEditPost ? `dark profile-wrapper` : 'profile-wrapper'}>
                 <NavMenu page={-1} theme={props.theme} setTheme={props.setTheme} avatar={avatar}/>
                 <PostPageContent setIsOpenReportPostModal={setIsOpenReportPostModal} setIsActiveEditPost={setIsActiveEditPost} theme={props.theme} post={post} setPost={setPost}/>
             </div>
