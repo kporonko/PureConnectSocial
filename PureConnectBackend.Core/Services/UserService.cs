@@ -188,7 +188,7 @@ namespace PureConnectBackend.Core.Services
         /// </summary>
         /// <param name="user">Current user making a request.</param>
         /// <returns>MyFollowersFriendsListResponse object with followers data.</returns>
-        public async Task<MyFollowersFriendsListResponse> GetMyFollowers(User user)
+        public async Task<MyFollowersFriendsListResponse> GetFollowersByUser(User user)
         {
             var currUser = await _context.Users.FirstOrDefaultAsync(x => x.Id == user.Id);
             if (currUser is null)
@@ -213,7 +213,7 @@ namespace PureConnectBackend.Core.Services
         /// </summary>
         /// <param name="user">Current user making a request.</param>
         /// <returns>MyFollowersFriendsListResponse object with friends data.</returns>
-        public async Task<MyFollowersFriendsListResponse?> GetMyFriends(User user)
+        public async Task<MyFollowersFriendsListResponse?> GetUserFriendsByUser(User user)
         {
             var currUser = await _context.Users.FirstOrDefaultAsync(x => x.Id == user.Id);
             if (currUser is null)

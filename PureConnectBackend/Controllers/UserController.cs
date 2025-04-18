@@ -81,10 +81,42 @@ namespace PureConnectBackend.Controllers
         /// <returns>MyFollowersFriendsListResponse object with data about friends.</returns>
         [HttpGet("friends")]
         [Authorize]
-        public async Task<ActionResult<MyFollowersFriendsListResponse?>> GetFriends()
+        public async Task<ActionResult<MyFollowersFriendsListResponse?>> GetMyFriends()
         {
             var currUser = GetCurrentUser();
-            var response = await _userService.GetMyFriends(currUser);
+            var response = await _userService.GetUserFriendsByUser(currUser);
+            if (response is null)
+                return BadRequest();
+
+            return Ok(response);
+        }
+
+        /// <summary>
+        /// Gets a list of current user`s friends.
+        /// </summary>
+        /// <returns>MyFollowersFriendsListResponse object with data about friends.</returns>
+        [HttpGet("{profileId}/friends")]
+        [Authorize]
+        public async Task<ActionResult<MyFollowersFriendsListResponse?>> GetUserFriends([FromRoute] int profileId)
+        {
+            var response = await _userService.GetUserFriendsByUser(new Infrastructure.Models.User { Id = profileId });
+            if (response is null)
+                return BadRequest();
+
+            return Ok(response);
+        }
+
+        
+        /// <summary>
+        /// Gets a list of current user`s followers.
+        /// </summary>
+        /// <returns>MyFollowersFriendsListResponse object with data about followers.</returns>
+        [HttpGet("followers")]
+        [Authorize]
+        public async Task<ActionResult<MyFollowersFriendsListResponse?>> GetMyFollowers()
+        {
+            var currUser = GetCurrentUser();
+            var response = await _userService.GetFollowersByUser(currUser);
             if (response is null)
                 return BadRequest();
 
@@ -95,12 +127,11 @@ namespace PureConnectBackend.Controllers
         /// Gets a list of current user`s followers.
         /// </summary>
         /// <returns>MyFollowersFriendsListResponse object with data about followers.</returns>
-        [HttpGet("followers")]
+        [HttpGet("{profileId}/followers")]
         [Authorize]
-        public async Task<ActionResult<MyFollowersFriendsListResponse?>> GetFollowers()
+        public async Task<ActionResult<MyFollowersFriendsListResponse?>> GetUserFollowers([FromRoute] int profileId)
         {
-            var currUser = GetCurrentUser();
-            var response = await _userService.GetMyFollowers(currUser);
+            var response = await _userService.GetFollowersByUser(new Infrastructure.Models.User { Id = profileId});
             if (response is null)
                 return BadRequest();
 

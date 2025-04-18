@@ -103,11 +103,16 @@ namespace PureConnectBackend.Controllers
         /// </summary>
         /// <returns>List of PostImageResponse object with 200 code if user was found, otherwise NotFound(404).</returns>
         [Authorize]
-        [HttpGet("images")]
-        public async Task<ActionResult<List<PostImageResponse>>> PostsImages()
+        [HttpGet("images/{userId?}")]
+        public async Task<ActionResult<List<PostImageResponse>>> PostsImages([FromRoute] int? userId)
         {
-            var user = GetCurrentUser();
-            var postsImages = await _postService.GetPostsImages(user!);
+            User user;
+            if (userId.HasValue && userId != null)
+                user = new User { Id = userId.Value };
+            else
+                user = GetCurrentUser();
+            
+            var postsImages = await _postService.GetPostsImages(user);
             if (postsImages is null)
                 return NotFound();
             
@@ -119,10 +124,15 @@ namespace PureConnectBackend.Controllers
         /// </summary>
         /// <returns>List of PostResponse objects with 200 code if user was found, otherwise NotFound(404).</returns>
         [Authorize]
-        [HttpGet("posts")]
-        public async Task<ActionResult<List<PostResponse>>> Posts()
+        [HttpGet("posts/{userId?}")]
+        public async Task<ActionResult<List<PostResponse>>> Posts([FromRoute] int? userId)
         {
-            var user = GetCurrentUser();
+            User user;
+            if (userId.HasValue && userId != null)
+                user = new User { Id = userId.Value };
+            else
+                user = GetCurrentUser();
+            
             var posts = await _postService.GetPosts(user!);
             if (posts is null)
                 return NotFound();

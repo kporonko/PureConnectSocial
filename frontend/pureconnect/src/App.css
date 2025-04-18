@@ -2213,3 +2213,15 @@ gap: 1vh;
   color: var(--button-yellow);
   font-family: "Montserrat", sans-serif;
 }
+
+.my-posts-images-wrapper-external{
+  /*width: 60vw;*/
+  display: flex;
+  gap: 20px!important;
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+}
+

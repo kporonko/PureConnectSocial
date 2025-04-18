@@ -709,3 +709,95 @@ export const getSearchedUsers = async (token: string|null, userName: string) => 
         return [];
     }
 }
+
+export const getProfile = async (token: string, userId: number) => {
+    try {
+        const response = await fetch(`${BASE_URL}api/User/profile/${userId}`, {
+            method: 'GET',
+            headers:{
+                'Authorization': 'Bearer ' + token,
+                'Content-Type': 'application/x-www-form-urlencoded'
+            }
+        });
+
+        const responseJson = await response.json()
+        return responseJson;
+    }
+    catch (error: any) {
+        console.log(error);
+        return error;
+    }
+}
+
+export const getUserFriends = async (token: string|null, userId: number) => {
+    try {
+        const response = await fetch(`${BASE_URL}api/User/${userId}/friends`, {
+            method: 'GET',
+            headers:{
+                'Content-Type': 'application/json',
+                'Accept-Language': getUsersLocale(),
+                'Authorization': 'Bearer ' + token,
+            }
+        });
+        return response;
+    }
+    catch (error: any) {
+        console.log(error);
+        return error;
+    }
+}
+
+export const getUserFollowers = async (token: string|null, userId: number) => {
+    try {
+        const response = await fetch(`${BASE_URL}api/User/${userId}/followers`, {
+            method: 'GET',
+            headers:{
+                'Content-Type': 'application/json',
+                'Accept-Language': getUsersLocale(),
+                'Authorization': 'Bearer ' + token,
+            }
+        });
+        return response;
+    }
+    catch (error: any) {
+        console.log(error);
+        return error;
+    }
+}
+
+export const getPostsListByUser = async (token: string, userId: string) => {
+    try {
+        const response = await fetch(`${BASE_URL}api/Post/posts/${userId}`, {
+            method: 'GET',
+            headers:{
+                'Authorization': 'Bearer ' + token,
+                'Content-Type': 'application/x-www-form-urlencoded'
+            }
+        });
+
+        return response;
+    }
+    catch (error: any) {
+        console.log(error);
+        return error;
+    }
+}
+
+export const getPostsImagesByUserId = async (token: string, userId: string) => {
+    try {
+        const response = await fetch(`${BASE_URL}api/Post/images/${userId}`, {
+            method: 'GET',
+            headers:{
+                'Authorization': 'Bearer ' + token,
+                'Content-Type': 'application/x-www-form-urlencoded'
+            }
+        });
+
+        return response;
+    }
+    catch (error: any) {
+        console.log(error);
+        return error;
+    }
+}
+
