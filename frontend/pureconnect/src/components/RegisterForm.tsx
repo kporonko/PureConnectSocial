@@ -97,7 +97,7 @@ const RegisterForm = (props: {theme: string}) => {
 
             const res = await login({email: user.email, password: user.password});
             localStorage.setItem('access_token', res.token);
-            setInterval(() => nav("/home"), 2000)
+            setTimeout(() => nav("/home"), 2000)
         }
         else if(res.status === 400) {
             const notify = () => toast.error(responseJson.errors);
