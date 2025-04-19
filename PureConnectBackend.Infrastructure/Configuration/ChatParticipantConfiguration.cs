@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using PureConnectBackend.Infrastructure.Models;
+using PureConnectBackend.Core.Models.Models;
 
 namespace PureConnectBackend.Infrastructure.Configuration
 {

@@ -1,16 +1,11 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Localization;
 using PureConnectBackend.Core.Interfaces;
 using PureConnectBackend.Core.Models;
+using PureConnectBackend.Core.Models.Models;
 using PureConnectBackend.Core.Models.Responses;
-using PureConnectBackend.Core.Services;
-using PureConnectBackend.Infrastructure.Models;
-using System.Collections;
-using System.Collections.Generic;
 using System.Security.Claims;
-using System.Threading.Tasks;
 
 namespace PureConnectBackend.Controllers
 {

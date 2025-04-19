@@ -1,5 +1,5 @@
-﻿using PureConnectBackend.Core.Models.Requests;
-using PureConnectBackend.Infrastructure.Models;
+﻿using PureConnectBackend.Core.Models.Models;
+using PureConnectBackend.Core.Models.Requests;
 using System;
 using System.Collections.Generic;
 using System.Linq;

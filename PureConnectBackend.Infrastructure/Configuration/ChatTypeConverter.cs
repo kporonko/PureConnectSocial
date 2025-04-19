@@ -1,6 +1,5 @@
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using PureConnectBackend.Infrastructure.Enums;
-using PureConnectBackend.Infrastructure.Models;
+using PureConnectBackend.Core.Enums;
 using System;
 using System.Linq.Expressions;
 

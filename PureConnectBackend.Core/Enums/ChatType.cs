@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PureConnectBackend.Infrastructure.Enums
+namespace PureConnectBackend.Core.Enums
 {
     public enum ChatType
     {

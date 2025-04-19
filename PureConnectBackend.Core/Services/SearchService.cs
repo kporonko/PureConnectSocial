@@ -1,10 +1,8 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.EntityFrameworkCore;
-using PureConnectBackend.Core.Interfaces;
+﻿using PureConnectBackend.Core.Interfaces;
+using PureConnectBackend.Core.Models.Models;
 using PureConnectBackend.Core.Models;
 using PureConnectBackend.Core.Models.Responses;
-using PureConnectBackend.Infrastructure.Data;
-using PureConnectBackend.Infrastructure.Models;
+using PureConnectBackend.Core.Repositories;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,13 +12,21 @@ namespace PureConnectBackend.Core.Services
 {
     public class SearchService : ISearchService
     {
-        private readonly ApplicationContext _context;
+        private readonly IPostRepository _postRepository;
+        private readonly IUserRepository _userRepository;
+        private readonly IFollowRepository _followRepository;
         private readonly ICacheService _cacheService;
         private readonly TimeSpan _userSearchCacheTime = TimeSpan.FromMinutes(10);
 
-        public SearchService(ApplicationContext context, ICacheService cacheService)
+        public SearchService(
+            IPostRepository postRepository,
+            IUserRepository userRepository,
+            IFollowRepository followRepository,
+            ICacheService cacheService)
         {
-            _context = context;
+            _postRepository = postRepository;
+            _userRepository = userRepository;
+            _followRepository = followRepository;
             _cacheService = cacheService;
         }
 
@@ -31,22 +37,22 @@ namespace PureConnectBackend.Core.Services
         /// <returns>List of post images for display in feed</returns>
         public async Task<List<PostImageResponse>> GetMostPopularPosts(int count = 20)
         {
-            // Get posts with the most likes
-            var posts = await _context.Posts
-                .Include(p => p.PostLikes)
-                .OrderByDescending(p => p.PostLikes.Count)
-                .Take(count * 2)
-                .ToListAsync();
+            // Используем соответствующий метод из IPostRepository
+            string cacheKey = $"popular_posts_{count}";
 
-            // Randomize the order
-            var random = new Random();
-            var randomizedPosts = posts.OrderBy(p => random.Next()).Take(count);
+            return await _cacheService.GetOrCreateAsync(cacheKey, async () => {
+                var popularPosts = await _postRepository.GetPopularPostsAsync(count * 2);
 
-            return randomizedPosts.Select(p => new PostImageResponse
-            {
-                PostId = p.Id,
-                Image = p.Image
-            }).ToList();
+                // Randomize the order
+                var random = new Random();
+                var randomizedPosts = popularPosts.OrderBy(p => random.Next()).Take(count);
+
+                return randomizedPosts.Select(p => new PostImageResponse
+                {
+                    PostId = p.Id,
+                    Image = p.Image
+                }).ToList();
+            }, TimeSpan.FromMinutes(30));
         }
 
         /// <summary>
@@ -57,21 +63,18 @@ namespace PureConnectBackend.Core.Services
         /// <returns>List of post images for display in feed</returns>
         public async Task<List<PostImageResponse>> GetTrendingPosts(int hours = 24, int count = 20)
         {
-            var timeThreshold = DateTime.UtcNow.AddHours(-hours);
+            string cacheKey = $"trending_posts_{hours}_{count}";
 
-            // Get posts with the most recent likes
-            var posts = await _context.Posts
-                .Include(p => p.PostLikes)
-                .Where(p => p.PostLikes.Any(l => l.CreatedAt >= timeThreshold))
-                .OrderByDescending(p => p.PostLikes.Count(l => l.CreatedAt >= timeThreshold))
-                .Take(count)
-                .ToListAsync();
+            return await _cacheService.GetOrCreateAsync(cacheKey, async () => {
+                var timeThreshold = DateTime.UtcNow.AddHours(-hours);
+                var trendingPosts = await _postRepository.GetTrendingPostsAsync(timeThreshold, count);
 
-            return posts.Select(p => new PostImageResponse
-            {
-                PostId = p.Id,
-                Image = p.Image
-            }).ToList();
+                return trendingPosts.Select(p => new PostImageResponse
+                {
+                    PostId = p.Id,
+                    Image = p.Image
+                }).ToList();
+            }, TimeSpan.FromMinutes(15));
         }
 
         /// <summary>
@@ -81,25 +84,22 @@ namespace PureConnectBackend.Core.Services
         /// <returns>List of post images for display in feed</returns>
         public async Task<List<PostImageResponse>> GetPostsFromPopularUsers(int count = 20)
         {
-            // First, get the most popular users (with most followers)
-            var popularUserIds = await _context.Users
-                .OrderByDescending(u => u.Follower.Count)
-                .Take(10) // Take top 10 popular users
-                .Select(u => u.Id)
-                .ToListAsync();
+            string cacheKey = $"popular_users_posts_{count}";
 
-            // Get recent posts from these popular users
-            var posts = await _context.Posts
-                .Where(p => popularUserIds.Contains(p.UserId))
-                .OrderByDescending(p => p.CreatedAt)
-                .Take(count)
-                .ToListAsync();
+            return await _cacheService.GetOrCreateAsync(cacheKey, async () => {
+                // Получаем ID популярных пользователей
+                var popularUsers = await _userRepository.GetMostPopularUsersAsync(10);
+                var popularUserIds = popularUsers.Select(u => u.Id);
 
-            return posts.Select(p => new PostImageResponse
-            {
-                PostId = p.Id,
-                Image = p.Image
-            }).ToList();
+                // Получаем посты этих пользователей
+                var posts = await _postRepository.GetPostsFromUsersAsync(popularUserIds, count);
+
+                return posts.Select(p => new PostImageResponse
+                {
+                    PostId = p.Id,
+                    Image = p.Image
+                }).ToList();
+            }, TimeSpan.FromMinutes(30));
         }
 
         public async Task<List<SearchedUserResponse>> GetSearchedUsers(User user, string userName)
@@ -119,29 +119,25 @@ namespace PureConnectBackend.Core.Services
         {
             var searchTerm = userName.ToLower();
 
-            var currentUser = await _context.Users
-                .Include(u => u.Followee)
-                .Include(u => u.Follower)
-                .FirstOrDefaultAsync(u => u.Id == user.Id);
-
+            // Получаем текущего пользователя с его подписками
+            var currentUser = await _userRepository.GetUserWithFollowsAsync(user.Id);
             if (currentUser == null)
                 return new List<SearchedUserResponse>();
 
-            var currentUserFriends = await GetUserFriends(currentUser);
+            // Получаем друзей текущего пользователя
+            var currentUserFriends = await _userRepository.GetUserFriendsAsync(currentUser.Id);
 
-            var matchedUsers = await _context.Users
-                .Where(u => u.Id != user.Id)
-                .Where(u => u.UserName.ToLower().Contains(searchTerm) || u.FirstName.ToLower().Contains(searchTerm) || u.LastName.ToLower().Contains(searchTerm))
-                .Include(u => u.Follower)
-                .Include(u => u.Followee)
-                .ToListAsync();
+            // Находим пользователей, чьи имена соответствуют запросу
+            var matchedUsers = await _userRepository.SearchUsersAsync(searchTerm, user.Id);
 
             var result = new List<SearchedUserResponse>();
 
             foreach (var matchedUser in matchedUsers)
             {
-                var matchedUserFriends = await GetUserFriends(matchedUser);
+                // Получаем друзей найденного пользователя
+                var matchedUserFriends = await _userRepository.GetUserFriendsAsync(matchedUser.Id);
 
+                // Находим общих друзей
                 var commonFriendsCount = currentUserFriends
                     .Intersect(matchedUserFriends, new UserComparer())
                     .Count();
@@ -158,32 +154,6 @@ namespace PureConnectBackend.Core.Services
             }
 
             return result.OrderByDescending(x => x.CommonFriendsCount).ToList();
-        }
-
-        private async Task<List<User>> GetUserFriends(User user)
-        {
-            var followingIds = await _context.Follows
-                .Where(f => f.FollowerId == user.Id)
-                .Select(f => f.FolloweeId)
-                .Distinct() // Добавляем Distinct для исключения дубликатов
-                .ToListAsync();
-
-            // Затем получаем ID пользователей, которые подписаны на текущего пользователя
-            var followerIds = await _context.Follows
-                .Where(f => f.FolloweeId == user.Id)
-                .Select(f => f.FollowerId)
-                .Distinct() // Добавляем Distinct для исключения дубликатов
-                .ToListAsync();
-
-            // Находим пересечение - это ID взаимных друзей
-            var mutualFriendIds = followingIds.Intersect(followerIds).ToList();
-
-            // Получаем полную информацию о пользователях
-            var mutualFriends = await _context.Users
-                .Where(u => mutualFriendIds.Contains(u.Id))
-                .ToListAsync();
-
-            return mutualFriends;
         }
 
         private class UserComparer : IEqualityComparer<User>

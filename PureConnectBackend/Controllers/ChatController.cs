@@ -1,13 +1,13 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Localization;
-using PureConnectBackend.Core.Interfaces;
-using PureConnectBackend.Infrastructure.Models;
-using System.Security.Claims;
-using PureConnectBackend.Core.Models.Responses;
-using PureConnectBackend.Core.Models.Requests;
 using Microsoft.AspNetCore.SignalR;
+using Microsoft.Extensions.Localization;
 using PureConnectBackend.Core.Hubs;
+using PureConnectBackend.Core.Interfaces;
+using PureConnectBackend.Core.Models.Models;
+using PureConnectBackend.Core.Models.Requests;
+using PureConnectBackend.Core.Models.Responses;
+using System.Security.Claims;
 
 namespace PureConnectBackend.Controllers
 {

@@ -1,11 +1,9 @@
 ﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Localization;
 using PureConnectBackend.Core.Interfaces;
+using PureConnectBackend.Core.Models.Models;
 using PureConnectBackend.Core.Models.Requests;
 using PureConnectBackend.Core.Models.Responses;
-using PureConnectBackend.Infrastructure.Models;
 using System.Security.Claims;
 
 namespace PureConnectBackend.Controllers
@@ -99,7 +97,7 @@ namespace PureConnectBackend.Controllers
         [Authorize]
         public async Task<ActionResult<MyFollowersFriendsListResponse?>> GetUserFriends([FromRoute] int profileId)
         {
-            var response = await _userService.GetUserFriendsByUser(new Infrastructure.Models.User { Id = profileId });
+            var response = await _userService.GetUserFriendsByUser(new User { Id = profileId });
             if (response is null)
                 return BadRequest();
 
@@ -131,7 +129,7 @@ namespace PureConnectBackend.Controllers
         [Authorize]
         public async Task<ActionResult<MyFollowersFriendsListResponse?>> GetUserFollowers([FromRoute] int profileId)
         {
-            var response = await _userService.GetFollowersByUser(new Infrastructure.Models.User { Id = profileId});
+            var response = await _userService.GetFollowersByUser(new User { Id = profileId});
             if (response is null)
                 return BadRequest();
 
