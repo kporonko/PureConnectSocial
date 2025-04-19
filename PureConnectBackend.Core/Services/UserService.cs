@@ -121,7 +121,8 @@ namespace PureConnectBackend.Core.Services
             profilePageResponse.FollowersCount = GetUsersFollowersCount(user);
             profilePageResponse.Response = MyResponses.Ok;
             profilePageResponse.IsFollowed = _context.Follows.Any(x => x.FollowerId == currUser.Id && x.FolloweeId == user.Id);
-            
+            profilePageResponse.IsMine = user.Id == currUser.Id;
+
             return profilePageResponse;
         }
 

@@ -56,13 +56,14 @@ const UserPage = (props: {
             }
             const bodyAvatar = await responseAvatar.json();
             setProfile(bodyAvatar);
-
             console.log(bodyAvatar)
+            if (bodyAvatar?.isMine){
+                nav('/my-profile')
+            }
 
             if (bodyAvatar) {
                 const userObj = convertProfileToUser(bodyAvatar);
                 setUser(userObj);
-                console.log(userObj)
             }
         }
     }
@@ -83,6 +84,7 @@ const UserPage = (props: {
     }
 
     useEffect(() => {
+
         GetAvatar();
         getProfile();
     }, [userId])
