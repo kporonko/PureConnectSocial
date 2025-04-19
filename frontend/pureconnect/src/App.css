@@ -302,6 +302,9 @@ html, body{
   display: flex;
   width: 100%;
 }
+
+
+
 .nav-menu-wrapper {
   width: 17vw; /* Fixed width instead of max-width: 17vw */
   background: var(--background-imagelogin);
@@ -409,6 +412,44 @@ html, body{
   background: var(--background-third);
   border-radius: 30px;
 }
+
+
+@media (max-width: 1600px) {
+
+  .nav-menu-wrapper {
+    width: 80px;
+    padding-right: 20px;
+  }
+
+  .nav-menu-item-text {
+    display: none;
+  }
+
+  .nav-menu-image {
+    width: 80%;
+    padding-left: 40px;
+  }
+
+  .nav-menu-image-wrapper {
+    padding: 0.5rem;
+  }
+
+  .nav-menu-item {
+    justify-content: center;
+    padding: 1vh 0;
+  }
+
+  .active-page {
+    margin-right: 0;
+    padding: 1vh 0;
+  }
+
+  .nav-more {
+    justify-content: center;
+    padding: 1vh 0;
+  }
+}
+
 .main-content-home{
   display: flex;
   justify-content: center;
@@ -1073,8 +1114,8 @@ html, body{
   height: 100%;
 }
 .modal-add-post-content-with-panel{
-  width: 60%;
-  height: 60%;
+  /*width: 60%;*/
+  /*height: 60%;*/
   background: var(--background);
   border: 1px solid var(--text-primary);
   border-radius: 20px;
@@ -1126,6 +1167,7 @@ html, body{
   padding: 1rem;
   border-radius: 20px;
   gap: 2rem;
+  max-width: 100%;
 }
 .modal-add-post-image-part-wrapper{
   display: flex;
@@ -1210,6 +1252,7 @@ html, body{
 .post-page-content-wrapper{
   background: var(--background);
   min-height: 100vh;
+  width: 100%;
   /*margin-left: 17vw; !* same as width of #left-nav *!*/
   /*width: calc(100% - 17vw);*/
   overflow: hidden;
@@ -2116,3 +2159,112 @@ html, body{
   height: 50vh;
   max-height: 200px;
 }
+
+.search-area-wrapper{
+  display: flex;
+gap: 1vh;
+}
+
+.search-img-wrapper{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.nav-icon-search-page{
+  display: flex;
+  color: var(--text-primary);
+  font-size: 3vw;
+}
+
+.search-textarea{
+  border-radius: 5px;
+  padding: 10px;
+  background: var(--background-third);
+  color: var(--text-primary);
+  font-family: "Montserrat", sans-serif;
+  font-size: 1vw;
+  width: 50vw;
+}
+
+.search-container{
+  padding: 2vh;
+  background: var(--background-secondary);
+  border: 3px solid var(--background-third);
+  border-radius: 20px;
+}
+
+.searched-user-item {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  padding: 1rem;
+  margin: 1rem 0;
+  border-radius: 15px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.searched-user-item:hover {
+  background: var(--background-third);
+}
+
+.searched-user-item.light {
+  background: var(--background-secondary);
+}
+
+.searched-user-item.dark {
+  background: var(--background-third);
+}
+
+.searched-user-avatar-wrapper {
+  width: 10vh;
+  height: 10vh;
+  flex-shrink: 0;
+}
+
+.searched-user-avatar-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+  border: 2px solid var(--button-yellow);
+}
+
+.searched-user-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.searched-user-name {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  font-family: "Montserrat", sans-serif;
+}
+
+.searched-user-username {
+  font-size: 0.9rem;
+  color: var(--text-primary);
+  opacity: 0.7;
+  font-family: "Montserrat", sans-serif;
+}
+
+.searched-user-common-friends {
+  font-size: 0.8rem;
+  color: var(--button-yellow);
+  font-family: "Montserrat", sans-serif;
+}
+
+.my-posts-images-wrapper-external{
+  /*width: 60vw;*/
+  display: flex;
+  gap: 20px!important;
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+}
+

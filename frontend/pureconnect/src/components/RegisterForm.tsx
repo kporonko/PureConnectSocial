@@ -97,7 +97,7 @@ const RegisterForm = (props: {theme: string}) => {
 
             const res = await login({email: user.email, password: user.password});
             localStorage.setItem('access_token', res.token);
-            setInterval(() => nav("/home"), 2000)
+            setTimeout(() => nav("/home"), 2000)
         }
         else if(res.status === 400) {
             const notify = () => toast.error(responseJson.errors);
@@ -170,7 +170,9 @@ const RegisterForm = (props: {theme: string}) => {
     }, [inputValue, options]);
 
     const handleChooseLocation = (location: string) => {
+        console.log(location)
         setInputValue(location)
+        setUser({...user, location: location} as IRegisterUser)
     }
 
     const checkUndefined = (string: string) => {
@@ -226,7 +228,10 @@ const RegisterForm = (props: {theme: string}) => {
                             value={inputValue}
                             onFocus={() => setIsFocused(true)}
                             // onBlur={() => setIsFocused(false)}
-                            onChange={(event) => setInputValue(event.target.value)}
+                            onChange={(event) => {
+                                setInputValue(event.target.value)
+                                console.log(event.target.value)
+                            }}
                             // onChange={(e) => {
                             //     setUser({...user, location: e.target.value} as IRegisterUser)
                             //     console.log(getData(e.target.value))

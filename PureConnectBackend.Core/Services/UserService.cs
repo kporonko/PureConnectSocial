@@ -121,7 +121,8 @@ namespace PureConnectBackend.Core.Services
             profilePageResponse.FollowersCount = GetUsersFollowersCount(user);
             profilePageResponse.Response = MyResponses.Ok;
             profilePageResponse.IsFollowed = _context.Follows.Any(x => x.FollowerId == currUser.Id && x.FolloweeId == user.Id);
-            
+            profilePageResponse.IsMine = user.Id == currUser.Id;
+
             return profilePageResponse;
         }
 
@@ -188,7 +189,7 @@ namespace PureConnectBackend.Core.Services
         /// </summary>
         /// <param name="user">Current user making a request.</param>
         /// <returns>MyFollowersFriendsListResponse object with followers data.</returns>
-        public async Task<MyFollowersFriendsListResponse> GetMyFollowers(User user)
+        public async Task<MyFollowersFriendsListResponse> GetFollowersByUser(User user)
         {
             var currUser = await _context.Users.FirstOrDefaultAsync(x => x.Id == user.Id);
             if (currUser is null)
@@ -213,7 +214,7 @@ namespace PureConnectBackend.Core.Services
         /// </summary>
         /// <param name="user">Current user making a request.</param>
         /// <returns>MyFollowersFriendsListResponse object with friends data.</returns>
-        public async Task<MyFollowersFriendsListResponse?> GetMyFriends(User user)
+        public async Task<MyFollowersFriendsListResponse?> GetUserFriendsByUser(User user)
         {
             var currUser = await _context.Users.FirstOrDefaultAsync(x => x.Id == user.Id);
             if (currUser is null)
@@ -362,18 +363,20 @@ namespace PureConnectBackend.Core.Services
         /// <returns>Count of user`s friends.</returns>
         private int GetUsersFriendsCount(User user)
         {
-            int counter = 0;
+            if (user?.Follower == null || user?.Followee == null)
+                return 0;
 
-            foreach (var follower in user.Followee)
-            {
-                var followee = user.Follower.FirstOrDefault(x => x.FollowerId == user.Id && x.FolloweeId == follower.FollowerId);
-                if (followee is not null)
-                {
-                    counter++;
-                }
-            }
+            // Получаем уникальные ID пользователей, на которых подписан текущий пользователь
+            var followingIds = user.Follower
+                                 .Select(f => f.FolloweeId)
+                                 .Distinct()
+                                 .ToHashSet();
 
-            return counter;
+            // Считаем подписчиков, которые есть в списке подписок
+            return user.Followee
+                     .Select(f => f.FollowerId)
+                     .Distinct()
+                     .Count(id => followingIds.Contains(id));
         }
 
         /// <summary>
@@ -383,18 +386,15 @@ namespace PureConnectBackend.Core.Services
         /// <returns>Count of user`s followers.</returns>
         private int GetUsersFollowersCount(User user)
         {
-            int counter = 0;
+            if (user?.Follower == null || user?.Followee == null)
+                return 0;
 
-            foreach (var follower in user.Followee)
-            {
-                var followee = user.Follower.FirstOrDefault(x => x.FollowerId == user.Id && x.FolloweeId == follower.FollowerId);
-                if (followee is null)
-                {
-                    counter++;
-                }
-            }
+            // ID всех, на кого подписан текущий пользователь
+            var followingIds = user.Follower.Select(f => f.FolloweeId).Distinct().ToHashSet();
 
-            return counter;
+            // Подписчики без взаимной подписки
+            return user.Followee
+                .Count(follower => !followingIds.Distinct().Contains(follower.FollowerId));
         }
 
 
@@ -419,7 +419,7 @@ namespace PureConnectBackend.Core.Services
                 }
             }
 
-            return friends;
+            return friends.Distinct().ToList();
         }
 
         private async Task<List<User>> GetUserFollowers(User currUser)

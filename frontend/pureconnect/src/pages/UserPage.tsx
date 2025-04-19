@@ -25,6 +25,7 @@ const UserPage = (props: {
     const {userId} = useParams();
 
     const [profile, setProfile] = React.useState<IProfile>();
+    const [user, setUser] = React.useState<IUser>();
 
     const [avatarImage, setAvatarImage] = React.useState("");
     const [currPostIdUsersLiked , setCurrPostIdUsersLiked] = useState<number>()
@@ -54,7 +55,16 @@ const UserPage = (props: {
                 notify();
             }
             const bodyAvatar = await responseAvatar.json();
-            setProfile(bodyAvatar.avatar);
+            setProfile(bodyAvatar);
+            console.log(bodyAvatar)
+            if (bodyAvatar?.isMine){
+                nav('/my-profile')
+            }
+
+            if (bodyAvatar) {
+                const userObj = convertProfileToUser(bodyAvatar);
+                setUser(userObj);
+            }
         }
     }
 
@@ -69,20 +79,46 @@ const UserPage = (props: {
             }
             const bodyAvatar = await responseAvatar.json();
             setAvatarImage(bodyAvatar.avatar);
+
         }
     }
 
     useEffect(() => {
+
         GetAvatar();
         getProfile();
     }, [userId])
 
+    const convertProfileToUser = (profile: IProfile): IUser => {
+        return {
+            userId: profile.userId,
+            email: profile.email,
+            password: '', // Это поле в IUser, но его нет в IProfile - заполняем пустой строкой
+            lastName: profile.lastName,
+            firstName: profile.firstName,
+            location: profile.location,
+            birthDate: profile.birthDate,
+            avatar: profile.avatar,
+            userName: profile.userName,
+            status: profile.status,
+            postsCount: profile.postsCount,
+            followersCount: profile.followersCount,
+            friendsCount: profile.friendsCount
+        };
+    };
+
     return (
         <div className={`profile-wrapper`} data-theme={props.theme}>
-            <div>
-                <NavMenu page={3} theme={props.theme} setTheme={props.setTheme} avatar={avatarImage}/>
-                <MainContentUserProfile setCurrPostIdUsersLiked={setCurrPostIdUsersLiked} setIsOpenUsersLikedPost={setIsOpenUsersLikedPost} user={profile} setUser={setProfile} isOpenFollowers={isOpenFollowers} setIsOpenFollowers={setIsOpenFollowers} isOpenFriends={isOpenFriends} setIsOpenFriends={setIsOpenFriends} theme={props.theme} posts={posts} postsImage={postsImage}/>
+            <div className={`profile-page-wrapper ${(isOpenFollowers || isOpenFriends) && 'content-while-active-modal'}`}>
+                <NavMenu page={-1} theme={props.theme} setTheme={props.setTheme} avatar={avatarImage}/>
+                <MainContentUserProfile setPosts={setPosts} setImagePosts={setPostsImage} userId={userId} setCurrPostIdUsersLiked={setCurrPostIdUsersLiked} setIsOpenUsersLikedPost={setIsOpenUsersLikedPost} user={profile} setUser={setProfile} isOpenFollowers={isOpenFollowers} setIsOpenFollowers={setIsOpenFollowers} isOpenFriends={isOpenFriends} setIsOpenFriends={setIsOpenFriends} theme={props.theme} posts={posts} postsImage={postsImage}/>
             </div>
+
+            {isOpenFollowers &&
+                <FollowersFriendsListModal isExternal={true} user={user} setUser={setUser} setIsOpenFollowers={setIsOpenFollowers} isFollowers={true}/>}
+            {isOpenFriends &&
+                <FollowersFriendsListModal isExternal={true} user={user} setUser={setUser} setIsOpenFriends={setIsOpenFriends} isFollowers={false}/>}
+
             <ToastContainer
                 position="top-right"
                 autoClose={5000}

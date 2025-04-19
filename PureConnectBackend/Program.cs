@@ -27,6 +27,16 @@ builder.Services.AddTransient<IAdminService, AdminService>();
 builder.Services.AddTransient<IChatService, ChatService>();
 builder.Services.AddTransient<ISearchService, SearchService>();
 
+// Регистрация Redis и сервиса кеширования
+builder.Services.AddStackExchangeRedisCache(options =>
+{
+    options.Configuration = builder.Configuration["Redis:ConnectionString"];
+    options.InstanceName = builder.Configuration["Redis:InstanceName"];
+});
+
+// Регистрация ICacheService
+builder.Services.AddScoped<ICacheService, RedisCacheService>();
+
 builder.Services.AddSignalR();
 
 var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";

@@ -13,4 +13,5 @@ export interface IProfile{
     friendsCount: number,
     isFollowed: boolean,
     myResponse: string | undefined,
+    isMine: boolean
 }

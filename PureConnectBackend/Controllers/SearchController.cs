@@ -1,8 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Localization;
 using PureConnectBackend.Core.Interfaces;
+using PureConnectBackend.Core.Models;
 using PureConnectBackend.Core.Models.Responses;
+using PureConnectBackend.Core.Services;
 using PureConnectBackend.Infrastructure.Models;
 using System.Collections;
 using System.Collections.Generic;
@@ -61,8 +64,20 @@ namespace PureConnectBackend.Controllers
             {
                 return BadRequest(_stringLocalizer.GetString("RetrievalFailed") + ": " + ex.Message);
             }
-        } 
+        }
 
+        [HttpGet("searched-users")]
+        [Authorize]
+        public async Task<ActionResult<List<SearchedUserResponse>?>> GetSearchedUsers(string userName)
+        {
+            var currUser = GetCurrentUser();
+            var response = await _searchService.GetSearchedUsers(currUser, userName);
+            if (response is null)
+                return NotFound();
+
+            return Ok(response);
+        }
+        
         /// <summary>
         /// Gets current user by authorizing jwt token
         /// </summary>
