@@ -94,7 +94,7 @@ const PostsList = (props:
         <div className={'posts-list-wrapper'}>
 
             <div style={{display:'flex', justifyContent:'center'}}>
-                <ProfilePostsActionsPanel setIsActiveAddPost={props.setIsActiveAddPost} isFeed={isFeed} setIsFeed={setIsFeed}/>
+                <ProfilePostsActionsPanel isExternal={true} setIsActiveAddPost={props.setIsActiveAddPost} isFeed={isFeed} setIsFeed={setIsFeed}/>
             </div>
 
 
