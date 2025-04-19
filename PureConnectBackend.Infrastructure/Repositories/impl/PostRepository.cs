@@ -66,17 +66,30 @@ namespace PureConnectBackend.Infrastructure.Repositories.impl
         public async Task<List<Post>> GetUserRecentPostsAsync(int userId, int daysBack)
         {
             var user = await _context.Users
-                .Include(u => u.Posts)
-                    .ThenInclude(p => p.PostLikes)
-                .Include(u => u.Posts)
-                    .ThenInclude(p => p.PostComments)
                 .FirstOrDefaultAsync(u => u.Id == userId);
 
             if (user == null)
                 return new List<Post>();
 
-            DateTime threshold = DateTime.Now.AddDays(-daysBack);
+            await _context.Entry(user)
+                .Collection(u => u.Posts)
+                .LoadAsync();
 
+            if (user.Posts != null && user.Posts.Any())
+            {
+                foreach (var post in user.Posts)
+                {
+                    await _context.Entry(post)
+                        .Collection(p => p.PostLikes)
+                        .LoadAsync();
+
+                    await _context.Entry(post)
+                        .Collection(p => p.PostComments)
+                        .LoadAsync();
+                }
+            }
+
+            DateTime threshold = DateTime.Now.AddDays(-daysBack);
             return user.Posts
                 .Where(p => p.CreatedAt >= threshold)
                 .OrderByDescending(p => p.CreatedAt)
@@ -97,21 +110,40 @@ namespace PureConnectBackend.Infrastructure.Repositories.impl
 
         public async Task<List<Post>> GetPopularPostsAsync(int count)
         {
-            return await _dbSet
-                .Include(p => p.PostLikes)
-                .OrderByDescending(p => p.PostLikes.Count)
-                .Take(count)
-                .ToListAsync();
+            var posts = await _dbSet
+                   .OrderByDescending(p => p.PostLikes.Count)
+                   .Take(count)
+                   .ToListAsync();
+
+            foreach (var post in posts)
+            {
+                await _context.Entry(post)
+                    .Collection(p => p.PostLikes)
+                    .LoadAsync();
+            }
+
+            return posts;
         }
 
         public async Task<List<Post>> GetTrendingPostsAsync(DateTime fromDate, int count)
         {
-            return await _dbSet
-                .Include(p => p.PostLikes)
+            var posts = await _dbSet
                 .Where(p => p.PostLikes.Any(l => l.CreatedAt >= fromDate))
                 .OrderByDescending(p => p.PostLikes.Count(l => l.CreatedAt >= fromDate))
                 .Take(count)
                 .ToListAsync();
+
+            foreach (var post in posts)
+            {
+                await _context.Entry(post)
+                    .Collection(p => p.PostLikes)
+                    .LoadAsync();
+            }
+
+            return posts
+                .Where(p => p.PostLikes.Any(l => l.CreatedAt >= fromDate))
+                .OrderByDescending(p => p.PostLikes.Count(l => l.CreatedAt >= fromDate))
+                .ToList();
         }
 
         public async Task<List<Post>> GetPostsFromUsersAsync(IEnumerable<int> userIds, int count)

@@ -5,21 +5,19 @@ using PureConnectBackend.Core.Models.Requests;
 using PureConnectBackend.Core.Models.Responses;
 using PureConnectBackend.Core.Repositories;
 using PureConnectBackend.Infrastructure.Data;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net;
-using System.Threading.Tasks;
 
 namespace PureConnectBackend.Infrastructure.Repositories.impl
 {
     public class UserRepository : Repository<User>, IUserRepository
     {
         private readonly IFollowRepository _followRepository;
+        private readonly ApplicationContext _context;
 
         public UserRepository(ApplicationContext context, IFollowRepository followRepository) : base(context)
         {
             _followRepository = followRepository;
+            _context = context;
         }
 
         public async Task<User> GetUserByEmailAsync(string email)
@@ -36,11 +34,24 @@ namespace PureConnectBackend.Infrastructure.Repositories.impl
 
         public async Task<User> GetUserWithDetailsAsync(int userId)
         {
-            return await _dbSet
-                .Include(u => u.Follower)
-                .Include(u => u.Followee)
-                .Include(u => u.Posts)
-                .FirstOrDefaultAsync(u => u.Id == userId);
+            var user = await _dbSet.FirstOrDefaultAsync(u => u.Id == userId);
+
+            if (user == null)
+                return null;
+
+            await _context.Entry(user)
+                .Collection(u => u.Follower)
+                .LoadAsync();
+
+            await _context.Entry(user)
+                .Collection(u => u.Followee)
+                .LoadAsync();
+
+            await _context.Entry(user)
+                .Collection(u => u.Posts)
+                .LoadAsync();
+
+            return user;
         }
 
         public async Task<List<User>> GetUserFriendsAsync(int userId)
@@ -177,11 +188,21 @@ namespace PureConnectBackend.Infrastructure.Repositories.impl
             var userFriends = await GetUserFriendsAsync(userId);
 
             var result = new List<RecommendedUserResponse>();
+
             var otherUsers = await _dbSet
-                .Include(u => u.Follower)
-                .Include(u => u.Followee)
                 .Where(u => u.Id != userId)
                 .ToListAsync();
+
+            foreach (var u in otherUsers)
+            {
+                await _context.Entry(u)
+                    .Collection(u => u.Follower)
+                    .LoadAsync();
+
+                await _context.Entry(u)
+                    .Collection(u => u.Followee)
+                    .LoadAsync();
+            }
 
             foreach (var otherUser in otherUsers)
             {
