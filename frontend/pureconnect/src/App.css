@@ -1073,8 +1073,8 @@ html, body{
   height: 100%;
 }
 .modal-add-post-content-with-panel{
-  width: 60%;
-  height: 60%;
+  /*width: 60%;*/
+  /*height: 60%;*/
   background: var(--background);
   border: 1px solid var(--text-primary);
   border-radius: 20px;
@@ -1126,6 +1126,7 @@ html, body{
   padding: 1rem;
   border-radius: 20px;
   gap: 2rem;
+  max-width: 100%;
 }
 .modal-add-post-image-part-wrapper{
   display: flex;
