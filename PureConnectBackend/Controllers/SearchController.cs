@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Localization;
+using PureConnectBackend.Core.Extentions;
 using PureConnectBackend.Core.Interfaces;
 using PureConnectBackend.Core.Models;
 using PureConnectBackend.Core.Models.Models;
@@ -36,7 +37,7 @@ namespace PureConnectBackend.Controllers
         {
             try
             {
-                var currUser = GetCurrentUser();
+                var currUser = UserExtentions.GetCurrentUser(HttpContext.User.Identity as ClaimsIdentity);
                 if (currUser == null)
                     return NotFound();
 
@@ -65,37 +66,12 @@ namespace PureConnectBackend.Controllers
         [Authorize]
         public async Task<ActionResult<List<SearchedUserResponse>?>> GetSearchedUsers(string userName)
         {
-            var currUser = GetCurrentUser();
+            var currUser = UserExtentions.GetCurrentUser(HttpContext.User.Identity as ClaimsIdentity);
             var response = await _searchService.GetSearchedUsers(currUser, userName);
             if (response is null)
                 return NotFound();
 
             return Ok(response);
-        }
-        
-        /// <summary>
-        /// Gets current user by authorizing jwt token
-        /// </summary>
-        /// <returns>Current user or null</returns>
-        private User? GetCurrentUser()
-        {
-            var identity = HttpContext.User.Identity as ClaimsIdentity;
-
-            if (identity is not null)
-            {
-                var userClaims = identity.Claims;
-
-                return new User
-                {
-                    UserName = userClaims.FirstOrDefault(o => o.Type == ClaimTypes.NameIdentifier)?.Value,
-                    Email = userClaims.FirstOrDefault(o => o.Type == ClaimTypes.Email)?.Value,
-                    FirstName = userClaims.FirstOrDefault(o => o.Type == ClaimTypes.GivenName)?.Value,
-                    LastName = userClaims.FirstOrDefault(o => o.Type == ClaimTypes.Surname)?.Value,
-                    Role = userClaims.FirstOrDefault(o => o.Type == ClaimTypes.Role)?.Value,
-                    Id = Convert.ToInt32(userClaims.FirstOrDefault(o => o.Type == ClaimTypes.Sid)?.Value)
-                };
-            }
-            return null;
         }
     }
 }

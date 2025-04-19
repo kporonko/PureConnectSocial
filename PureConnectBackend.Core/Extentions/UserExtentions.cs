@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using PureConnectBackend.Core.Models.Models;
 using System;
@@ -45,6 +46,25 @@ namespace PureConnectBackend.Core.Extentions
                 );
 
             return new JwtSecurityTokenHandler().WriteToken(token);
+        }
+
+        public static User? GetCurrentUser(ClaimsIdentity identity)
+        {
+            if (identity is not null)
+            {
+                var userClaims = identity.Claims;
+
+                return new User
+                {
+                    UserName = userClaims.FirstOrDefault(o => o.Type == ClaimTypes.NameIdentifier)?.Value,
+                    Email = userClaims.FirstOrDefault(o => o.Type == ClaimTypes.Email)?.Value,
+                    FirstName = userClaims.FirstOrDefault(o => o.Type == ClaimTypes.GivenName)?.Value,
+                    LastName = userClaims.FirstOrDefault(o => o.Type == ClaimTypes.Surname)?.Value,
+                    Role = userClaims.FirstOrDefault(o => o.Type == ClaimTypes.Role)?.Value,
+                    Id = Convert.ToInt32(userClaims.FirstOrDefault(o => o.Type == ClaimTypes.Sid)?.Value)
+                };
+            }
+            return null;
         }
     }
 }

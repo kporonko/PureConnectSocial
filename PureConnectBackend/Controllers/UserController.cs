@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using PureConnectBackend.Core.Extentions;
 using PureConnectBackend.Core.Interfaces;
 using PureConnectBackend.Core.Models.Models;
 using PureConnectBackend.Core.Models.Requests;
@@ -32,7 +33,7 @@ namespace PureConnectBackend.Controllers
         [Authorize(Roles = "user")]
         public async Task<ActionResult<PostResponse?>> GetMyProfile()
         {
-            var currUser = GetCurrentUser();
+            var currUser = UserExtentions.GetCurrentUser(HttpContext.User.Identity as ClaimsIdentity);
             var response = await _userService.GetProfile(currUser);
             if (response is null)
                 return NotFound();
@@ -48,7 +49,7 @@ namespace PureConnectBackend.Controllers
         [Authorize]
         public async Task<ActionResult<GetAvatarResponse?>> GetMyAvatar()
         {
-            var currUser = GetCurrentUser();
+            var currUser = UserExtentions.GetCurrentUser(HttpContext.User.Identity as ClaimsIdentity);
             var response = await _userService.GetProfileAvatar(currUser);
             if (response is null)
                 return NotFound();
@@ -65,7 +66,7 @@ namespace PureConnectBackend.Controllers
         [Authorize]
         public async Task<ActionResult<List<RecommendedUserResponse>?>> GetRecommendedUsers()
         {
-            var currUser = GetCurrentUser();
+            var currUser = UserExtentions.GetCurrentUser(HttpContext.User.Identity as ClaimsIdentity);
             var response = await _userService.GetRecommendedUsers(currUser);
             if (response is null)
                 return NotFound();
@@ -81,7 +82,7 @@ namespace PureConnectBackend.Controllers
         [Authorize]
         public async Task<ActionResult<MyFollowersFriendsListResponse?>> GetMyFriends()
         {
-            var currUser = GetCurrentUser();
+            var currUser = UserExtentions.GetCurrentUser(HttpContext.User.Identity as ClaimsIdentity);
             var response = await _userService.GetUserFriendsByUser(currUser);
             if (response is null)
                 return BadRequest();
@@ -113,7 +114,7 @@ namespace PureConnectBackend.Controllers
         [Authorize]
         public async Task<ActionResult<MyFollowersFriendsListResponse?>> GetMyFollowers()
         {
-            var currUser = GetCurrentUser();
+            var currUser = UserExtentions.GetCurrentUser(HttpContext.User.Identity as ClaimsIdentity);
             var response = await _userService.GetFollowersByUser(currUser);
             if (response is null)
                 return BadRequest();
@@ -145,7 +146,7 @@ namespace PureConnectBackend.Controllers
         [Authorize]
         public async Task<ActionResult<ProfilePageResponse>> GetProfileById([FromRoute] int profileId)
         {
-            var currUser = GetCurrentUser();
+            var currUser = UserExtentions.GetCurrentUser(HttpContext.User.Identity as ClaimsIdentity);
             var response = await _userService.GetProfileById(currUser, profileId);
             
             if (response.Response == Core.Models.MyResponses.ClosedAcc)
@@ -160,7 +161,7 @@ namespace PureConnectBackend.Controllers
         [Authorize]
         public async Task<ActionResult<ProfileResponse>> UpdateProfile([FromBody] ProfileEditRequest request)
         {
-            var currUser = GetCurrentUser();
+            var currUser = UserExtentions.GetCurrentUser(HttpContext.User.Identity as ClaimsIdentity);
             var response = await _userService.EditProfile(currUser, request);
             if (response == System.Net.HttpStatusCode.BadRequest)
                 return BadRequest();
@@ -172,37 +173,12 @@ namespace PureConnectBackend.Controllers
         [Authorize]
         public async Task<ActionResult<List<RecommendedUserResponse>?>> GetCommonFriends([FromRoute] int profileId)
         {
-            var currUser = GetCurrentUser();
+            var currUser = UserExtentions.GetCurrentUser(HttpContext.User.Identity as ClaimsIdentity);
             var response = await _userService.GetCommonFriends(currUser, profileId);
             if (response is null)
                 return BadRequest();
 
             return Ok(response);
-        }
-
-        /// <summary>
-        /// Gets current user by authorizing jwt token.
-        /// </summary>
-        /// <returns></returns>
-        private User GetCurrentUser()
-        {
-            var identity = HttpContext.User.Identity as ClaimsIdentity;
-
-            if (identity is not null)
-            {
-                var userClaims = identity.Claims;
-
-                return new User
-                {
-                    UserName = userClaims.FirstOrDefault(o => o.Type == ClaimTypes.NameIdentifier)?.Value,
-                    Email = userClaims.FirstOrDefault(o => o.Type == ClaimTypes.Email)?.Value,
-                    FirstName = userClaims.FirstOrDefault(o => o.Type == ClaimTypes.GivenName)?.Value,
-                    LastName = userClaims.FirstOrDefault(o => o.Type == ClaimTypes.Surname)?.Value,
-                    Role = userClaims.FirstOrDefault(o => o.Type == ClaimTypes.Role)?.Value,
-                    Id = Convert.ToInt32(userClaims.FirstOrDefault(o => o.Type == ClaimTypes.Sid)?.Value)
-                };
-            }
-            return null;
         }
     }
 }

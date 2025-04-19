@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Localization;
+using PureConnectBackend.Core.Extentions;
 using PureConnectBackend.Core.Hubs;
 using PureConnectBackend.Core.Interfaces;
 using PureConnectBackend.Core.Models.Models;
@@ -34,7 +35,7 @@ namespace PureConnectBackend.Controllers
         [Authorize(Roles = "user")]
         public async Task<ActionResult<Chat>> CreateChat([FromBody] CreateChatDto dto)
         {
-            var user = GetCurrentUser();
+            var user = UserExtentions.GetCurrentUser(HttpContext.User.Identity as ClaimsIdentity);
             if (user == null)
                 return BadRequest(_stringLocalizer.GetString("UserNotFound"));
 
@@ -63,7 +64,7 @@ namespace PureConnectBackend.Controllers
         {
             Console.WriteLine($"SendMessage called for chat {chatId}, content: {dto.Content}");
 
-            var user = GetCurrentUser();
+            var user = UserExtentions.GetCurrentUser(HttpContext.User.Identity as ClaimsIdentity);
             if (user == null)
             {
                 Console.WriteLine("User not found");
@@ -96,7 +97,7 @@ namespace PureConnectBackend.Controllers
         [Route("chats")]
         public async Task<ActionResult<IEnumerable<ChatShortResponse>>> GetUserChats()
         {
-            var user = GetCurrentUser();
+            var user = UserExtentions.GetCurrentUser(HttpContext.User.Identity as ClaimsIdentity);
             if (user == null)
                 return BadRequest(_stringLocalizer.GetString("UserNotFound"));
 
@@ -107,7 +108,7 @@ namespace PureConnectBackend.Controllers
         [HttpGet("{chatId}/messages")]
         public async Task<ActionResult<ChatResponse>> GetChatHistory(int chatId)
         {
-            var user = GetCurrentUser();
+            var user = UserExtentions.GetCurrentUser(HttpContext.User.Identity as ClaimsIdentity);
             if (user == null)
                 return BadRequest(_stringLocalizer.GetString("UserNotFound"));
 
@@ -133,31 +134,6 @@ namespace PureConnectBackend.Controllers
             await _chatHubContext.Clients.Group(chatId.ToString()).OnUserJoined(chatId, userId);
 
             return Ok(_stringLocalizer.GetString("ParticipantAdded"));
-        }
-
-        /// <summary>
-        /// Gets current user by authorizing jwt token.
-        /// </summary>
-        /// <returns></returns>
-        private User? GetCurrentUser()
-        {
-            var identity = HttpContext.User.Identity as ClaimsIdentity;
-
-            if (identity is not null)
-            {
-                var userClaims = identity.Claims;
-
-                return new User
-                {
-                    UserName = userClaims.FirstOrDefault(o => o.Type == ClaimTypes.NameIdentifier)?.Value,
-                    Email = userClaims.FirstOrDefault(o => o.Type == ClaimTypes.Email)?.Value,
-                    FirstName = userClaims.FirstOrDefault(o => o.Type == ClaimTypes.GivenName)?.Value,
-                    LastName = userClaims.FirstOrDefault(o => o.Type == ClaimTypes.Surname)?.Value,
-                    Role = userClaims.FirstOrDefault(o => o.Type == ClaimTypes.Role)?.Value,
-                    Id = Convert.ToInt32(userClaims.FirstOrDefault(o => o.Type == ClaimTypes.Sid)?.Value)
-                };
-            }
-            return null;
         }
     }
 }
