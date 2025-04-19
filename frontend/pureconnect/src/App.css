@@ -302,6 +302,9 @@ html, body{
   display: flex;
   width: 100%;
 }
+
+
+
 .nav-menu-wrapper {
   width: 17vw; /* Fixed width instead of max-width: 17vw */
   background: var(--background-imagelogin);
@@ -409,6 +412,44 @@ html, body{
   background: var(--background-third);
   border-radius: 30px;
 }
+
+
+@media (max-width: 1600px) {
+
+  .nav-menu-wrapper {
+    width: 80px;
+    padding-right: 20px;
+  }
+
+  .nav-menu-item-text {
+    display: none;
+  }
+
+  .nav-menu-image {
+    width: 80%;
+    padding-left: 40px;
+  }
+
+  .nav-menu-image-wrapper {
+    padding: 0.5rem;
+  }
+
+  .nav-menu-item {
+    justify-content: center;
+    padding: 1vh 0;
+  }
+
+  .active-page {
+    margin-right: 0;
+    padding: 1vh 0;
+  }
+
+  .nav-more {
+    justify-content: center;
+    padding: 1vh 0;
+  }
+}
+
 .main-content-home{
   display: flex;
   justify-content: center;
