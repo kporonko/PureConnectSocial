@@ -108,7 +108,7 @@ const UserPage = (props: {
     return (
         <div className={`profile-wrapper`} data-theme={props.theme}>
             <div className={`profile-page-wrapper ${(isOpenFollowers || isOpenFriends) && 'content-while-active-modal'}`}>
-                <NavMenu page={3} theme={props.theme} setTheme={props.setTheme} avatar={avatarImage}/>
+                <NavMenu page={-1} theme={props.theme} setTheme={props.setTheme} avatar={avatarImage}/>
                 <MainContentUserProfile setPosts={setPosts} setImagePosts={setPostsImage} userId={userId} setCurrPostIdUsersLiked={setCurrPostIdUsersLiked} setIsOpenUsersLikedPost={setIsOpenUsersLikedPost} user={profile} setUser={setProfile} isOpenFollowers={isOpenFollowers} setIsOpenFollowers={setIsOpenFollowers} isOpenFriends={isOpenFriends} setIsOpenFriends={setIsOpenFriends} theme={props.theme} posts={posts} postsImage={postsImage}/>
             </div>
 
