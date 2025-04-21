@@ -1,6 +1,6 @@
 using System;
 
-namespace PureConnectBackend.Infrastructure.Models
+namespace PureConnectBackend.Core.Models.Models
 {
     public class ChatParticipant
     {

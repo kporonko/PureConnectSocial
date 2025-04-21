@@ -1,22 +1,18 @@
-﻿using Microsoft.EntityFrameworkCore;
-using PureConnectBackend.Core.Extentions;
+﻿using PureConnectBackend.Core.Extentions;
 using PureConnectBackend.Core.Interfaces;
+using PureConnectBackend.Core.Models.Models;
 using PureConnectBackend.Core.Models.Requests;
-using PureConnectBackend.Infrastructure.Data;
-using PureConnectBackend.Infrastructure.Models;
+using PureConnectBackend.Core.Repositories;
 
 namespace PureConnectBackend.Core.Services
 {
     public class LoginService : ILoginService
     {
-        /// <summary>
-        /// Entity Framework DbContext.
-        /// </summary>
-        private readonly ApplicationContext _context;
+        private readonly IUserRepository _userRepository;
 
-        public LoginService(ApplicationContext context)
+        public LoginService(IUserRepository userRepository)
         {
-            _context = context;
+            _userRepository = userRepository;
         }
 
         /// <summary>
@@ -24,11 +20,10 @@ namespace PureConnectBackend.Core.Services
         /// </summary>
         /// <param name="userLogin">User`s login data.</param>
         /// <returns>If there is user with such an email and password returns user object, otherwise null.</returns>
-        public async Task<User?> GetUser(LoginUserRequest userLogin)
+        public async Task<User> GetUser(LoginUserRequest userLogin)
         {
             var passwordHash = userLogin.Password.ConvertPasswordToHash();
-            User? user = await _context.Users.FirstOrDefaultAsync(x => x.Email == userLogin.Email && x.Password == passwordHash);
-            return user;
+            return await _userRepository.GetUserByCredentialsAsync(userLogin.Email, passwordHash);
         }
     }
 }

@@ -2000,7 +2000,7 @@ html, body{
 
 .current-user .message-bubble {
   background-color: var(--background, #4a76a8);
-  color: white;
+  color: var(--text-primary);
   border-bottom-right-radius: 4px;
 }
 
@@ -2021,7 +2021,7 @@ html, body{
 }
 
 .current-user .message-time {
-  color: rgba(255, 255, 255, 0.8);
+  color: var(--text-color, #212529);
 }
 
 /* Input area */

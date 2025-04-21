@@ -1,8 +1,8 @@
-using PureConnectBackend.Infrastructure.Enums;
+using PureConnectBackend.Core.Enums;
 using System;
 using System.Collections.Generic;
 
-namespace PureConnectBackend.Infrastructure.Models
+namespace PureConnectBackend.Core.Models.Models
 {
     public class Chat
     {

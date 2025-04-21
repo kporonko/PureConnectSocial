@@ -1,87 +1,72 @@
-﻿using Microsoft.EntityFrameworkCore;
-using PureConnectBackend.Core.Interfaces;
+﻿using PureConnectBackend.Core.Interfaces;
+using PureConnectBackend.Core.Models.Models;
 using PureConnectBackend.Core.Models.Requests;
-using PureConnectBackend.Infrastructure.Data;
-using PureConnectBackend.Infrastructure.Models;
+using PureConnectBackend.Core.Repositories;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace PureConnectBackend.Core.Services
 {
     public class ReportService : IReportService
     {
-        /// <summary>
-        /// Entity Framework DbContext.
-        /// </summary>
-        private readonly ApplicationContext _context;
+        private readonly IUserRepository _userRepository;
+        private readonly IReportRepository _reportRepository;
+        private readonly IPostReportRepository _postReportRepository;
 
-        public ReportService(ApplicationContext context)
+        public ReportService(
+            IUserRepository userRepository,
+            IReportRepository reportRepository,
+            IPostReportRepository postReportRepository)
         {
-            _context = context;
+            _userRepository = userRepository;
+            _reportRepository = reportRepository;
+            _postReportRepository = postReportRepository;
         }
 
         public async Task<HttpStatusCode> AddPostReport(User userJwt, AddPostReportRequest postReport)
         {
-            var currUser = await _context.Users.FirstOrDefaultAsync(x => x.Id == userJwt.Id);
-            if (currUser is null)
+            var user = await _userRepository.GetByIdAsync(userJwt.Id);
+            if (user == null)
                 return HttpStatusCode.BadRequest;
 
-            PostReport postReportResult = new PostReport
+            var postReportEntity = new PostReport
             {
                 CreatedAt = postReport.CreatedAt,
                 PostId = postReport.PostId,
                 Text = postReport.Text,
-                UserId = currUser.Id
+                UserId = user.Id
             };
 
-            var response = await AddPostReportObjectToDb(postReportResult);
-            return response;
-        }
-
-
-        public async Task<HttpStatusCode> AddReport(User userJwt, AddReportRequest report)
-        {
-            var currUser = await _context.Users.FirstOrDefaultAsync(x => x.Id == userJwt.Id);
-            if (currUser is null)
-                return HttpStatusCode.BadRequest;
-
-            Report reportResult = new Report
-            {
-                CreatedAt = report.CreatedAt,
-                Text = report.Text,
-                UserId = currUser.Id
-            };
-
-            var response = await AddReportObjectToDb(reportResult);
-            return response;
-        }
-
-
-        private async Task<HttpStatusCode> AddPostReportObjectToDb(PostReport postReportResult)
-        {
             try
             {
-                await _context.PostsReports.AddAsync(postReportResult);
-                await _context.SaveChangesAsync();
+                await _postReportRepository.AddAsync(postReportEntity);
+                await _postReportRepository.SaveChangesAsync();
                 return HttpStatusCode.OK;
             }
             catch (Exception)
             {
                 return HttpStatusCode.BadRequest;
             }
-
         }
 
-        private async Task<HttpStatusCode> AddReportObjectToDb(Report reportResult)
+        public async Task<HttpStatusCode> AddReport(User userJwt, AddReportRequest report)
         {
+            var user = await _userRepository.GetByIdAsync(userJwt.Id);
+            if (user == null)
+                return HttpStatusCode.BadRequest;
+
+            var reportEntity = new Report
+            {
+                CreatedAt = report.CreatedAt,
+                Text = report.Text,
+                UserId = user.Id
+            };
+
             try
             {
-                await _context.Reports.AddAsync(reportResult);
-                await _context.SaveChangesAsync();
+                await _reportRepository.AddAsync(reportEntity);
+                await _reportRepository.SaveChangesAsync();
                 return HttpStatusCode.OK;
             }
             catch (Exception)

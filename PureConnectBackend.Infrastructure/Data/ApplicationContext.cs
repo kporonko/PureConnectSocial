@@ -1,13 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using PureConnectBackend.Core.Models.Models;
 using PureConnectBackend.Infrastructure.Configuration;
-using PureConnectBackend.Infrastructure.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml;
 
 namespace PureConnectBackend.Infrastructure.Data
 {

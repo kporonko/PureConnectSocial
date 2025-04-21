@@ -10,6 +10,8 @@ using PureConnectBackend.Core.Services;
 using Microsoft.Extensions.Options;
 using PureConnectBackend.Core.Hubs;
 using Microsoft.AspNetCore.SignalR;
+using PureConnectBackend.Core.Repositories;
+using PureConnectBackend.Infrastructure.Repositories.impl;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -24,8 +26,19 @@ builder.Services.AddTransient<IPostService, PostService>();
 builder.Services.AddTransient<IUserService, UserService>();
 builder.Services.AddTransient<IReportService, ReportService>();
 builder.Services.AddTransient<IAdminService, AdminService>();
-builder.Services.AddTransient<IChatService, ChatService>();
 builder.Services.AddTransient<ISearchService, SearchService>();
+builder.Services.AddTransient<IChatService, ChatService>();
+
+builder.Services.AddTransient<IPostReportRepository, PostReportRepository>();
+builder.Services.AddTransient<IPostLikeRepository, PostLikeRepository>();
+builder.Services.AddTransient<IReportRepository, ReportRepository>();
+builder.Services.AddTransient<IChatRepository, ChatRepository>();
+builder.Services.AddTransient<IChatParticipantRepository, ChatParticipantRepository>();
+builder.Services.AddTransient<IMessageRepository, MessageRepository>();
+builder.Services.AddTransient<IFollowRepository, FollowRepository>();
+builder.Services.AddTransient<IPostRepository, PostRepository>();
+builder.Services.AddTransient<IUserRepository, UserRepository>();
+
 
 // Регистрация Redis и сервиса кеширования
 builder.Services.AddStackExchangeRedisCache(options =>

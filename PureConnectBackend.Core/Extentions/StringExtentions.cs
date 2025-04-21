@@ -1,5 +1,4 @@
-﻿using Azure.Core;
-using PureConnectBackend.Core.Models;
+﻿using PureConnectBackend.Core.Models;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Cryptography;
 using System.Text;

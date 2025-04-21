@@ -1,23 +1,29 @@
 using System;
 using System.Collections.Generic;
-using System.Net;
+using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
+using PureConnectBackend.Core.Enums;
 using PureConnectBackend.Core.Interfaces;
+using PureConnectBackend.Core.Models.Models;
 using PureConnectBackend.Core.Models.Responses;
-using PureConnectBackend.Infrastructure.Data;
-using PureConnectBackend.Infrastructure.Enums;
-using PureConnectBackend.Infrastructure.Models;
+using PureConnectBackend.Core.Repositories;
 
 namespace PureConnectBackend.Core.Services
 {
     public class ChatService : IChatService
     {
-        private readonly ApplicationContext _context;
+        private readonly IChatRepository _chatRepository;
+        private readonly IChatParticipantRepository _chatParticipantRepository;
+        private readonly IMessageRepository _messageRepository;
 
-        public ChatService(ApplicationContext context)
+        public ChatService(
+            IChatRepository chatRepository,
+            IChatParticipantRepository chatParticipantRepository,
+            IMessageRepository messageRepository)
         {
-            _context = context;
+            _chatRepository = chatRepository;
+            _chatParticipantRepository = chatParticipantRepository;
+            _messageRepository = messageRepository;
         }
 
         public async Task<Chat> CreateChatAsync(string name, ChatType type, int creatorId)
@@ -25,11 +31,12 @@ namespace PureConnectBackend.Core.Services
             var chat = new Chat
             {
                 Name = name,
-                ChatType = type
+                ChatType = type,
+                ChatParticipants = new List<ChatParticipant>()
             };
 
-            _context.Chats.Add(chat);
-            await _context.SaveChangesAsync();
+            await _chatRepository.AddAsync(chat);
+            await _chatRepository.SaveChangesAsync();
 
             var chatParticipant = new ChatParticipant
             {
@@ -39,14 +46,14 @@ namespace PureConnectBackend.Core.Services
             };
 
             chat.ChatParticipants.Add(chatParticipant);
-            await _context.SaveChangesAsync();
+            await _chatRepository.SaveChangesAsync();
+
             return chat;
         }
 
         public async Task<MessageResponse> SendMessageAsync(int chatId, int senderId, string content)
         {
-            var chatParticipant = await _context.ChatParticipants
-                .FirstOrDefaultAsync(cp => cp.ChatId == chatId && cp.UserId == senderId);
+            var chatParticipant = await _chatParticipantRepository.GetParticipantAsync(chatId, senderId);
 
             if (chatParticipant == null)
                 throw new InvalidOperationException("User is not a participant of this chat");
@@ -58,9 +65,10 @@ namespace PureConnectBackend.Core.Services
                 ChatParticipantId = chatParticipant.Id
             };
 
-            _context.Messages.Add(message);
-            await _context.SaveChangesAsync();
-            return new MessageResponse 
+            await _messageRepository.AddAsync(message);
+            await _messageRepository.SaveChangesAsync();
+
+            return new MessageResponse
             {
                 MessageId = message.Id,
                 MessageText = message.Content,
@@ -68,14 +76,14 @@ namespace PureConnectBackend.Core.Services
                 Timestamp = message.Timestamp
             };
         }
-        
+
         public async Task<ChatResponse> GetChatHistoryAsync(int chatId, int userId)
         {
-            var chat = await GetChatWithParticipantsAsync(chatId);
+            var chat = await _chatRepository.GetChatWithParticipantsAsync(chatId);
             if (chat == null)
                 return null;
 
-            var messages = await GetChatMessagesAsync(chatId);
+            var messages = await _messageRepository.GetChatMessagesAsync(chatId);
             var participants = GetParticipantsList(chat);
             var messageResponses = GetMessageResponses(messages);
 
@@ -90,22 +98,14 @@ namespace PureConnectBackend.Core.Services
 
         public async Task<ChatShortResponse> GetUserChatsAsync(int userId)
         {
-            var chats = await _context.Chats
-                .Include(c => c.ChatParticipants)
-                    .ThenInclude(x => x.User)
-                .Where(c => c.ChatParticipants.Any(cp => cp.UserId == userId))
-                .ToListAsync();
+            var chats = await _chatRepository.GetUserChatsWithParticipantsAsync(userId);
 
             var chatResponse = new ChatShortResponse();
             chatResponse.Chats = new List<ChatShort>();
 
             foreach (var chat in chats)
             {
-                var lastMessage = await _context.Messages
-                    .Include(m => m.ChatParticipant)
-                    .Where(m => m.ChatParticipant.ChatId == chat.Id)
-                    .OrderByDescending(m => m.Timestamp)
-                    .FirstOrDefaultAsync();
+                var lastMessage = await _messageRepository.GetLastMessageAsync(chat.Id);
 
                 var chatShort = new ChatShort
                 {
@@ -129,10 +129,8 @@ namespace PureConnectBackend.Core.Services
 
         public async Task<bool> AddParticipantAsync(int chatId, int userId)
         {
-            var existingParticipant = await _context.ChatParticipants
-                .FirstOrDefaultAsync(cp => cp.ChatId == chatId && cp.UserId == userId);
-
-            if (existingParticipant != null)
+            bool exists = await _chatParticipantRepository.IsParticipantAsync(chatId, userId);
+            if (exists)
                 return false;
 
             var chatParticipant = new ChatParticipant
@@ -142,21 +140,19 @@ namespace PureConnectBackend.Core.Services
                 JoinedAt = DateTime.UtcNow
             };
 
-            _context.ChatParticipants.Add(chatParticipant);
-            await _context.SaveChangesAsync();
+            await _chatParticipantRepository.AddAsync(chatParticipant);
+            await _chatParticipantRepository.SaveChangesAsync();
             return true;
         }
 
         public async Task<bool> RemoveParticipantAsync(int chatId, int userId)
         {
-            var chatParticipant = await _context.ChatParticipants
-                .FirstOrDefaultAsync(cp => cp.ChatId == chatId && cp.UserId == userId);
-
+            var chatParticipant = await _chatParticipantRepository.GetParticipantAsync(chatId, userId);
             if (chatParticipant == null)
                 return false;
 
-            _context.ChatParticipants.Remove(chatParticipant);
-            await _context.SaveChangesAsync();
+            await _chatParticipantRepository.DeleteAsync(chatParticipant);
+            await _chatParticipantRepository.SaveChangesAsync();
             return true;
         }
 
@@ -170,7 +166,6 @@ namespace PureConnectBackend.Core.Services
                 return otherParticipant?.User?.Avatar ?? string.Empty;
             }
 
-            // ��� ���������� ���� ���� ���������� null
             return null;
         }
 
@@ -185,24 +180,6 @@ namespace PureConnectBackend.Core.Services
             }
 
             return chat.Name;
-        }
-        
-        private async Task<Chat> GetChatWithParticipantsAsync(int chatId)
-        {
-            return await _context.Chats
-                .Include(c => c.ChatParticipants)
-                    .ThenInclude(cp => cp.User)
-                .FirstOrDefaultAsync(c => c.Id == chatId);
-        }
-
-        private async Task<List<Message>> GetChatMessagesAsync(int chatId)
-        {
-            return await _context.Messages
-                .Include(m => m.ChatParticipant)
-                    .ThenInclude(cp => cp.User)
-                .Where(m => m.ChatParticipant.ChatId == chatId)
-                .OrderBy(m => m.Timestamp)
-                .ToListAsync();
         }
 
         private List<Participant> GetParticipantsList(Chat chat)
@@ -233,4 +210,4 @@ namespace PureConnectBackend.Core.Services
                 .ToList();
         }
     }
-} 
+}

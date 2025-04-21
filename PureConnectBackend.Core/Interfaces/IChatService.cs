@@ -1,6 +1,6 @@
+using PureConnectBackend.Core.Enums;
+using PureConnectBackend.Core.Models.Models;
 using PureConnectBackend.Core.Models.Responses;
-using PureConnectBackend.Infrastructure.Enums;
-using PureConnectBackend.Infrastructure.Models;
 
 namespace PureConnectBackend.Core.Interfaces
 {
