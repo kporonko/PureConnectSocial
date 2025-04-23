@@ -680,6 +680,16 @@ html, body{
   gap: 1rem;
   align-items: center;
 }
+
+.post-user-wrapper:hover{
+  cursor: pointer;
+  transition: 0.5s background-color ease;
+}
+.post-user-wrapper:hover .post-user-name{
+  cursor: pointer;
+  color: var(--background-third);
+  transition: 0.5s background-color ease;
+}
 .post-user-avatar{
   width: 4rem;
   height: 4rem;
