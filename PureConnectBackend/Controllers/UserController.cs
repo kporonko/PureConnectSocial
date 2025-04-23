@@ -83,7 +83,7 @@ namespace PureConnectBackend.Controllers
         public async Task<ActionResult<MyFollowersFriendsListResponse?>> GetMyFriends()
         {
             var currUser = UserExtentions.GetCurrentUser(HttpContext.User.Identity as ClaimsIdentity);
-            var response = await _userService.GetUserFriendsByUser(currUser);
+            var response = await _userService.GetUserFriendsByUser(currUser, null);
             if (response is null)
                 return BadRequest();
 
@@ -98,7 +98,8 @@ namespace PureConnectBackend.Controllers
         [Authorize]
         public async Task<ActionResult<MyFollowersFriendsListResponse?>> GetUserFriends([FromRoute] int profileId)
         {
-            var response = await _userService.GetUserFriendsByUser(new User { Id = profileId });
+            var currUser = UserExtentions.GetCurrentUser(HttpContext.User.Identity as ClaimsIdentity);
+            var response = await _userService.GetUserFriendsByUser(new User { Id = profileId }, currUser);
             if (response is null)
                 return BadRequest();
 
@@ -115,7 +116,7 @@ namespace PureConnectBackend.Controllers
         public async Task<ActionResult<MyFollowersFriendsListResponse?>> GetMyFollowers()
         {
             var currUser = UserExtentions.GetCurrentUser(HttpContext.User.Identity as ClaimsIdentity);
-            var response = await _userService.GetFollowersByUser(currUser);
+            var response = await _userService.GetFollowersByUser(currUser, null);
             if (response is null)
                 return BadRequest();
 
@@ -130,7 +131,8 @@ namespace PureConnectBackend.Controllers
         [Authorize]
         public async Task<ActionResult<MyFollowersFriendsListResponse?>> GetUserFollowers([FromRoute] int profileId)
         {
-            var response = await _userService.GetFollowersByUser(new User { Id = profileId});
+            var currUser = UserExtentions.GetCurrentUser(HttpContext.User.Identity as ClaimsIdentity);
+            var response = await _userService.GetFollowersByUser(new User { Id = profileId}, currUser);
             if (response is null)
                 return BadRequest();
 

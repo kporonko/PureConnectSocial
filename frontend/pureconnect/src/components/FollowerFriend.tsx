@@ -30,7 +30,7 @@ const FollowerFriend = (props: {
     });
     const [isValidAvatar, setIsValidAvatar] = React.useState(false);
 
-    const [isToggleFollow, setIsToggleFollow] = React.useState(false);
+    const [isToggleFollow, setIsToggleFollow] = React.useState(props.data.isFollowed);
 
     React.useEffect(() => {
         if (props.data?.avatar) {
@@ -116,11 +116,11 @@ const FollowerFriend = (props: {
                 {props.isFriend ?
                     isToggleFollow ?
                     <div onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave} onClick={(e) => followFollower(e)}>
-                        <FollowButton userId={props.data.id}/>
+                        <UnFollowButton userId={props.data.id}/>
                     </div>
                         :
                     <div onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}  onClick={(e) => unFollowFriend(e)}>
-                        <UnFollowButton userId={props.data.id}/>
+                        <FollowButton userId={props.data.id}/>
                     </div>
                     : isToggleFollow ?
                     <div onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}  onClick={(e) => unFollowFriend(e)}>
