@@ -54,7 +54,7 @@ namespace PureConnectBackend.Core.Services
             return await _userRepository.UpdateUserProfileAsync(user, profileEdit);
         }
 
-        public async Task<MyFollowersFriendsListResponse> GetFollowersByUser(User user)
+        public async Task<MyFollowersFriendsListResponse> GetFollowersByUser(User user, User? currentUser)
         {
             var followers = await _userRepository.GetUserFollowersAsync(user.Id);
 
@@ -67,6 +67,8 @@ namespace PureConnectBackend.Core.Services
 
                 if (follow != null)
                 {
+                    var isFollowed = await _followRepository.GetFollowAsync(currentUser != null ? currentUser.Id : user.Id, follow.FollowerId) != null;
+
                     response.Users.Add(new MyFollowerFriendResponse
                     {
                         Id = follower.Id,
@@ -74,7 +76,8 @@ namespace PureConnectBackend.Core.Services
                         LastName = follower.LastName,
                         Avatar = follower.Avatar,
                         UserName = follower.UserName,
-                        FollowDate = follow.RequestDate
+                        FollowDate = follow.RequestDate,
+                        IsFollowed = isFollowed
                     });
                 }
             }
@@ -82,7 +85,7 @@ namespace PureConnectBackend.Core.Services
             return response;
         }
 
-        public async Task<MyFollowersFriendsListResponse> GetUserFriendsByUser(User user)
+        public async Task<MyFollowersFriendsListResponse> GetUserFriendsByUser(User user, User? currentUser)
         {
             var friends = await _userRepository.GetUserFriendsAsync(user.Id);
 
@@ -98,6 +101,8 @@ namespace PureConnectBackend.Core.Services
                 {
                     var laterDate = follow1.RequestDate > follow2.RequestDate ? follow1.RequestDate : follow2.RequestDate;
 
+                    var isFollowed = await _followRepository.GetFollowAsync(currentUser != null ? currentUser.Id : user.Id, friend.Id) != null;
+
                     response.Users.Add(new MyFollowerFriendResponse
                     {
                         Id = friend.Id,
@@ -105,7 +110,8 @@ namespace PureConnectBackend.Core.Services
                         LastName = friend.LastName,
                         Avatar = friend.Avatar,
                         UserName = friend.UserName,
-                        FollowDate = laterDate
+                        FollowDate = laterDate,
+                        IsFollowed = isFollowed
                     });
                 }
             }

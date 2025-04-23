@@ -4,6 +4,7 @@ export interface IMayKnowUser{
     firstName: string;
     commonFriendsCount: number;
     avatar: string;
+    isFollowed: boolean;
 }
 
 export interface ISearchedUser extends IMayKnowUser{
