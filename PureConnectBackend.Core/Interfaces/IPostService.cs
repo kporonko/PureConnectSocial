@@ -1,6 +1,6 @@
-﻿using PureConnectBackend.Core.Models.Requests;
+﻿using PureConnectBackend.Core.Models.Models;
+using PureConnectBackend.Core.Models.Requests;
 using PureConnectBackend.Core.Models.Responses;
-using PureConnectBackend.Infrastructure.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;

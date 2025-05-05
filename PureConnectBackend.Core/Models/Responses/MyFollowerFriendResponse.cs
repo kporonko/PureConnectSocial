@@ -14,5 +14,6 @@ namespace PureConnectBackend.Core.Models.Responses
         public string UserName { get; set; }
         public string Avatar { get; set; }
         public DateTime FollowDate { get; set; }
+        public bool IsFollowed { get; set; }
     }
 }

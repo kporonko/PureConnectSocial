@@ -5,4 +5,5 @@ export interface IFriendFollower{
     firstName: string,
     lastName: string,
     followDate: Date,
+    isFollowed: boolean;
 }

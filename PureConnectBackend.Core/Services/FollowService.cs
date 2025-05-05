@@ -1,27 +1,21 @@
-﻿using Microsoft.EntityFrameworkCore;
-using PureConnectBackend.Core.Interfaces;
+﻿using PureConnectBackend.Core.Interfaces;
+using PureConnectBackend.Core.Models.Models;
 using PureConnectBackend.Core.Models.Requests;
-using PureConnectBackend.Infrastructure.Data;
-using PureConnectBackend.Infrastructure.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+using PureConnectBackend.Core.Repositories;
 using System.Net;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace PureConnectBackend.Core.Services
 {
     public class FollowService : IFollowService
     {
-        /// <summary>
-        /// Entity Framework DbContext.
-        /// </summary>
-        private readonly ApplicationContext _context;
+        private readonly IFollowRepository _followRepository;
+        private readonly IPostRepository _postRepository;
 
-        public FollowService(ApplicationContext context)
+        public FollowService(IFollowRepository followRepository, IPostRepository postRepository)
         {
-            _context = context;
+            _followRepository = followRepository;
+            _postRepository = postRepository;
         }
 
         /// <summary>
@@ -32,14 +26,22 @@ namespace PureConnectBackend.Core.Services
         /// <returns>Status code of the operation.</returns>
         public async Task<HttpStatusCode> AddFollow(FollowAddRequest request, User user)
         {
-            var follow = await _context.Follows.FirstOrDefaultAsync(x => x.FolloweeId == request.FolloweeId && x.FollowerId == user.Id);
+            var follow = await _followRepository.GetFollowAsync(user.Id, request.FolloweeId);
 
-            if(follow is not null)
+            if (follow is not null)
                 return HttpStatusCode.BadRequest;
-            var newFollow = new Follow() { FolloweeId = request.FolloweeId, FollowerId = user.Id, RequestDate = request.RequestDate };
-            return await AddFollowToDb(newFollow);
-        }
 
+            var newFollow = new Follow
+            {
+                FolloweeId = request.FolloweeId,
+                FollowerId = user.Id,
+                RequestDate = request.RequestDate
+            };
+
+            await _followRepository.AddAsync(newFollow);
+            await _followRepository.SaveChangesAsync();
+            return HttpStatusCode.Created;
+        }
 
         /// <summary>
         /// Deletes follow.
@@ -49,11 +51,14 @@ namespace PureConnectBackend.Core.Services
         /// <returns>Status code of the operation.</returns>
         public async Task<HttpStatusCode> RemoveFollow(FollowDeleteRequest request, User user)
         {
-            var follow = await _context.Follows.FirstOrDefaultAsync(x => x.FolloweeId == request.FolloweeId && x.FollowerId == user.Id);
+            var follow = await _followRepository.GetFollowAsync(user.Id, request.FolloweeId);
 
             if (follow is null)
                 return HttpStatusCode.BadRequest;
-            return await DeleteFollowFromDb(follow);
+
+            await _followRepository.DeleteAsync(follow);
+            await _followRepository.SaveChangesAsync();
+            return HttpStatusCode.Created;
         }
 
         /// <summary>
@@ -64,40 +69,18 @@ namespace PureConnectBackend.Core.Services
         /// <returns>200 if was deleted. 400 if smth went wrong.</returns>
         public async Task<HttpStatusCode> RemoveFollowByPostId(DeletePostRequest request, User user)
         {
-            var post = await _context.Posts.Include(x => x.User).FirstOrDefaultAsync(x => x.Id == request.PostId);
+            var post = await _postRepository.GetPostWithUserAsync(request.PostId);
 
             if (post is null)
                 return HttpStatusCode.BadRequest;
-            
-            var follow = await _context.Follows.FirstOrDefaultAsync(x => x.FolloweeId == post.User.Id && x.FollowerId == user.Id);
+
+            var follow = await _followRepository.GetFollowAsync(user.Id, post.User.Id);
 
             if (follow is null)
                 return HttpStatusCode.BadRequest;
-            
-            return await DeleteFollowFromDb(follow);
-        }
 
-        /// <summary>
-        /// Adds follow to db context.
-        /// </summary>
-        /// <param name="follow">Follow object to add.</param>
-        /// <returns>Status code 201.</returns>
-        private async Task<HttpStatusCode> AddFollowToDb(Follow follow)
-        {
-            _context.Follows.Add(follow);
-            await _context.SaveChangesAsync();
-            return HttpStatusCode.Created;
-        }
-
-        /// <summary>
-        /// Deletes follow from db.
-        /// </summary>
-        /// <param name="follow">Follow object to delete.</param>
-        /// <returns>Status code 201.</returns>
-        private async Task<HttpStatusCode> DeleteFollowFromDb(Follow follow)
-        {
-            _context.Follows.Remove(follow);
-            await _context.SaveChangesAsync();
+            await _followRepository.DeleteAsync(follow);
+            await _followRepository.SaveChangesAsync();
             return HttpStatusCode.Created;
         }
     }

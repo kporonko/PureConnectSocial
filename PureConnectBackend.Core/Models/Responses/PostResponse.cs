@@ -22,5 +22,9 @@ namespace PureConnectBackend.Core.Models.Responses
 
         public bool IsMine { get; set; }
         public MyResponses Response { get; set; }
+
+
+        public bool IsFollowedUser { get; set; }
+        public int UserId { get; set; }
     }
 }

@@ -1,10 +1,4 @@
-﻿using PureConnectBackend.Core.Models.Responses;
-using PureConnectBackend.Infrastructure.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using PureConnectBackend.Core.Models.Models;
 
 namespace PureConnectBackend.Core.Interfaces
 {

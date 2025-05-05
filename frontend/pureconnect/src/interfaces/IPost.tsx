@@ -13,4 +13,7 @@ export interface IPost{
 
     isLike: boolean;
     isMine: boolean;
+
+    isFollowedUser: boolean;
+    userId: number
 }

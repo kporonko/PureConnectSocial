@@ -3,9 +3,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Localization;
 using PureConnectBackend.Core.Extentions;
 using PureConnectBackend.Core.Interfaces;
+using PureConnectBackend.Core.Models.Models;
 using PureConnectBackend.Core.Models.Requests;
 using PureConnectBackend.Core.Models.Responses;
-using PureConnectBackend.Infrastructure.Models;
 using System.Text;
 
 namespace PureConnectBackend.Controllers

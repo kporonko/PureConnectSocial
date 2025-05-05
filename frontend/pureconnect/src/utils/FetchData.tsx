@@ -4,8 +4,15 @@ import {IRegisterUser} from "../interfaces/IRegisterUser";
 import {IPostAddRequest} from "../interfaces/IPostAddRequest";
 import {IPostPutRequest} from "../interfaces/IPostPutRequest";
 import {IUser} from "../interfaces/IUser";
+import {
+    IChat,
+    IChatShortResponse,
+    IChatResponse,
+    IMessage
+} from '../interfaces/IChat';
+import {toast} from "react-toastify";
 
-const BASE_URL = "https://localhost:7219/";
+export const BASE_URL = "https://localhost:7219/";
 
 export const login = async (loginData: IUserLoginRequest) => {
     try {
@@ -624,3 +631,173 @@ export const DeletePostReport = async (token: string|null, postReportId: number)
         return error;
     }
 }
+
+export const GetUserById = async (token: string|null, profileId: number) => {
+    try {
+        const response = await fetch(`${BASE_URL}api/User/profile/${profileId}`, {
+            method: 'GET',
+            headers:{
+                'Content-Type': 'application/json',
+                'Accept-Language': getUsersLocale(),
+                'Authorization': 'Bearer ' + token,
+            },
+        });
+        return response;
+    }
+    catch (error: any) {
+        console.log(error);
+        return error;
+    }
+}
+
+export const fetchChats = async (token: string | null) => {
+    try {
+        const response = await fetch(`${BASE_URL}api/Chat/chats/`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept-Language': getUsersLocale(),
+                'Authorization': `Bearer ${token}`,
+            },
+        });
+
+        return response;
+    } catch (error: any) {
+        console.log(error);
+        return error;
+    }
+}
+
+export const getSearchRecommendedPosts = async (token: string) => {
+    try {
+        const response = await fetch(`${BASE_URL}api/Search/recommended`, {
+            method: 'GET',
+            headers:{
+                'Authorization': 'Bearer ' + token,
+                'Content-Type': 'application/x-www-form-urlencoded'
+            }
+        });
+
+        return response;
+    }
+    catch (error: any) {
+        console.log(error);
+        return error;
+    }
+}
+
+export const getSearchedUsers = async (token: string|null, userName: string) => {
+    try {
+        const response = await fetch(`${BASE_URL}api/Search/searched-users?userName=${encodeURIComponent(userName)}`, {
+            method: 'GET',
+            headers:{
+                'Content-Type': 'application/json',
+                'Accept-Language': getUsersLocale(),
+                'Authorization': 'Bearer ' + token,
+            }
+        });
+
+        if (!response.ok) {
+            throw new Error(`Error ${response.status}: ${response.statusText}`);
+        }
+
+        const data = await response.json();
+        return data;
+    }
+    catch (error: any) {
+        console.log('Error searching users:', error);
+        return [];
+    }
+}
+
+export const getProfile = async (token: string, userId: number) => {
+    try {
+        const response = await fetch(`${BASE_URL}api/User/profile/${userId}`, {
+            method: 'GET',
+            headers:{
+                'Authorization': 'Bearer ' + token,
+                'Content-Type': 'application/x-www-form-urlencoded'
+            }
+        });
+
+        const responseJson = await response.json()
+        return responseJson;
+    }
+    catch (error: any) {
+        console.log(error);
+        return error;
+    }
+}
+
+export const getUserFriends = async (token: string|null, userId: number) => {
+    try {
+        const response = await fetch(`${BASE_URL}api/User/${userId}/friends`, {
+            method: 'GET',
+            headers:{
+                'Content-Type': 'application/json',
+                'Accept-Language': getUsersLocale(),
+                'Authorization': 'Bearer ' + token,
+            }
+        });
+        return response;
+    }
+    catch (error: any) {
+        console.log(error);
+        return error;
+    }
+}
+
+export const getUserFollowers = async (token: string|null, userId: number) => {
+    try {
+        const response = await fetch(`${BASE_URL}api/User/${userId}/followers`, {
+            method: 'GET',
+            headers:{
+                'Content-Type': 'application/json',
+                'Accept-Language': getUsersLocale(),
+                'Authorization': 'Bearer ' + token,
+            }
+        });
+        return response;
+    }
+    catch (error: any) {
+        console.log(error);
+        return error;
+    }
+}
+
+export const getPostsListByUser = async (token: string, userId: string) => {
+    try {
+        const response = await fetch(`${BASE_URL}api/Post/posts/${userId}`, {
+            method: 'GET',
+            headers:{
+                'Authorization': 'Bearer ' + token,
+                'Content-Type': 'application/x-www-form-urlencoded'
+            }
+        });
+
+        return response;
+    }
+    catch (error: any) {
+        console.log(error);
+        return error;
+    }
+}
+
+export const getPostsImagesByUserId = async (token: string, userId: string) => {
+    try {
+        const response = await fetch(`${BASE_URL}api/Post/images/${userId}`, {
+            method: 'GET',
+            headers:{
+                'Authorization': 'Bearer ' + token,
+                'Content-Type': 'application/x-www-form-urlencoded'
+            }
+        });
+
+        return response;
+    }
+    catch (error: any) {
+        console.log(error);
+        return error;
+    }
+}
+

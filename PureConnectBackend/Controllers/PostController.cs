@@ -1,12 +1,10 @@
-﻿using Azure;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Localization;
+using PureConnectBackend.Core.Extentions;
 using PureConnectBackend.Core.Interfaces;
+using PureConnectBackend.Core.Models.Models;
 using PureConnectBackend.Core.Models.Requests;
 using PureConnectBackend.Core.Models.Responses;
-using PureConnectBackend.Infrastructure.Models;
 using System.Net;
 using System.Security.Claims;
 
@@ -33,7 +31,7 @@ namespace PureConnectBackend.Controllers
         [HttpPost]
         public async Task<IActionResult> Post([FromBody] CreatePostRequest postRequest)
         {
-            var user = GetCurrentUser();
+            var user = UserExtentions.GetCurrentUser(HttpContext.User.Identity as ClaimsIdentity);
             var response = await _postService.CreatePost(postRequest, user);
             if (response == HttpStatusCode.Created)
                 return Ok();
@@ -83,7 +81,7 @@ namespace PureConnectBackend.Controllers
         [HttpGet("post/{postId}")]
         public async Task<ActionResult<PostResponse>> Post([FromRoute]int postId)
         {
-            var user = GetCurrentUser();
+            var user = UserExtentions.GetCurrentUser(HttpContext.User.Identity as ClaimsIdentity);
             var post = await _postService.GetPost(user, postId);
 
             if (post is null)
@@ -103,11 +101,16 @@ namespace PureConnectBackend.Controllers
         /// </summary>
         /// <returns>List of PostImageResponse object with 200 code if user was found, otherwise NotFound(404).</returns>
         [Authorize]
-        [HttpGet("images")]
-        public async Task<ActionResult<List<PostImageResponse>>> PostsImages()
+        [HttpGet("images/{userId?}")]
+        public async Task<ActionResult<List<PostImageResponse>>> PostsImages([FromRoute] int? userId)
         {
-            var user = GetCurrentUser();
-            var postsImages = await _postService.GetPostsImages(user!);
+            User user;
+            if (userId.HasValue && userId != null)
+                user = new User { Id = userId.Value };
+            else
+                user = UserExtentions.GetCurrentUser(HttpContext.User.Identity as ClaimsIdentity);
+
+            var postsImages = await _postService.GetPostsImages(user);
             if (postsImages is null)
                 return NotFound();
             
@@ -119,10 +122,15 @@ namespace PureConnectBackend.Controllers
         /// </summary>
         /// <returns>List of PostResponse objects with 200 code if user was found, otherwise NotFound(404).</returns>
         [Authorize]
-        [HttpGet("posts")]
-        public async Task<ActionResult<List<PostResponse>>> Posts()
+        [HttpGet("posts/{userId?}")]
+        public async Task<ActionResult<List<PostResponse>>> Posts([FromRoute] int? userId)
         {
-            var user = GetCurrentUser();
+            User user;
+            if (userId.HasValue && userId != null)
+                user = new User { Id = userId.Value };
+            else
+                user = UserExtentions.GetCurrentUser(HttpContext.User.Identity as ClaimsIdentity);
+
             var posts = await _postService.GetPosts(user!);
             if (posts is null)
                 return NotFound();
@@ -138,7 +146,7 @@ namespace PureConnectBackend.Controllers
         [HttpGet("recommended-posts")]
         public async Task<ActionResult<List<PostResponse>>> RecommendedPosts()
         {
-            var user = GetCurrentUser();
+            var user = UserExtentions.GetCurrentUser(HttpContext.User.Identity as ClaimsIdentity);
             var posts = await _postService.GetRecommendedPosts(user!);
             if (posts is null)
                 return NotFound();
@@ -156,7 +164,7 @@ namespace PureConnectBackend.Controllers
         [HttpPost("like")]
         public async Task<IActionResult> LikePost([FromBody] LikePostRequest postInfo)
         {
-            var user = GetCurrentUser();
+            var user = UserExtentions.GetCurrentUser(HttpContext.User.Identity as ClaimsIdentity);
             var response = await _postService.LikePost(postInfo, user);
             if (response == HttpStatusCode.OK)
                 return Ok();
@@ -173,7 +181,7 @@ namespace PureConnectBackend.Controllers
         [HttpDelete("like")]
         public async Task<IActionResult> UnLikePost([FromBody] LikePostDeleteRequest postInfo)
         {
-            var user = GetCurrentUser();
+            var user = UserExtentions.GetCurrentUser(HttpContext.User.Identity as ClaimsIdentity);
             var response = await _postService.UnlikePost(postInfo, user);
             if (response == HttpStatusCode.OK)
                 return Ok();
@@ -185,37 +193,12 @@ namespace PureConnectBackend.Controllers
         [HttpGet("users-liked-post/{postId}")]
         public async Task<ActionResult<List<UserLikedPost>>> UsersLikedPost([FromRoute] int postId)
         {
-            var user = GetCurrentUser();
+            var user = UserExtentions.GetCurrentUser(HttpContext.User.Identity as ClaimsIdentity);
             var users = await _postService.GetUsersLikedPost(user, postId);
             if (users is null)
                 return NotFound();
 
             return Ok(users);
-        }
-
-        /// <summary>
-        /// Gets current user by authorizing jwt token.
-        /// </summary>
-        /// <returns></returns>
-        private User? GetCurrentUser()
-        {
-            var identity = HttpContext.User.Identity as ClaimsIdentity;
-
-            if (identity is not null)
-            {
-                var userClaims = identity.Claims;
-
-                return new User
-                {
-                    UserName = userClaims.FirstOrDefault(o => o.Type == ClaimTypes.NameIdentifier)?.Value,
-                    Email = userClaims.FirstOrDefault(o => o.Type == ClaimTypes.Email)?.Value,
-                    FirstName = userClaims.FirstOrDefault(o => o.Type == ClaimTypes.GivenName)?.Value,
-                    LastName = userClaims.FirstOrDefault(o => o.Type == ClaimTypes.Surname)?.Value,
-                    Role = userClaims.FirstOrDefault(o => o.Type == ClaimTypes.Role)?.Value,
-                    Id = Convert.ToInt32(userClaims.FirstOrDefault(o => o.Type == ClaimTypes.Sid)?.Value)
-                };
-            }
-            return null;
         }
     }
 }

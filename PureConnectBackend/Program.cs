@@ -8,6 +8,10 @@ using System.Text;
 using PureConnectBackend.Core.Interfaces;
 using PureConnectBackend.Core.Services;
 using Microsoft.Extensions.Options;
+using PureConnectBackend.Core.Hubs;
+using Microsoft.AspNetCore.SignalR;
+using PureConnectBackend.Core.Repositories;
+using PureConnectBackend.Infrastructure.Repositories.impl;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -22,6 +26,31 @@ builder.Services.AddTransient<IPostService, PostService>();
 builder.Services.AddTransient<IUserService, UserService>();
 builder.Services.AddTransient<IReportService, ReportService>();
 builder.Services.AddTransient<IAdminService, AdminService>();
+builder.Services.AddTransient<ISearchService, SearchService>();
+builder.Services.AddTransient<IChatService, ChatService>();
+
+builder.Services.AddTransient<IPostReportRepository, PostReportRepository>();
+builder.Services.AddTransient<IPostLikeRepository, PostLikeRepository>();
+builder.Services.AddTransient<IReportRepository, ReportRepository>();
+builder.Services.AddTransient<IChatRepository, ChatRepository>();
+builder.Services.AddTransient<IChatParticipantRepository, ChatParticipantRepository>();
+builder.Services.AddTransient<IMessageRepository, MessageRepository>();
+builder.Services.AddTransient<IFollowRepository, FollowRepository>();
+builder.Services.AddTransient<IPostRepository, PostRepository>();
+builder.Services.AddTransient<IUserRepository, UserRepository>();
+
+
+// Регистрация Redis и сервиса кеширования
+builder.Services.AddStackExchangeRedisCache(options =>
+{
+    options.Configuration = builder.Configuration["Redis:ConnectionString"];
+    options.InstanceName = builder.Configuration["Redis:InstanceName"];
+});
+
+// Регистрация ICacheService
+builder.Services.AddScoped<ICacheService, RedisCacheService>();
+
+builder.Services.AddSignalR();
 
 var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 
@@ -30,7 +59,10 @@ builder.Services.AddCors(options =>
     options.AddPolicy(name: MyAllowSpecificOrigins,
                       builder =>
                       {
-                          builder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod();
+                          builder.WithOrigins("http://localhost:3000", "http://localhost:3001") // Replace with your frontend application URL
+                                 .AllowAnyHeader()
+                                 .AllowAnyMethod()
+                                 .AllowCredentials();
                       });
 });
 
@@ -86,9 +118,16 @@ var localizationOptions =
 
 app.UseRequestLocalization(localizationOptions);
 #endregion
-
 app.UseHttpsRedirection();
+app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
-app.MapControllers();
+
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapControllers();
+    endpoints.MapHub<NotificationHub>("/notificationHub"); // Map the SignalR hub endpoint
+    endpoints.MapHub<ChatHub>("/chatHub"); // Map the SignalR hub endpoint
+});
+
 app.Run();

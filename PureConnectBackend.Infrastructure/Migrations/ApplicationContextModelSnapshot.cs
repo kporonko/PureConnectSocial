@@ -22,6 +22,55 @@ namespace PureConnectBackend.Infrastructure.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("PureConnectBackend.Infrastructure.Models.Chat", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("ChatType")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Chats", (string)null);
+                });
+
+            modelBuilder.Entity("PureConnectBackend.Infrastructure.Models.ChatParticipant", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("ChatId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("JoinedAt")
+                        .IsRequired()
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ChatId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("ChatParticipants", (string)null);
+                });
+
             modelBuilder.Entity("PureConnectBackend.Infrastructure.Models.Follow", b =>
                 {
                     b.Property<int>("Id")
@@ -48,6 +97,32 @@ namespace PureConnectBackend.Infrastructure.Migrations
                     b.HasIndex("FollowerId");
 
                     b.ToTable("Follow", (string)null);
+                });
+
+            modelBuilder.Entity("PureConnectBackend.Infrastructure.Models.Message", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("ChatParticipantId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Content")
+                        .IsRequired()
+                        .HasMaxLength(1000)
+                        .HasColumnType("nvarchar(1000)");
+
+                    b.Property<DateTime>("Timestamp")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ChatParticipantId");
+
+                    b.ToTable("Messages", (string)null);
                 });
 
             modelBuilder.Entity("PureConnectBackend.Infrastructure.Models.Post", b =>
@@ -304,6 +379,25 @@ namespace PureConnectBackend.Infrastructure.Migrations
                     b.ToTable("User", (string)null);
                 });
 
+            modelBuilder.Entity("PureConnectBackend.Infrastructure.Models.ChatParticipant", b =>
+                {
+                    b.HasOne("PureConnectBackend.Infrastructure.Models.Chat", "Chat")
+                        .WithMany("ChatParticipants")
+                        .HasForeignKey("ChatId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("PureConnectBackend.Infrastructure.Models.User", "User")
+                        .WithMany("ChatParticipants")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Chat");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("PureConnectBackend.Infrastructure.Models.Follow", b =>
                 {
                     b.HasOne("PureConnectBackend.Infrastructure.Models.User", "Follower")
@@ -323,6 +417,17 @@ namespace PureConnectBackend.Infrastructure.Migrations
                     b.Navigation("Follower");
                 });
 
+            modelBuilder.Entity("PureConnectBackend.Infrastructure.Models.Message", b =>
+                {
+                    b.HasOne("PureConnectBackend.Infrastructure.Models.ChatParticipant", "ChatParticipant")
+                        .WithMany("Messages")
+                        .HasForeignKey("ChatParticipantId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("ChatParticipant");
+                });
+
             modelBuilder.Entity("PureConnectBackend.Infrastructure.Models.Post", b =>
                 {
                     b.HasOne("PureConnectBackend.Infrastructure.Models.User", "User")
@@ -339,13 +444,13 @@ namespace PureConnectBackend.Infrastructure.Migrations
                     b.HasOne("PureConnectBackend.Infrastructure.Models.PostComment", "ParentComment")
                         .WithMany("CommentReplies")
                         .HasForeignKey("ParentCommentId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("PureConnectBackend.Infrastructure.Models.Post", "Post")
                         .WithMany("PostComments")
                         .HasForeignKey("PostId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("PureConnectBackend.Infrastructure.Models.User", "User")
@@ -385,7 +490,7 @@ namespace PureConnectBackend.Infrastructure.Migrations
                     b.HasOne("PureConnectBackend.Infrastructure.Models.Post", "Post")
                         .WithMany("PostLikes")
                         .HasForeignKey("PostId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("PureConnectBackend.Infrastructure.Models.User", "User")
@@ -429,6 +534,16 @@ namespace PureConnectBackend.Infrastructure.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("PureConnectBackend.Infrastructure.Models.Chat", b =>
+                {
+                    b.Navigation("ChatParticipants");
+                });
+
+            modelBuilder.Entity("PureConnectBackend.Infrastructure.Models.ChatParticipant", b =>
+                {
+                    b.Navigation("Messages");
+                });
+
             modelBuilder.Entity("PureConnectBackend.Infrastructure.Models.Post", b =>
                 {
                     b.Navigation("PostComments");
@@ -447,6 +562,8 @@ namespace PureConnectBackend.Infrastructure.Migrations
 
             modelBuilder.Entity("PureConnectBackend.Infrastructure.Models.User", b =>
                 {
+                    b.Navigation("ChatParticipants");
+
                     b.Navigation("Followee");
 
                     b.Navigation("Follower");

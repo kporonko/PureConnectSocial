@@ -2,7 +2,7 @@ import React, {SetStateAction, useEffect} from 'react';
 import ModalEditPostTopPanel from "./ModalEditPostTopPanel";
 import ModalAddEditPostContent from "./ModalAddEditPostContent";
 import {IFriendFollower} from "../interfaces/IFriendFollower";
-import {getMyFollowers, getMyFriends} from "../utils/FetchData";
+import {getMyFollowers, getMyFriends, getUserFollowers, getUserFriends} from "../utils/FetchData";
 import FollowerFriend from "./FollowerFriend";
 import FollowerTopPanel from "./FollowerTopPanel";
 import FriendTopPanel from "./FriendTopPanel";
@@ -13,7 +13,8 @@ const FollowersFriendsListModal = (props: {
     setIsOpenFollowers?: React.Dispatch<SetStateAction<boolean>>,
     setIsOpenFriends?: React.Dispatch<SetStateAction<boolean>>,
     user:IUser|undefined,
-    setUser: React.Dispatch<SetStateAction<IUser|undefined>>
+    setUser: React.Dispatch<SetStateAction<IUser|undefined>>,
+    isExternal?: boolean
 }) => {
 
     const [followers, setFollowers] = React.useState<IFriendFollower[]>();
@@ -26,6 +27,23 @@ const FollowersFriendsListModal = (props: {
         }
         else {
             props.setIsOpenFriends!(false)
+        }
+    }
+
+    const getFollowersByUserId = async () => {
+        const token = localStorage.getItem('access_token')
+        if (token && props.user?.userId) {
+            const response = await getUserFollowers(token, props.user?.userId);
+            const body = await response.json();
+            setFollowers(body.users)
+        }
+    }
+    const getFriendsByUserId = async () => {
+        const token = localStorage.getItem('access_token')
+        if (token && props.user?.userId) {
+            const response = await getUserFriends(token, props.user?.userId);
+            const body = await response.json();
+            setFriends(body.users)
         }
     }
 
@@ -46,12 +64,11 @@ const FollowersFriendsListModal = (props: {
         }
     }
     useEffect(() => {
-        if (props.isFollowers) {
-            getFollowers()
-        }
-        else {
-            getFriends()
-        }
+        const fetchFunc = props.isExternal
+            ? (props.isFollowers ? getFollowersByUserId : getFriendsByUserId)
+            : (props.isFollowers ? getFollowers : getFriends);
+
+        fetchFunc();
     }, [])
 
     return (

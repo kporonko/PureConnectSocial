@@ -22,7 +22,8 @@ const MyProfileInfo = (props: {
     isOpenFriends?: boolean,
     setIsOpenFriends?: React.Dispatch<SetStateAction<boolean>>,
     user?: IUser|undefined,
-    setUser?: React.Dispatch<SetStateAction<IUser|undefined>>
+    setUser?: React.Dispatch<SetStateAction<IUser|undefined>>,
+    isMine?: boolean
 }) => {
 
     const [user, setUser] = useState<IUser|undefined>(props.user);

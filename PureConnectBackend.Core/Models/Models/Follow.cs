@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PureConnectBackend.Infrastructure.Models
+namespace PureConnectBackend.Core.Models.Models
 {
     public class Follow
     {
